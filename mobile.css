@@ -127,7 +127,8 @@
         font-weight: 600;
     }
     
-    .doc-description {
+    .doc-description,
+    .doc-desc {
         font-size: 0.8125rem;
         white-space: nowrap;
         overflow: hidden;
@@ -171,6 +172,10 @@
     }
     
     /* База знаний */
+    .knowledge-base {
+        padding: 0;
+    }
+    
     .search-container {
         flex-direction: column;
         padding: 1rem;
@@ -179,6 +184,7 @@
     .search-input {
         padding: 0.875rem 1rem;
         font-size: 1rem;
+        width: 100%;
     }
     
     .search-btn {
@@ -210,6 +216,10 @@
         gap: 1rem;
     }
     
+    .articles-list {
+        gap: 0.75rem;
+    }
+    
     .article-card {
         padding: 1rem;
     }
@@ -228,13 +238,39 @@
         line-height: 1.7;
     }
     
+    .article-content section {
+        margin-bottom: 1.5rem;
+    }
+    
+    .article-content ul {
+        margin-left: 1rem;
+    }
+    
+    .overview {
+        padding: 1rem;
+        font-size: 1rem;
+    }
+    
     .important-block {
         padding: 1rem;
         margin: 1.5rem 0;
         font-size: 0.9375rem;
     }
     
+    .article-tags {
+        flex-wrap: wrap;
+    }
+    
+    .tag {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.5rem;
+    }
+    
     /* Чек-листы */
+    .checklists-container {
+        padding: 0;
+    }
+    
     .stats-cards {
         grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
@@ -298,6 +334,22 @@
     
     .checklist-header h1 {
         font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .checklist-header p {
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+    }
+    
+    .progress-summary {
+        margin-top: 1rem;
+    }
+    
+    .progress-text {
+        font-size: 0.8125rem;
     }
     
     .checklist-section {
@@ -308,6 +360,10 @@
     
     .checklist-section h3 {
         font-size: 1.125rem;
+    }
+    
+    .section-progress {
+        font-size: 0.75rem;
     }
     
     .checks-list {
@@ -333,6 +389,10 @@
         height: 18px;
     }
     
+    .check-text {
+        font-size: 0.875rem;
+    }
+    
     .critical-badge {
         font-size: 0.625rem;
         padding: 0.125rem 0.375rem;
@@ -348,6 +408,172 @@
     .checklist-actions .btn {
         width: 100%;
         justify-content: center;
+    }
+    
+    /* Wiki */
+    .wiki-container {
+        padding: 0;
+    }
+    
+    .wiki-header {
+        padding: 0 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .wiki-header h1 {
+        font-size: 1.5rem;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .wiki-header p {
+        font-size: 0.875rem;
+    }
+    
+    .wiki-actions {
+        flex-direction: column;
+        padding: 0 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .wiki-actions .btn {
+        width: 100%;
+    }
+    
+    .wiki-actions .search-input {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+    
+    .wiki-content {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 0 1rem;
+    }
+    
+    .wiki-sidebar {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .wiki-sidebar h3 {
+        font-size: 1.125rem;
+    }
+    
+    .categories-list {
+        gap: 0.5rem;
+    }
+    
+    .category-item {
+        padding: 0.625rem;
+        font-size: 0.875rem;
+    }
+    
+    .wiki-articles {
+        padding: 1rem;
+    }
+    
+    .wiki-articles h3 {
+        font-size: 1.125rem;
+        margin-bottom: 1rem;
+    }
+    
+    .wiki-article {
+        padding: 1rem;
+    }
+    
+    .wiki-article h4 {
+        font-size: 1rem;
+    }
+    
+    .wiki-placeholder {
+        padding: 2rem 1rem;
+        font-size: 0.875rem;
+    }
+    
+    /* Stories */
+    .stories-container {
+        padding: 0 1rem;
+    }
+    
+    .stories-header {
+        margin-bottom: 1.5rem;
+    }
+    
+    .stories-header h1 {
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+    
+    .stories-header p {
+        font-size: 0.875rem;
+    }
+    
+    .stories-toolbar {
+        flex-direction: column;
+        margin: 1.5rem 0;
+        gap: 1rem;
+    }
+    
+    .stories-toolbar .btn {
+        width: 100%;
+    }
+    
+    .stories-filters {
+        width: 100%;
+        overflow-x: auto;
+        margin-left: 0 !important;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .stories-feed {
+        margin-bottom: 1.5rem;
+    }
+    
+    .story-card {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .story-header {
+        gap: 0.75rem;
+    }
+    
+    .story-avatar {
+        width: 36px;
+        height: 36px;
+        font-size: 1.25rem;
+    }
+    
+    .story-content h3 {
+        font-size: 1.125rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .story-content p {
+        font-size: 0.875rem;
+    }
+    
+    .story-tags {
+        flex-wrap: wrap;
+    }
+    
+    .story-tags span {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.5rem;
+    }
+    
+    .story-actions {
+        gap: 0.75rem;
+        padding-top: 0.75rem;
+        margin-top: 1rem;
+    }
+    
+    .story-action {
+        font-size: 0.875rem;
     }
     
     /* Прогресс бары */
@@ -367,6 +593,7 @@
         overflow-x: auto;
         white-space: nowrap;
         -webkit-overflow-scrolling: touch;
+        gap: 0.25rem;
     }
     
     /* Кнопки */
@@ -402,6 +629,10 @@
         font-size: 0.75rem;
     }
     
+    footer p {
+        margin-bottom: 0.5rem;
+    }
+    
     /* Уведомления */
     .notification {
         min-width: 90%;
@@ -410,6 +641,8 @@
         top: auto;
         bottom: 20px;
         border-radius: var(--radius);
+        padding: 0.875rem 1rem;
+        font-size: 0.875rem;
     }
     
     /* Debug панель */
@@ -425,6 +658,12 @@
     /* Недавние проверки */
     .recent-checks {
         margin-top: 2rem;
+        padding: 0 1rem;
+    }
+    
+    .recent-checks h3 {
+        font-size: 1.125rem;
+        margin-bottom: 1rem;
     }
     
     .recent-list {
@@ -442,13 +681,62 @@
         box-shadow: var(--shadow-sm);
     }
     
+    .recent-icon {
+        font-size: 1.25rem;
+    }
+    
+    .recent-info {
+        min-width: 0;
+    }
+    
+    .recent-title {
+        font-size: 0.875rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .recent-date {
+        font-size: 0.75rem;
+    }
+    
+    .recent-progress {
+        font-size: 0.875rem;
+    }
+    
+    /* Модуль документы */
+    .documents-container {
+        padding: 0;
+    }
+    
+    .documents-header {
+        padding: 0 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .documents-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 0 1rem;
+    }
+    
+    .document-card {
+        padding: 1rem;
+    }
+    
+    .document-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 1.5rem;
+    }
+    
     /* Утилиты для мобильных */
     .hide-mobile {
-        display: none;
+        display: none !important;
     }
     
     .show-mobile {
-        display: block;
+        display: block !important;
     }
     
     /* Оптимизация производительности */
@@ -478,6 +766,14 @@
     .checklists-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+    
+    .articles-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .wiki-content {
+        grid-template-columns: 200px 1fr;
+    }
 }
 
 /* === Маленькие экраны === */
@@ -494,7 +790,29 @@
         font-size: 1.5rem;
     }
     
-    .doc-description {
+    .doc-description,
+    .doc-desc {
         display: none;
+    }
+    
+    nav {
+        justify-content: flex-start;
+    }
+    
+    .nav-link {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8125rem;
+    }
+    
+    .checklist-header h1 {
+        font-size: 1.25rem;
+    }
+    
+    .wiki-header h1 {
+        font-size: 1.25rem;
+    }
+    
+    .stories-header h1 {
+        font-size: 1.25rem;
     }
 }
