@@ -2,7 +2,7 @@
   "name": "TechCheck Pro - Система проверки документации",
   "short_name": "TechCheck",
   "description": "Система проверки технической документации Массивбург",
-  "start_url": "/index.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#ffffff",
@@ -19,4 +19,5 @@
   
   "categories": ["business", "productivity", "utilities"],
   "lang": "ru-RU"
+
 }
