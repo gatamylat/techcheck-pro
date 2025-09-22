@@ -27,9 +27,6 @@ export default class Checklist extends BaseModule {
         this.checkResults = {};
     }
     
-    /**
-     * Загрузка данных чек-листов
-     */
     async loadData() {
         // Чек-листы на основе документа
         this.data = {
@@ -222,7 +219,6 @@ export default class Checklist extends BaseModule {
                 }
             ],
             
-            // Шаблоны результатов
             templates: {
                 report: {
                     title: 'Отчет о проверке',
@@ -231,7 +227,6 @@ export default class Checklist extends BaseModule {
             }
         };
         
-        // Загружаем сохраненные результаты
         const savedResults = this.getCache('results');
         if (savedResults) {
             this.checkResults = savedResults;
@@ -240,9 +235,6 @@ export default class Checklist extends BaseModule {
         this.setCache(this.data);
     }
     
-    /**
-     * Рендер контента
-     */
     renderContent() {
         if (this.activeCheck) {
             return this.renderActiveCheck();
@@ -255,9 +247,6 @@ export default class Checklist extends BaseModule {
         return this.renderMain();
     }
     
-    /**
-     * Главная страница чек-листов
-     */
     renderMain() {
         const stats = this.getStatistics();
         
@@ -316,9 +305,6 @@ export default class Checklist extends BaseModule {
         `;
     }
     
-    /**
-     * Карточка чек-листа
-     */
     renderChecklistCard(checklist) {
         const progress = this.getChecklistProgress(checklist.id);
         const statusClass = progress === 100 ? 'completed' : progress > 0 ? 'in-progress' : '';
@@ -342,9 +328,6 @@ export default class Checklist extends BaseModule {
         `;
     }
     
-    /**
-     * Страница чек-листа
-     */
     renderChecklist() {
         const checklist = this.data.checklists.find(c => c.id === this.currentChecklist);
         if (!checklist) return '<p>Чек-лист не найден</p>';
@@ -395,9 +378,6 @@ export default class Checklist extends BaseModule {
         `;
     }
     
-    /**
-     * Рендер секции чек-листа
-     */
     renderSection(section, checklistId) {
         const results = this.checkResults[checklistId] || {};
         const sectionResults = results[section.id] || {};
@@ -412,7 +392,6 @@ export default class Checklist extends BaseModule {
                             <input type="checkbox" 
                                    ${sectionResults[check.id] ? 'checked' : ''}
                                    onchange="app.getModule('checklist').toggleCheck('${checklistId}', '${section.id}', '${check.id}')">
-                            <span class="check-box"></span>
                             <span class="check-text">${check.text}</span>
                             ${check.critical ? '<span class="critical-badge">Критично</span>' : ''}
                         </label>
@@ -422,9 +401,6 @@ export default class Checklist extends BaseModule {
         `;
     }
     
-    /**
-     * Недавние проверки
-     */
     renderRecentChecks() {
         const recent = this.getRecentChecks();
         if (recent.length === 0) return '';
@@ -448,9 +424,6 @@ export default class Checklist extends BaseModule {
         `;
     }
     
-    /**
-     * Публичные методы
-     */
     getPublicMethods() {
         return {
             openChecklist: (id) => this.openChecklist(id),
@@ -464,18 +437,12 @@ export default class Checklist extends BaseModule {
         };
     }
     
-    /**
-     * Открыть чек-лист
-     */
     openChecklist(id) {
         this.currentChecklist = id;
         this.app.router.navigate(`/checklist/${id}`);
         this.render();
     }
     
-    /**
-     * Переключить чек
-     */
     toggleCheck(checklistId, sectionId, checkId) {
         if (!this.checkResults[checklistId]) {
             this.checkResults[checklistId] = {};
@@ -491,42 +458,26 @@ export default class Checklist extends BaseModule {
         this.render();
     }
     
-    /**
-     * Сохранить прогресс
-     */
     saveProgress() {
         this.setCache(this.checkResults, 'results');
         this.log('Progress saved');
-        
-        // Показать уведомление
         this.showNotification('Прогресс сохранен');
     }
     
-    /**
-     * Генерировать отчет
-     */
     generateReport(checklistId) {
         const checklist = this.data.checklists.find(c => c.id === checklistId);
         const results = this.checkResults[checklistId] || {};
         
         this.log(`Generating report for ${checklistId}`);
-        
-        // Здесь будет логика генерации отчета
         this.showNotification('Отчет сгенерирован');
     }
     
-    /**
-     * Завершить проверку
-     */
     completeCheck(checklistId) {
         this.log(`Completing check ${checklistId}`);
         this.showNotification('Проверка завершена');
         this.goHome();
     }
     
-    /**
-     * Вспомогательные методы
-     */
     getChecklistProgress(checklistId) {
         const checklist = this.data.checklists.find(c => c.id === checklistId);
         if (!checklist) return 0;
@@ -589,7 +540,6 @@ export default class Checklist extends BaseModule {
     }
     
     getRecentChecks() {
-        // Заглушка для недавних проверок
         return [];
     }
     
@@ -602,32 +552,17 @@ export default class Checklist extends BaseModule {
     
     filterByCategory(category) {
         this.log(`Filtering by category: ${category}`);
-        // Здесь будет логика фильтрации
         this.render();
     }
     
     loadCheck(id) {
         this.log(`Loading check: ${id}`);
-        // Здесь будет логика загрузки
     }
     
     showNotification(message) {
-        // Простое уведомление
         const notification = document.createElement('div');
         notification.className = 'notification';
         notification.textContent = message;
-        notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--success-color);
-            color: white;
-            padding: 1rem 1.5rem;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-lg);
-            z-index: 1000;
-            animation: slideIn 0.3s;
-        `;
         
         document.body.appendChild(notification);
         
