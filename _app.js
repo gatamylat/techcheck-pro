@@ -24,6 +24,7 @@ export default class App {
             ],
             // Функциональные модули
             functional: [
+                'documents',
                 'knowledge-base',
                 'checklist',
                 'wiki',
@@ -40,6 +41,13 @@ export default class App {
         
         // Метаданные модулей
         this.moduleMeta = {
+            'documents': {
+                title: 'Состав документации',
+                icon: '📋',
+                description: 'Полный перечень выпускаемой КБ документации',
+                navLabel: 'Документы',
+                status: 'ready'
+            },
             'knowledge-base': {
                 title: 'База знаний',
                 icon: '📚',
@@ -242,8 +250,10 @@ export default class App {
         // Главная всегда первая
         this.addNavLink(nav, '/', 'Главная');
         
-        // Добавляем функциональные модули
+        // Добавляем функциональные модули (кроме documents - он не в навигации)
         for (const moduleName of this.moduleRegistry.functional) {
+            if (moduleName === 'documents') continue; // Documents доступен только с главной
+            
             const meta = this.moduleMeta[moduleName];
             if (meta && meta.status !== 'hidden') {
                 this.addNavLink(nav, `/${moduleName}`, meta.navLabel);
