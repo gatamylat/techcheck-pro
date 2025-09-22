@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechCheck Pro - Система проверки технической документации</title>
+    
+    <!-- PWA манифест -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Стили разделены по файлам согласно архитектуре -->
+    <link rel="stylesheet" href="base.css">
+    <link rel="stylesheet" href="desktop.css" media="(min-width: 768px)">
+    <link rel="stylesheet" href="mobile.css" media="(max-width: 767px)">
+    
+    <!-- Временные встроенные стили для демо (потом вынесем в файлы) -->
+    <style>
+        /* === Базовые переменные === */
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --radius: 8px;
+            --max-width: 1280px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* === Загрузчик === */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.3s;
+        }
+
+        .loader-content {
+            text-align: center;
+        }
+
+        .loader-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* === Контейнер приложения === */
+        #app {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        #app.loaded {
+            opacity: 1;
+        }
+
+        /* === Навигация === */
+        header {
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary-color), #3b82f6);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        nav {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .nav-link {
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            text-decoration: none;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .nav-link:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .nav-link.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* === Основной контент === */
+        main {
+            flex: 1;
+            max-width: var(--max-width);
+            width: 100%;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* === Стили для модулей === */
+        .module-container {
+            background: var(--bg-primary);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .module-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--bg-secondary);
+        }
+
+        .module-header h1 {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .module-icon {
+            font-size: 2rem;
+        }
+
+        .module-description {
+            color: var(--text-secondary);
+        }
+
+        /* === Карточки === */
+        .module-card {
+            background: var(--bg-primary);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .module-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+
+        /* === Кнопки === */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color);
+        }
+
+        /* === Футер === */
+        footer {
+            background: var(--bg-primary);
+            border-top: 1px solid var(--border-color);
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* === Debug панель === */
+        .debug-panel {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 1rem;
+            border-radius: var(--radius);
+            font-family: monospace;
+            font-size: 0.75rem;
+            max-width: 300px;
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+            z-index: 1000;
+        }
+
+        .debug-panel.active {
+            display: block;
+        }
+
+        .debug-panel h4 {
+            margin-bottom: 0.5rem;
+            color: #10b981;
+        }
+
+        .debug-log {
+            margin-bottom: 0.25rem;
+            padding: 0.25rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* === Мобильная версия === */
+        @media (max-width: 767px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav {
+                width: 100%;
+                overflow-x: auto;
+                justify-content: center;
+            }
+
+            main {
+                padding: 1rem;
+            }
+
+            .module-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Загрузчик -->
+    <div id="loader">
+        <div class="loader-content">
+            <div class="loader-spinner"></div>
+            <div>Загрузка модулей...</div>
+        </div>
+    </div>
+
+    <!-- Основное приложение -->
+    <div id="app">
+        <header>
+            <div class="header-container">
+                <a class="logo" data-route="/">
+                    <div class="logo-icon">✓</div>
+                    <span>TechCheck Pro</span>
+                </a>
+                <nav id="main-nav">
+                    <!-- Навигация будет сгенерирована динамически -->
+                </nav>
+            </div>
+        </header>
+
+        <main id="content">
+            <!-- Контент будет загружаться динамически через модули -->
+        </main>
+
+        <footer>
+            <p>© 2024 TechCheck Pro • Система проверки документации Массивбург</p>
+            <p style="margin-top: 0.5rem; font-size: 0.75rem; opacity: 0.7;">
+                Версия: <span id="app-version">0.0.0</span> | 
+                Модулей загружено: <span id="modules-count">0</span>
+            </p>
+        </footer>
+    </div>
+
+    <!-- Debug панель (показывается при ?debug=true) -->
+    <div class="debug-panel" id="debug-panel">
+        <h4>🔧 Debug Panel</h4>
+        <div id="debug-logs"></div>
+    </div>
+
+    <!-- Модульная система -->
+    <script type="module">
+        // Импортируем главный модуль приложения
+        import App from './_app.js';
+        
+        // Запускаем приложение
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                window.app = new App();
+                await window.app.init();
+            } catch (error) {
+                console.error('Failed to initialize app:', error);
+                document.getElementById('loader').innerHTML = `
+                    <div class="loader-content">
+                        <h2 style="color: var(--error-color);">Ошибка загрузки</h2>
+                        <p style="margin-top: 1rem;">${error.message}</p>
+                        <button onclick="location.reload()" class="btn btn-primary" style="margin-top: 1rem;">
+                            Перезагрузить
+                        </button>
+                    </div>
+                `;
+            }
+        });
+    </script>
+    
+    <!-- Fallback для старых браузеров -->
+    <script nomodule>
+        document.getElementById('loader').innerHTML = `
+            <div class="loader-content">
+                <h2 style="color: var(--error-color);">Браузер не поддерживается</h2>
+                <p style="margin-top: 1rem;">
+                    Для работы с системой требуется современный браузер с поддержкой ES6 модулей.
+                </p>
+                <p style="margin-top: 0.5rem;">
+                    Рекомендуем использовать последние версии Chrome, Firefox, Safari или Edge.
+                </p>
+            </div>
+        `;
+    </script>
+   <!-- PWA Service Worker -->
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(registration => console.log('SW registered:', registration))
+            .catch(error => console.log('SW registration failed:', error));
+    });
+}
+</script> 
+</body>
+</html>
