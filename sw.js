@@ -7,20 +7,10 @@ const CACHE_NAME = 'techcheck-v1.0.0';
 const urlsToCache = [
     './',
     './index.html',
+    './manifest.json',
     './base.css',
     './desktop.css',
-    './mobile.css',
-    './_app.js',
-    './_config.js',
-    './_router.js',
-    './_state.js',
-    './BaseModule.js',
-    './knowledge-base.js',
-    './checklist.js',
-    './wiki.js',
-    './stories.js',
-    './statistics.js',
-    './llm-check.js'
+    './mobile.css'
 ];
 
 // Установка Service Worker
@@ -29,7 +19,13 @@ self.addEventListener('install', event => {
         caches.open(CACHE_NAME)
             .then(cache => {
                 console.log('Opened cache');
-                return cache.addAll(urlsToCache);
+                return Promise.all(
+                    urlsToCache.map(url => {
+                        return cache.add(url).catch(err => {
+                            console.warn('Failed to cache:', url, err);
+                        });
+                    })
+                );
             })
     );
 });
@@ -64,3 +60,4 @@ self.addEventListener('fetch', event => {
     );
 
 });
+
