@@ -22,7 +22,6 @@ export default class KnowledgeBase extends BaseModule {
             status: 'ready'
         };
         
-        // Категории документов
         this.categories = [
             { 
                 id: 'sketches',
@@ -79,11 +78,7 @@ export default class KnowledgeBase extends BaseModule {
         this.currentArticle = null;
     }
     
-    /**
-     * Загрузка данных базы знаний
-     */
     async loadData() {
-        // Данные из документа "Состав выпускаемой КБ документации"
         this.data = {
             articles: [
                 {
@@ -176,158 +171,6 @@ export default class KnowledgeBase extends BaseModule {
                         ],
                         important: 'Фасады выше 1950мм требуют использования скрытых выпрямителей!'
                     }
-                },
-                {
-                    id: 'specification',
-                    category: 'specs',
-                    title: 'Правила оформления спецификации',
-                    tags: ['спецификация', 'детали', 'таблица'],
-                    content: {
-                        overview: 'Спецификация содержит полный перечень всех деталей изделия с размерами и материалами.',
-                        sections: [
-                            {
-                                title: 'Формат спецификации',
-                                items: [
-                                    'Номер детали в формате: блок.деталь',
-                                    'Наименование детали',
-                                    'Количество',
-                                    'Габаритные размеры (ДхШхТ)',
-                                    'Материал с указанием облицовки',
-                                    'Примечания при необходимости'
-                                ]
-                            },
-                            {
-                                title: 'Важные правила',
-                                items: [
-                                    'Длина всегда указывается вдоль текстуры',
-                                    'Составные фасады не разбиваются на элементы',
-                                    'Съемные детали указываются отдельно'
-                                ]
-                            }
-                        ],
-                        important: 'При наличии текстуры длина ВСЕГДА указывается вдоль рисунка!'
-                    }
-                },
-                {
-                    id: 'basis-files',
-                    category: 'basis',
-                    title: 'Файлы Базис Мебельщик',
-                    tags: ['базис', 'ЛДСП', 'ЧПУ'],
-                    content: {
-                        overview: 'Файлы для заказа ЛДСП у подрядчиков и передачи на участок ЧПУ.',
-                        sections: [
-                            {
-                                title: 'Для заказа ЛДСП',
-                                items: [
-                                    'Только детали ЛДСП и ХДФ',
-                                    'Все торцы с кромкой ABS 0.8mm',
-                                    'Для толщин >16мм кромка 2мм',
-                                    'Секции объединены в блоки',
-                                    'Иерархическая расстановка позиций'
-                                ]
-                            },
-                            {
-                                title: 'Для участка ЧПУ',
-                                items: [
-                                    'Все детали кроме профильных',
-                                    'Актуальные присадки и фрезеровки',
-                                    'Каждой детали присвоен номер',
-                                    'Сложные формы в формате STEP'
-                                ]
-                            }
-                        ],
-                        important: 'Перед передачей обязательно запустить "Анализ модели" для проверки ошибок!'
-                    }
-                },
-                {
-                    id: 'typical-solutions',
-                    category: 'typical',
-                    title: 'Типовые конструктивные решения',
-                    tags: ['конструкция', 'стандарт', 'решения'],
-                    content: {
-                        overview: 'Предпочтительные и проверенные конструктивные решения.',
-                        sections: [
-                            {
-                                title: 'Ящики',
-                                items: [
-                                    'МДФ под эмаль - 12мм, клей, усовое соединение',
-                                    'ЛДСП - шкант и клей, платик на толщину кромки',
-                                    'Направляющие Blum Tandem серии F (для 19мм)'
-                                ]
-                            },
-                            {
-                                title: 'Общие правила',
-                                items: [
-                                    'Зазор между фасадами стандартно 4мм',
-                                    'Задние стенки из ЛДСП внакладку',
-                                    'Доборы из МДФ 12мм на УС',
-                                    'Полки по умолчанию съемные',
-                                    'Подтапливать полки на 10мм'
-                                ]
-                            }
-                        ],
-                        important: 'Избегать видимого крепежа! Соединения должны быть скрытыми.'
-                    }
-                },
-                {
-                    id: 'furniture-standards',
-                    category: 'furniture',
-                    title: 'Стандарты по фурнитуре',
-                    tags: ['фурнитура', 'петли', 'направляющие'],
-                    content: {
-                        overview: 'Рекомендуемая фурнитура и правила её применения.',
-                        sections: [
-                            {
-                                title: 'Базовая фурнитура',
-                                items: [
-                                    'Петли всегда Blum',
-                                    'Ящики Blum или Hettich Aventos',
-                                    'Выпрямители фасадов врезные',
-                                    'Полкодержатели OR для всех типов полок'
-                                ]
-                            },
-                            {
-                                title: 'Подсветка',
-                                items: [
-                                    'Лента Arlight 3000K, 24V, 120 диодов/м',
-                                    'Профили прямые для рабочей зоны',
-                                    'Профили наклонные для секций',
-                                    'Блоки питания Arlight стандартные'
-                                ]
-                            }
-                        ],
-                        important: 'Черная фурнитура только в темную мебель с черным крепежом!'
-                    }
-                },
-                {
-                    id: 'builtin-tech',
-                    category: 'tech',
-                    title: 'Встроенная техника',
-                    tags: ['техника', 'холодильник', 'посудомойка'],
-                    content: {
-                        overview: 'Правила проектирования ниш и фасадов для встроенной техники.',
-                        sections: [
-                            {
-                                title: 'Общие правила',
-                                items: [
-                                    'Ниши по средним размерам из технички',
-                                    'Проверять вес накладного фасада',
-                                    'От стены до задней стенки минимум 40мм',
-                                    'Вырез под вентиляцию 20х450мм'
-                                ]
-                            },
-                            {
-                                title: 'Специфика техники',
-                                items: [
-                                    'Холодильник - проверить количество петель',
-                                    'Посудомойка - фасад максимально легкий',
-                                    'Духовка - фасад перекрывает нишу на 2-3мм',
-                                    'Вырез под фасад ПММ = 15х604мм при цоколе 100мм'
-                                ]
-                            }
-                        ],
-                        important: 'Всегда руководствоваться официальными техническими данными производителя!'
-                    }
                 }
             ]
         };
@@ -335,27 +178,18 @@ export default class KnowledgeBase extends BaseModule {
         this.setCache(this.data);
     }
     
-    /**
-     * Рендер контента модуля
-     */
     renderContent() {
-        // Если открыта конкретная статья
         if (this.currentArticle) {
             return this.renderArticle();
         }
         
-        // Если выбрана категория
         if (this.currentCategory) {
             return this.renderCategory();
         }
         
-        // Главная страница базы знаний
         return this.renderMain();
     }
     
-    /**
-     * Главная страница базы знаний
-     */
     renderMain() {
         return `
             <div class="knowledge-base">
@@ -377,9 +211,6 @@ export default class KnowledgeBase extends BaseModule {
         `;
     }
     
-    /**
-     * Поисковая строка
-     */
     renderSearch() {
         return `
             <div class="search-container">
@@ -393,16 +224,13 @@ export default class KnowledgeBase extends BaseModule {
         `;
     }
     
-    /**
-     * Карточка категории
-     */
     renderCategoryCard(category) {
         const count = this.data.articles.filter(a => a.category === category.id).length;
         
         return `
             <div class="category-card" 
                  onclick="app.getModule('knowledge-base').openCategory('${category.id}')"
-                 style="border-left: 4px solid ${category.color};">
+                 style="border-left-color: ${category.color};">
                 <div class="category-icon" style="background: ${category.color}20;">
                     ${category.icon}
                 </div>
@@ -412,9 +240,6 @@ export default class KnowledgeBase extends BaseModule {
         `;
     }
     
-    /**
-     * Карточка статьи
-     */
     renderArticleCard(article) {
         const category = this.categories.find(c => c.id === article.category);
         
@@ -436,9 +261,6 @@ export default class KnowledgeBase extends BaseModule {
         `;
     }
     
-    /**
-     * Страница категории
-     */
     renderCategory() {
         const category = this.categories.find(c => c.id === this.currentCategory);
         const articles = this.data.articles.filter(a => a.category === this.currentCategory);
@@ -453,7 +275,7 @@ export default class KnowledgeBase extends BaseModule {
                     <span>${category.title}</span>
                 </div>
                 
-                <div class="category-header" style="border-left: 4px solid ${category.color};">
+                <div class="category-header" style="border-left-color: ${category.color};">
                     <h2>
                         <span style="color: ${category.color};">${category.icon}</span>
                         ${category.title}
@@ -467,9 +289,6 @@ export default class KnowledgeBase extends BaseModule {
         `;
     }
     
-    /**
-     * Страница статьи
-     */
     renderArticle() {
         const article = this.data.articles.find(a => a.id === this.currentArticle);
         if (!article) return '<p>Статья не найдена</p>';
@@ -535,9 +354,6 @@ export default class KnowledgeBase extends BaseModule {
         `;
     }
     
-    /**
-     * Публичные методы
-     */
     getPublicMethods() {
         return {
             search: (query) => this.search(query),
@@ -548,19 +364,12 @@ export default class KnowledgeBase extends BaseModule {
         };
     }
     
-    /**
-     * Поиск
-     */
     search(query) {
         this.searchQuery = query;
         this.log(`Searching: ${query}`);
-        // Здесь будет логика поиска
         this.render();
     }
     
-    /**
-     * Открыть категорию
-     */
     openCategory(categoryId) {
         this.currentCategory = categoryId;
         this.currentArticle = null;
@@ -568,18 +377,12 @@ export default class KnowledgeBase extends BaseModule {
         this.render();
     }
     
-    /**
-     * Открыть статью
-     */
     openArticle(articleId) {
         this.currentArticle = articleId;
         this.app.router.navigate(`/knowledge-base/article/${articleId}`);
         this.render();
     }
     
-    /**
-     * На главную базы знаний
-     */
     goHome() {
         this.currentCategory = null;
         this.currentArticle = null;
@@ -587,24 +390,15 @@ export default class KnowledgeBase extends BaseModule {
         this.render();
     }
     
-    /**
-     * Поиск по тегу
-     */
     searchByTag(tag) {
         this.searchQuery = `#${tag}`;
         this.search(this.searchQuery);
     }
     
-    /**
-     * Популярные статьи
-     */
     getPopularArticles() {
         return this.data.articles.slice(0, 3);
     }
     
-    /**
-     * Обновить контент на странице
-     */
     render() {
         const container = document.getElementById('content');
         if (container) {
