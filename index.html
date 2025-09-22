@@ -3,37 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechCheck Pro - Система проверки технической документации</title>
+    <title>TechCheck Pro - Система проверки документации</title>
     
     <!-- PWA манифест -->
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✓</text></svg>">
     
-    <!-- Стили разделены по файлам согласно архитектуре -->
-    <link rel="stylesheet" href="base.css">
-    <link rel="stylesheet" href="desktop.css" media="(min-width: 768px)">
-    <link rel="stylesheet" href="mobile.css" media="(max-width: 767px)">
-    
-    <!-- Временные встроенные стили для демо (потом вынесем в файлы) -->
+    <!-- Стили -->
     <style>
         /* === Базовые переменные === */
         :root {
             --primary-color: #2563eb;
             --primary-hover: #1d4ed8;
+            --primary-light: #dbeafe;
             --success-color: #10b981;
+            --success-light: #d1fae5;
             --warning-color: #f59e0b;
+            --warning-light: #fed7aa;
             --error-color: #ef4444;
+            --error-light: #fee2e2;
+            
             --bg-primary: #ffffff;
             --bg-secondary: #f8fafc;
             --bg-tertiary: #f1f5f9;
-            --text-primary: #1e293b;
+            --bg-card: #ffffff;
+            --bg-dark: #1e293b;
+            
+            --text-primary: #0f172a;
             --text-secondary: #64748b;
+            --text-light: #94a3b8;
+            
             --border-color: #e2e8f0;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
             --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
-            --radius: 8px;
+            --shadow-xl: 0 20px 25px rgba(0,0,0,0.1);
+            
+            --radius: 12px;
+            --radius-lg: 20px;
+            --radius-xl: 24px;
+            
             --max-width: 1280px;
+            --content-padding: 20px;
+            --card-gap: 16px;
         }
 
         * {
@@ -44,18 +56,17 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-secondary);
+            font-size: 16px;
+            line-height: 1.5;
             color: var(--text-primary);
-            line-height: 1.6;
+            background: var(--bg-secondary);
+            -webkit-font-smoothing: antialiased;
         }
 
         /* === Загрузчик === */
         #loader {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            inset: 0;
             background: white;
             display: flex;
             align-items: center;
@@ -64,50 +75,45 @@
             transition: opacity 0.3s;
         }
 
-        .loader-content {
-            text-align: center;
-        }
-
         .loader-spinner {
-            width: 50px;
-            height: 50px;
+            width: 48px;
+            height: 48px;
             border: 3px solid var(--border-color);
             border-top-color: var(--primary-color);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 1rem;
+            animation: spin 0.8s linear infinite;
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
 
-        /* === Контейнер приложения === */
+        /* === Приложение === */
         #app {
-            min-height: 100vh;Версия: 0.0.1
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             opacity: 0;
             transition: opacity 0.3s;
         }
+        
         #app.loaded {
             opacity: 1;
         }
 
-        /* === Навигация === */
+        /* === Шапка === */
         header {
             background: var(--bg-primary);
             border-bottom: 1px solid var(--border-color);
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: var(--shadow-sm);
         }
 
         .header-container {
             max-width: var(--max-width);
             margin: 0 auto;
-            padding: 1rem 1.5rem;
+            padding: 16px var(--content-padding);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -116,37 +122,40 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            font-size: 1.25rem;
+            gap: 12px;
+            font-size: 20px;
             font-weight: 700;
             color: var(--text-primary);
             text-decoration: none;
-            cursor: pointer;
         }
 
         .logo-icon {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             background: linear-gradient(135deg, var(--primary-color), #3b82f6);
-            border-radius: var(--radius);
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
         }
 
+        /* === Навигация === */
         nav {
             display: flex;
-            gap: 0.5rem;
+            gap: 8px;
         }
 
         .nav-link {
-            padding: 0.5rem 1rem;
-            border-radius: var(--radius);
-            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
             color: var(--text-secondary);
-            transition: all 0.2s;
             font-weight: 500;
+            font-size: 15px;
+            transition: all 0.2s;
+            text-decoration: none;
             cursor: pointer;
         }
 
@@ -166,99 +175,289 @@
             max-width: var(--max-width);
             width: 100%;
             margin: 0 auto;
-            padding: 2rem 1.5rem;
+            padding: 24px var(--content-padding);
         }
 
-        /* === Стили для модулей === */
-        .module-container {
-            background: var(--bg-primary);
-            border-radius: var(--radius);
-            padding: 2rem;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .module-header {
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--bg-secondary);
-        }
-
-        .module-header h1 {
+        /* === Главная страница === */
+        .home-container {
             display: flex;
-            align-items: center;
-            gap: 1rem;
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
+            flex-direction: column;
+            gap: 32px;
         }
 
-        .module-icon {
-            font-size: 2rem;
+        /* Hero секция */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: var(--radius-xl);
+            padding: 48px;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
         }
 
-        .module-description {
-            color: var(--text-secondary);
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            pointer-events: none;
         }
 
-        /* === Карточки === */
-        .module-card {
-            background: var(--bg-primary);
-            border-radius: var(--radius);
-            padding: 1.5rem;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.3s;
-            cursor: pointer;
-            border: 2px solid transparent;
+        .hero h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            position: relative;
         }
 
-        .module-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--primary-color);
+        .hero p {
+            font-size: 18px;
+            opacity: 0.95;
+            margin-bottom: 24px;
+            position: relative;
         }
 
-        /* === Кнопки === */
+        .hero-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            position: relative;
+        }
+
         .btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: var(--radius);
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
             font-weight: 600;
-            text-decoration: none;
+            cursor: pointer;
             transition: all 0.2s;
+            text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
+            gap: 8px;
         }
 
         .btn-primary {
-            background: var(--primary-color);
-            color: white;
+            background: white;
+            color: var(--text-primary);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
         }
 
         .btn-primary:hover {
-            background: var(--primary-hover);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         }
 
         .btn-secondary {
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
+            background: rgba(255,255,255,0.2);
+            color: white;
+            backdrop-filter: blur(10px);
         }
 
         .btn-secondary:hover {
-            background: var(--border-color);
+            background: rgba(255,255,255,0.3);
         }
 
-        /* === Футер === */
+        /* Основная сетка модулей */
+        .main-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--card-gap);
+        }
+
+        /* Карточка документации */
+        .docs-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            min-height: 200px;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .docs-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -30%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+        }
+
+        .docs-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(102, 126, 234, 0.4);
+        }
+
+        .docs-card h2 {
+            font-size: 24px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+        }
+
+        .docs-card p {
+            font-size: 16px;
+            opacity: 0.9;
+            position: relative;
+        }
+
+        /* Карточки модулей */
+        .module-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid var(--border-color);
+            text-decoration: none;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), #764ba2);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .module-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: transparent;
+        }
+
+        .module-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .module-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .module-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .module-info {
+            flex: 1;
+        }
+
+        .module-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .module-card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .module-status {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-ready {
+            background: var(--success-light);
+            color: #059669;
+        }
+
+        .status-beta {
+            background: var(--warning-light);
+            color: #d97706;
+        }
+
+        .status-soon {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+        }
+
+        /* Специальные модули */
+        .special-modules {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--card-gap);
+            margin-top: var(--card-gap);
+        }
+
+        .special-card {
+            background: var(--bg-dark);
+            color: white;
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: block;
+        }
+
+        .special-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(30, 41, 59, 0.3);
+        }
+
+        .special-card h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .special-card p {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        /* Футер */
         footer {
             background: var(--bg-primary);
             border-top: 1px solid var(--border-color);
-            padding: 2rem;
+            padding: 24px;
             text-align: center;
             color: var(--text-secondary);
-            font-size: 0.875rem;
+            font-size: 14px;
         }
 
         /* === Debug панель === */
@@ -268,10 +467,10 @@
             right: 20px;
             background: rgba(0, 0, 0, 0.9);
             color: white;
-            padding: 1rem;
-            border-radius: var(--radius);
+            padding: 16px;
+            border-radius: 12px;
             font-family: monospace;
-            font-size: 0.75rem;
+            font-size: 12px;
             max-width: 300px;
             max-height: 400px;
             overflow-y: auto;
@@ -283,36 +482,79 @@
             display: block;
         }
 
-        .debug-panel h4 {
-            margin-bottom: 0.5rem;
-            color: #10b981;
-        }
-
-        .debug-log {
-            margin-bottom: 0.25rem;
-            padding: 0.25rem 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
         /* === Мобильная версия === */
-        @media (max-width: 767px) {
+        @media (max-width: 768px) {
+            :root {
+                --content-padding: 16px;
+                --card-gap: 12px;
+            }
+
             .header-container {
-                flex-direction: column;
-                gap: 1rem;
+                padding: 12px var(--content-padding);
+            }
+
+            .logo {
+                font-size: 18px;
+            }
+
+            .logo-icon {
+                width: 32px;
+                height: 32px;
             }
 
             nav {
-                width: 100%;
-                overflow-x: auto;
-                justify-content: center;
+                display: none;
             }
 
             main {
-                padding: 1rem;
+                padding: 16px var(--content-padding);
             }
 
-            .module-container {
-                padding: 1rem;
+            .hero {
+                padding: 32px 20px;
+                border-radius: var(--radius-lg);
+            }
+
+            .hero h1 {
+                font-size: 24px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .docs-card {
+                padding: 24px;
+                min-height: 160px;
+            }
+
+            .module-card {
+                padding: 20px;
+            }
+
+            .special-modules {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Планшеты */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -322,7 +564,7 @@
     <div id="loader">
         <div class="loader-content">
             <div class="loader-spinner"></div>
-            <div>Загрузка модулей...</div>
+            <div style="margin-top: 16px; color: var(--text-secondary);">Загрузка модулей...</div>
         </div>
     </div>
 
@@ -330,30 +572,116 @@
     <div id="app">
         <header>
             <div class="header-container">
-                <a class="logo" data-route="/">
+                <a class="logo" href="#/">
                     <div class="logo-icon">✓</div>
                     <span>TechCheck Pro</span>
                 </a>
                 <nav id="main-nav">
-                    <!-- Навигация будет сгенерирована динамически -->
+                    <!-- Навигация генерируется динамически -->
                 </nav>
             </div>
         </header>
 
         <main id="content">
-            <!-- Контент будет загружаться динамически через модули -->
+            <!-- Стартовая страница (будет заменена роутером) -->
+            <div class="home-container">
+                <!-- Hero блок -->
+                <section class="hero">
+                    <h1>Проверяйте документацию быстро и точно</h1>
+                    <p>Стандарты Массивбург • Интерактивные чек-листы • База знаний</p>
+                    <div class="hero-actions">
+                        <button class="btn btn-primary" onclick="window.location.hash = '/checklist'">
+                            🚀 Начать проверку
+                        </button>
+                        <button class="btn btn-secondary" onclick="window.location.hash = '/knowledge-base'">
+                            📖 База знаний
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Основная сетка -->
+                <div class="main-grid">
+                    <!-- Документация - большая карточка -->
+                    <a href="#/documents" class="docs-card">
+                        <h2>📋 Состав документации</h2>
+                        <p>7 типов документов для проверки</p>
+                    </a>
+
+                    <!-- База знаний -->
+                    <div class="module-card" onclick="window.location.hash = '/knowledge-base'">
+                        <span class="module-status status-ready">Готово</span>
+                        <div class="module-header">
+                            <div class="module-icon">📚</div>
+                            <div class="module-info">
+                                <h3>База знаний</h3>
+                                <p>Нормы проектирования, ГОСТ стандарты</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Чек-листы -->
+                    <div class="module-card" onclick="window.location.hash = '/checklist'">
+                        <span class="module-status status-ready">Готово</span>
+                        <div class="module-header">
+                            <div class="module-icon">✓</div>
+                            <div class="module-info">
+                                <h3>Чек-листы</h3>
+                                <p>Интерактивная проверка документов</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Дополнительные модули -->
+                <div class="special-modules">
+                    <!-- Wiki -->
+                    <div class="module-card" onclick="window.location.hash = '/wiki'">
+                        <span class="module-status status-beta">Beta</span>
+                        <div class="module-header">
+                            <div class="module-icon">📖</div>
+                            <div class="module-info">
+                                <h3>Wiki</h3>
+                                <p>База знаний команды</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stories -->
+                    <div class="module-card" onclick="window.location.hash = '/stories'">
+                        <span class="module-status status-beta">Beta</span>
+                        <div class="module-header">
+                            <div class="module-icon">💬</div>
+                            <div class="module-info">
+                                <h3>Stories</h3>
+                                <p>Кейсы и обсуждения</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Статистика -->
+                    <div class="special-card" onclick="window.location.hash = '/statistics'">
+                        <h3>📊 Статистика</h3>
+                        <p>Скоро</p>
+                    </div>
+
+                    <!-- AI Проверка -->
+                    <div class="special-card" onclick="window.location.hash = '/llm-check'">
+                        <h3>🤖 AI Проверка</h3>
+                        <p>Скоро</p>
+                    </div>
+                </div>
+            </div>
         </main>
 
         <footer>
-            <p>© 2025 TechCheck Pro • Система проверки документации Массивбург</p>
-            <p style="margin-top: 0.5rem; font-size: 0.75rem; opacity: 0.7;">
-                Версия: <span id="app-version">0.0.1</span> | 
-                Модулей загружено: <span id="modules-count">10</span>
+            <p>© 2025 TechCheck Pro • Система проверки документации</p>
+            <p style="margin-top: 8px; font-size: 12px; opacity: 0.7;">
+                Версия: <span id="app-version">1.0.0</span>
             </p>
         </footer>
     </div>
 
-    <!-- Debug панель (показывается при ?debug=true) -->
+    <!-- Debug панель -->
     <div class="debug-panel" id="debug-panel">
         <h4>🔧 Debug Panel</h4>
         <div id="debug-logs"></div>
@@ -361,7 +689,7 @@
 
     <!-- Модульная система -->
     <script type="module">
-        // Импортируем главный модуль приложения
+        // Импортируем главный модуль
         import App from './_app.js';
         
         // Запускаем приложение
@@ -383,30 +711,5 @@
             }
         });
     </script>
-    
-    <!-- Fallback для старых браузеров -->
-    <script nomodule>
-        document.getElementById('loader').innerHTML = `
-            <div class="loader-content">
-                <h2 style="color: var(--error-color);">Браузер не поддерживается</h2>
-                <p style="margin-top: 1rem;">
-                    Для работы с системой требуется современный браузер с поддержкой ES6 модулей.
-                </p>
-                <p style="margin-top: 0.5rem;">
-                    Рекомендуем использовать последние версии Chrome, Firefox, Safari или Edge.
-                </p>
-            </div>
-        `;
-    </script>
-   <!-- PWA Service Worker -->
-<script>
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-            .then(registration => console.log('SW registered:', registration))
-            .catch(error => console.log('SW registration failed:', error));
-    });
-}
-</script> 
 </body>
 </html>
