@@ -180,25 +180,281 @@ export default class Router {
      * Рендер главной страницы
      */
     renderHome() {
-        const modules = [];
-        
-        // Собираем информацию о модулях
-        this.app.modules.forEach((module, name) => {
-            if (!name.startsWith('_')) {
-                const meta = module.meta || this.app.moduleMeta[name] || {};
-                modules.push({
-                    name,
-                    ...meta,
-                    module
-                });
-            }
-        });
-        
         return `
             <div class="home-container">
-                ${this.renderHero()}
-                ${this.renderDocuments()}
-                ${this.renderModules(modules)}
+                <!-- Hero блок -->
+                <section class="hero">
+                    <h1>Проверяйте документацию быстро и точно</h1>
+                    <p>Стандарты Массивбург • Интерактивные чек-листы • База знаний</p>
+                    <div class="hero-actions">
+                        <button class="btn btn-primary" onclick="app.router.navigate('/checklist')">
+                            🚀 Начать проверку
+                        </button>
+                        <button class="btn btn-secondary" onclick="app.router.navigate('/knowledge-base')">
+                            📖 База знаний
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Основная сетка -->
+                <div class="main-grid">
+                    <!-- Документация - большая карточка -->
+                    <div class="docs-card" onclick="app.router.navigate('/documents')">
+                        <h2>📋 Состав документации</h2>
+                        <p>7 типов документов для проверки</p>
+                    </div>
+
+                    <!-- База знаний -->
+                    <div class="module-card" onclick="app.router.navigate('/knowledge-base')">
+                        <span class="module-status status-ready">Готово</span>
+                        <div class="module-header">
+                            <div class="module-icon">📚</div>
+                            <div class="module-info">
+                                <h3>База знаний</h3>
+                                <p>Нормы проектирования, ГОСТ стандарты</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Чек-листы -->
+                    <div class="module-card" onclick="app.router.navigate('/checklist')">
+                        <span class="module-status status-ready">Готово</span>
+                        <div class="module-header">
+                            <div class="module-icon">✓</div>
+                            <div class="module-info">
+                                <h3>Чек-листы</h3>
+                                <p>Интерактивная проверка документов</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Дополнительные модули -->
+                <div class="special-modules">
+                    <!-- Wiki -->
+                    <div class="module-card" onclick="app.router.navigate('/wiki')">
+                        <span class="module-status status-beta">Beta</span>
+                        <div class="module-header">
+                            <div class="module-icon">📖</div>
+                            <div class="module-info">
+                                <h3>Wiki</h3>
+                                <p>База знаний команды</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stories -->
+                    <div class="module-card" onclick="app.router.navigate('/stories')">
+                        <span class="module-status status-beta">Beta</span>
+                        <div class="module-header">
+                            <div class="module-icon">💬</div>
+                            <div class="module-info">
+                                <h3>Stories</h3>
+                                <p>Кейсы и обсуждения</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Статистика -->
+                    <div class="special-card" onclick="app.router.navigate('/statistics')">
+                        <h3>📊 Статистика</h3>
+                        <p>Скоро</p>
+                    </div>
+
+                    <!-- AI Проверка -->
+                    <div class="special-card" onclick="app.router.navigate('/llm-check')">
+                        <h3>🤖 AI Проверка</h3>
+                        <p>Скоро</p>
+                    </div>
+                </div>
+                
+                <style>
+                    .home-container {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 32px;
+                    }
+
+                    .hero {
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        border-radius: 24px;
+                        padding: 48px;
+                        text-align: center;
+                        color: white;
+                        position: relative;
+                        overflow: hidden;
+                    }
+
+                    .hero h1 {
+                        font-size: 32px;
+                        font-weight: 700;
+                        margin-bottom: 12px;
+                    }
+
+                    .hero p {
+                        font-size: 18px;
+                        opacity: 0.95;
+                        margin-bottom: 24px;
+                    }
+
+                    .hero-actions {
+                        display: flex;
+                        gap: 12px;
+                        justify-content: center;
+                    }
+
+                    .btn {
+                        padding: 12px 24px;
+                        border: none;
+                        border-radius: 10px;
+                        font-size: 16px;
+                        font-weight: 600;
+                        cursor: pointer;
+                        transition: all 0.2s;
+                    }
+
+                    .btn-primary {
+                        background: white;
+                        color: var(--text-primary);
+                    }
+
+                    .btn-primary:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+                    }
+
+                    .btn-secondary {
+                        background: rgba(255,255,255,0.2);
+                        color: white;
+                    }
+
+                    .main-grid {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                        gap: 16px;
+                    }
+
+                    .docs-card {
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        border-radius: 20px;
+                        padding: 32px;
+                        color: white;
+                        cursor: pointer;
+                        transition: all 0.3s;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        text-align: center;
+                        min-height: 200px;
+                        justify-content: center;
+                    }
+
+                    .docs-card:hover {
+                        transform: translateY(-4px);
+                        box-shadow: 0 12px 24px rgba(102, 126, 234, 0.4);
+                    }
+
+                    .module-card {
+                        background: white;
+                        border-radius: 20px;
+                        padding: 24px;
+                        cursor: pointer;
+                        transition: all 0.3s;
+                        border: 1px solid var(--border-color);
+                        position: relative;
+                    }
+
+                    .module-card:hover {
+                        transform: translateY(-4px);
+                        box-shadow: var(--shadow-lg);
+                    }
+
+                    .module-header {
+                        display: flex;
+                        align-items: flex-start;
+                        gap: 16px;
+                    }
+
+                    .module-icon {
+                        width: 48px;
+                        height: 48px;
+                        background: var(--bg-secondary);
+                        border-radius: 12px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 24px;
+                    }
+
+                    .module-status {
+                        position: absolute;
+                        top: 16px;
+                        right: 16px;
+                        padding: 4px 10px;
+                        border-radius: 20px;
+                        font-size: 12px;
+                        font-weight: 600;
+                    }
+
+                    .status-ready {
+                        background: var(--success-light);
+                        color: #059669;
+                    }
+
+                    .status-beta {
+                        background: var(--warning-light);
+                        color: #d97706;
+                    }
+
+                    .special-modules {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                        gap: 16px;
+                    }
+
+                    .special-card {
+                        background: var(--bg-dark);
+                        color: white;
+                        border-radius: 20px;
+                        padding: 24px;
+                        cursor: pointer;
+                        transition: all 0.3s;
+                    }
+
+                    .special-card:hover {
+                        transform: translateY(-4px);
+                        box-shadow: 0 12px 24px rgba(30, 41, 59, 0.3);
+                    }
+
+                    @media (max-width: 768px) {
+                        .home-container {
+                            gap: 16px;
+                        }
+
+                        .hero {
+                            padding: 32px 20px;
+                            border-radius: 20px;
+                        }
+
+                        .hero h1 {
+                            font-size: 24px;
+                        }
+
+                        .hero-actions {
+                            flex-direction: column;
+                        }
+
+                        .btn {
+                            width: 100%;
+                            justify-content: center;
+                        }
+
+                        .main-grid,
+                        .special-modules {
+                            grid-template-columns: 1fr;
+                        }
+                    }
+                </style>
             </div>
         `;
     }
@@ -207,93 +463,32 @@ export default class Router {
      * Hero секция
      */
     renderHero() {
-        return `
-            <section class="hero">
-                <h1>Система проверки технической документации</h1>
-                <p>Стандарты Массивбург • Чек-листы • База знаний</p>
-                <div class="hero-actions">
-                    <button data-route="/checklist" class="btn btn-primary">
-                        🚀 Начать проверку
-                    </button>
-                    <button data-route="/wiki/guide" class="btn btn-secondary">
-                        📖 Руководство
-                    </button>
-                </div>
-            </section>
-        `;
+        // Удаляем этот метод, так как теперь все в renderHome()
+        return '';
     }
     
     /**
      * Блок документации
      */
     renderDocuments() {
-        const docs = [
-            { id: 1, title: 'Эскизы для согласования', desc: 'Первичные чертежи для утверждения' },
-            { id: 2, title: 'Чертежи для изготовления', desc: 'Рабочая документация для цеха' },
-            { id: 3, title: 'Спецификация деталей', desc: 'Полный перечень элементов' },
-            { id: 4, title: 'Чертежи для субподряда', desc: 'Документация для подрядчиков' },
-            { id: 5, title: 'Заявка в снабжение', desc: 'Excel с материалами и фурнитурой' },
-            { id: 6, title: 'Файлы Базис Мебельщик', desc: 'Для заказа ЛДСП и ЧПУ' },
-            { id: 7, title: 'Файлы DXF', desc: 'Для подрядчиков (по запросу)' }
-        ];
-        
-        return `
-            <section class="docs-section">
-                <h2>📋 Состав выпускаемой КБ документации</h2>
-                <div class="docs-list">
-                    ${docs.map(doc => `
-                        <div class="doc-item" data-route="/checklist?doc=${doc.id}">
-                            <span class="doc-number">${doc.id}</span>
-                            <div class="doc-content">
-                                <div class="doc-title">${doc.title}</div>
-                                <div class="doc-desc">${doc.desc}</div>
-                            </div>
-                            <span class="doc-arrow">→</span>
-                        </div>
-                    `).join('')}
-                </div>
-            </section>
-        `;
+        // Удаляем этот метод, так как теперь все в renderHome()
+        return '';
     }
     
     /**
      * Блок модулей
      */
     renderModules(modules) {
-        return `
-            <section class="modules-section">
-                <h2>Модули системы</h2>
-                <div class="modules-grid">
-                    ${modules.map(m => this.renderModuleCard(m)).join('')}
-                </div>
-            </section>
-        `;
+        // Удаляем этот метод, так как теперь все в renderHome()
+        return '';
     }
     
     /**
      * Карточка модуля
      */
     renderModuleCard(moduleInfo) {
-        const statusClass = {
-            'ready': 'status-ready',
-            'beta': 'status-beta',
-            'soon': 'status-soon'
-        }[moduleInfo.status] || 'status-soon';
-        
-        const statusText = {
-            'ready': 'Готово',
-            'beta': 'Beta',
-            'soon': 'Скоро'
-        }[moduleInfo.status] || 'В разработке';
-        
-        return `
-            <div class="module-card" data-route="/${moduleInfo.name}">
-                <div class="module-icon">${moduleInfo.icon || '📦'}</div>
-                <h3>${moduleInfo.title}</h3>
-                <p>${moduleInfo.description}</p>
-                <span class="module-status ${statusClass}">${statusText}</span>
-            </div>
-        `;
+        // Удаляем этот метод, так как теперь все в renderHome()
+        return '';
     }
     
     /**
