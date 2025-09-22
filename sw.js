@@ -5,22 +5,22 @@
 
 const CACHE_NAME = 'techcheck-v1.0.0';
 const urlsToCache = [
-    '/',
-    '/index.html',
-    '/base.css',
-    '/desktop.css',
-    '/mobile.css',
-    '/_app.js',
-    '/_config.js',
-    '/_router.js',
-    '/_state.js',
-    '/BaseModule.js',
-    '/knowledge-base.js',
-    '/checklist.js',
-    '/wiki.js',
-    '/stories.js',
-    '/statistics.js',
-    '/llm-check.js'
+    './',
+    './index.html',
+    './base.css',
+    './desktop.css',
+    './mobile.css',
+    './_app.js',
+    './_config.js',
+    './_router.js',
+    './_state.js',
+    './BaseModule.js',
+    './knowledge-base.js',
+    './checklist.js',
+    './wiki.js',
+    './stories.js',
+    './statistics.js',
+    './llm-check.js'
 ];
 
 // Установка Service Worker
@@ -62,4 +62,5 @@ self.addEventListener('fetch', event => {
             }
         )
     );
+
 });
