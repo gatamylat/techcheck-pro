@@ -3,7 +3,7 @@
  * Обеспечивает работу офлайн и кэширование
  */
 
-const CACHE_NAME = 'techcheck-v1.0.0';
+const CACHE_NAME = 'techcheck-v1.0.1';
 const urlsToCache = [
     './',
     './index.html',
@@ -48,16 +48,23 @@ self.addEventListener('activate', event => {
 // Обработка запросов
 self.addEventListener('fetch', event => {
     event.respondWith(
-        caches.match(event.request)
+        fetch(event.request)
             .then(response => {
-                // Cache hit - return response
-                if (response) {
-                    return response;
-                }
-                return fetch(event.request);
-            }
-        )
+                // Клонируем ответ для кэша
+                const responseToCache = response.clone();
+                
+                caches.open(CACHE_NAME)
+                    .then(cache => {
+                        cache.put(event.request, responseToCache);
+                    });
+                
+                return response;
+            })
+            .catch(() => {
+                // Если сеть недоступна, берем из кэша
+                return caches.match(event.request);
+            })
     );
-
 });
+
 
