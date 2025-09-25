@@ -180,9 +180,17 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 2rem;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
 }
 
+/* === Отступы для блоков главной страницы === */
+.main-grid {
+    margin-bottom: 2rem;
+}
+
+.special-modules {
+    margin-bottom: 2rem;
+}
 .module-card {
     background: var(--bg-primary);
     border: 1px solid var(--border-color);
