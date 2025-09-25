@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="base.css">
     <link rel="stylesheet" href="desktop.css" media="(min-width: 768px)">
     <link rel="stylesheet" href="mobile.css" media="(max-width: 767px)">
+    <link rel="stylesheet" href="effects.css">
 </head>
 <body>
     <!-- Загрузчик -->
@@ -165,6 +166,15 @@
                 `;
             }
         });
+        // Липкий хедер при скролле
+window.addEventListener('scroll', () => {
+    const header = document.querySelector('header');
+    if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+    } else {
+        header.classList.remove('scrolled');
+    }
+});
     </script>
 </body>
 </html>
