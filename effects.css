@@ -175,7 +175,7 @@ header.scrolled {
 }
 
 /* === ДЕКОРАТИВНЫЕ ЭЛЕМЕНТЫ === */
-.hero::after {
+/*.hero::after {
     content: '';
     position: absolute;
     top: 20px;
@@ -185,7 +185,7 @@ header.scrolled {
     background: radial-gradient(circle, rgba(0, 191, 165, 0.3), transparent);
     border-radius: 50%;
     animation: float 6s ease-in-out infinite;
-}
+}*/
 
 @keyframes float {
     0%, 100% { transform: translateY(0) rotate(0deg); }
