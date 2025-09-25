@@ -1060,3 +1060,130 @@ footer {
 .special-card p {
     color: rgba(255, 255, 255, 0.7);
 }
+/* === Стили модуля Documents === */
+.documents-page {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.page-header {
+    margin-bottom: 2rem;
+}
+
+.page-header h1 {
+    font-size: 2rem;
+    margin: 1rem 0 0.5rem;
+}
+
+.page-header p {
+    color: var(--text-secondary);
+    font-size: 1.125rem;
+}
+
+.back-btn {
+    background: var(--bg-secondary);
+    border: none;
+    padding: 0.625rem 1.25rem;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.back-btn:hover {
+    background: var(--bg-tertiary);
+    transform: translateX(-4px);
+}
+
+.documents-grid {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.document-card {
+    background: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1.25rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 1px solid var(--border-color);
+}
+
+.document-card:hover {
+    transform: translateX(8px);
+    box-shadow: var(--shadow-md);
+    border-color: transparent;
+}
+
+.document-detail {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.doc-header {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+
+.doc-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+}
+
+.doc-details {
+    background: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    margin: 2rem 0;
+    border: 1px solid var(--border-color);
+}
+
+.detail-section {
+    margin-bottom: 2rem;
+}
+
+.detail-section:last-child {
+    margin-bottom: 0;
+}
+
+.detail-section h3 {
+    font-size: 1.125rem;
+    margin-bottom: 0.75rem;
+}
+
+.detail-section p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.detail-section ul {
+    margin-left: 1.25rem;
+    color: var(--text-secondary);
+}
+
+.detail-section li {
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+}
+
+.requirements li {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.doc-actions {
+    display: flex;
+    gap: 0.75rem;
+}
