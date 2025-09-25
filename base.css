@@ -980,3 +980,83 @@ footer {
     padding: 0.25rem 0;
     border-bottom: 1px solid rgba(255,255,255,0.1);
 }
+/* === Стили главной страницы (из _router.js) === */
+.home-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.main-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.docs-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+}
+
+.docs-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(102, 126, 234, 0.4);
+}
+
+.docs-card h2 {
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.docs-card p {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.module-info h3 {
+    margin-bottom: 0.5rem;
+}
+
+.module-info p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.special-modules {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.special-card {
+    background: var(--bg-dark);
+    color: white;
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.special-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(30, 41, 59, 0.3);
+}
+
+.special-card h3 {
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.special-card p {
+    color: rgba(255, 255, 255, 0.7);
+}
