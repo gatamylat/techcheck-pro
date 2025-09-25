@@ -197,15 +197,7 @@
 }
 
 .module-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--primary-color), var(--accent-teal));
-    transform: scaleX(0);
-    transition: var(--transition);
+    display: none; /* Убираем верхнюю полоску */
 }
 
 .module-card:hover {
@@ -215,7 +207,7 @@
 }
 
 .module-card:hover::before {
-    transform: scaleX(1);
+    display: none; /* Убираем анимацию полоски */
 }
 
 .module-icon {
