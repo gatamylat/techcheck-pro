@@ -204,6 +204,21 @@ footer p:last-child {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
+/* Сетки главной страницы - десктопная версия по умолчанию */
+.main-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.special-modules {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
 /* === Модульные контейнеры === */
 .module-container {
     background: var(--bg-primary);
