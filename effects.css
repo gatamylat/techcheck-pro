@@ -14,11 +14,7 @@ h1, .hero h1 {
 
 /* === НЕОМОРФНЫЕ ИКОНКИ (3D эффект) === */
 .module-icon, .doc-number, .category-icon {
-    background: linear-gradient(145deg, #ffffff, #e6e6e6);
-    box-shadow: 
-        5px 5px 10px rgba(0,0,0,0.1),
-        -5px -5px 10px rgba(255,255,255,0.8),
-        inset 1px 1px 2px rgba(255,255,255,0.3);
+    /* Убираем 3D эффект иконок */
     transition: all 0.3s ease;
 }
 
