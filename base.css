@@ -467,7 +467,7 @@ main {
 
 .module-card {
     background: var(--bg-primary);
-    border-radius: var(--radius);
+    border-radius: var(--radius-sm);  /* Меньший радиус */
     padding: 1.5rem;
     box-shadow: var(--shadow-sm);
     transition: all 0.3s;
