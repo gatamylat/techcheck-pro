@@ -1346,3 +1346,65 @@ footer {
     display: flex;
     gap: 0.75rem;
 }
+/* === Специальные эффекты === */
+/* Стеклянный эффект */
+.glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Неоморфизм (мягкий 3D) */
+.neumorphic {
+    background: var(--bg-secondary);
+    box-shadow: 
+        8px 8px 16px rgba(0, 0, 0, 0.08),
+        -8px -8px 16px rgba(255, 255, 255, 0.9);
+    border-radius: var(--radius-lg);
+}
+
+/* Цветной градиент при наведении */
+.hover-gradient {
+    position: relative;
+    z-index: 1;
+}
+
+.hover-gradient::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-teal));
+    opacity: 0;
+    transition: var(--transition);
+    border-radius: inherit;
+    z-index: -1;
+}
+
+.hover-gradient:hover::before {
+    opacity: 0.1;
+}
+
+/* Индикатор новизны */
+.new-indicator {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 16px;
+    height: 16px;
+    background: var(--error-color);
+    border-radius: 50%;
+    border: 3px solid var(--bg-primary);
+    animation: pulse 2s infinite;
+}
+
+/* Липкий хедер с размытием */
+header.scrolled {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-lg);
+}
