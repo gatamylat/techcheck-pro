@@ -468,7 +468,7 @@ main {
 .module-card {
     background: var(--bg-primary);
     border-radius: var(--radius);
-    padding: 1rem 1.5rem;
+    padding: 0.75rem 1.25rem;
     min-height: auto;
     box-shadow: var(--shadow-sm);
     transition: all 0.3s;
