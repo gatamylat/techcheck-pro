@@ -143,9 +143,9 @@
         margin-bottom: 1rem;
     }
     
-    /* Главная страница */
-    .main-grid,
-    .special-modules {
+    /* Главная страница - ТОЛЬКО для мобильных */
+    .home-container .main-grid,
+    .home-container .special-modules {
         grid-template-columns: 1fr;
         gap: 1rem;
     }
