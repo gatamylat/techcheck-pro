@@ -202,8 +202,7 @@
 
 .module-card:hover {
     transform: translateY(-8px);
-    box-shadow: var(--shadow-xl);
-    background: var(--bg-card-hover);
+    box-shadow: var(--shadow-md); /* Убираем сильную тень */
 }
 
 .module-card:hover::before {
@@ -224,7 +223,7 @@
 }
 
 .module-card:hover .module-icon {
-    transform: scale(1.1) rotate(5deg);
+    /* Убираем анимацию иконки */
 }
 
 .module-status {
