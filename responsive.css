@@ -222,6 +222,11 @@
     }
     
     /* База знаний */
+    .categories-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+    
     .search-container {
         flex-direction: column;
         padding: 1rem;
@@ -238,8 +243,8 @@
         padding: 0.875rem;
     }
     
-    .categories-grid {
-        grid-template-columns: repeat(2, 1fr);
+    .articles-grid {
+        grid-template-columns: 1fr;
         gap: 1rem;
     }
     
@@ -269,6 +274,11 @@
     /* Чек-листы */
     .stats-cards {
         grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+    
+    .checklists-grid {
+        grid-template-columns: 1fr;
         gap: 1rem;
     }
     
