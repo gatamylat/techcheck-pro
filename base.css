@@ -11,6 +11,10 @@
     
     --accent-teal: #00BFA5;           /* Бирюзовый акцент */
     --accent-teal-dark: #00897b;      /* Темный бирюзовый */
+   /* Градиенты для эффектов */
+--gradient-primary: linear-gradient(135deg, #0056D2, #00BFA5);
+--gradient-success: linear-gradient(135deg, #4CAF50, #00BFA5);
+--gradient-info: linear-gradient(135deg, #2196F3, #00BFA5);
     --accent-green: #4CAF50;          /* Зеленый для успеха */
     
     --success-color: #00C853;         /* Яркий зеленый */
