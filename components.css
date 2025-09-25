@@ -1,0 +1,594 @@
+/* ================================
+   COMPONENTS.CSS - Компоненты UI TechCheck Pro
+   Содержит: все переиспользуемые компоненты
+   ================================ */
+
+/* === Hero секция === */
+.hero {
+    background: var(--bg-primary);
+    border-radius: var(--radius-xl);
+    padding: 3rem;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.hero h1.gradient-text {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero p {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    line-height: 1.6;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* === Карточки модулей === */
+.module-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-slow);
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.module-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-color);
+}
+
+.module-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.module-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.module-info {
+    flex: 1;
+}
+
+.module-info h3 {
+    margin-bottom: 0.25rem;
+    font-size: 1.125rem;
+}
+
+.module-info p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.module-status {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.status-ready {
+    background: var(--success-light);
+    color: #166534;
+}
+
+.status-beta {
+    background: var(--info-light);
+    color: var(--info-color);
+}
+
+.status-soon {
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+}
+
+/* === Карточка документации === */
+.docs-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem;
+    color: white;
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    min-height: 200px;
+}
+
+.docs-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(102, 126, 234, 0.4);
+}
+
+.docs-card h2 {
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.docs-card p {
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0;
+}
+
+/* === Карточка документа === */
+.document-card {
+    background: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1.25rem;
+    cursor: pointer;
+    transition: var(--transition);
+    border: 1px solid var(--border-color);
+}
+
+.document-card:hover {
+    transform: translateX(8px);
+    box-shadow: var(--shadow-md);
+    border-color: transparent;
+}
+
+.doc-number {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.doc-content {
+    min-width: 0;
+}
+
+.doc-content h3 {
+    margin-bottom: 0.25rem;
+}
+
+.doc-content p {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    margin: 0;
+}
+
+.doc-arrow {
+    color: var(--text-secondary);
+    font-size: 1.25rem;
+}
+
+/* === Специальная карточка === */
+.special-card {
+    background: var(--bg-dark);
+    color: white;
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.special-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(30, 41, 59, 0.3);
+}
+
+.special-card h3 {
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.special-card p {
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+}
+
+/* === Карточки категорий === */
+.category-card {
+    background: var(--bg-primary);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+    cursor: pointer;
+    text-align: center;
+    border-left: 4px solid;
+}
+
+.category-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: var(--shadow-xl);
+}
+
+.category-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1rem;
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+}
+
+.category-count {
+    display: inline-block;
+    background: var(--bg-secondary);
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-full);
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
+
+/* === Карточки статей === */
+.article-card {
+    background: var(--bg-primary);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    cursor: pointer;
+    border-left: 3px solid transparent;
+}
+
+.article-card:hover {
+    box-shadow: var(--shadow-md);
+    border-left-color: var(--primary-color);
+    transform: translateX(4px);
+}
+
+.article-header {
+    margin-bottom: 1rem;
+}
+
+.article-category {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.article-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+/* === Чек-листы === */
+.checklist-card {
+    background: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid transparent;
+}
+
+.checklist-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+}
+
+.checklist-card.completed {
+    border-color: var(--success-color);
+}
+
+.checklist-card.in-progress {
+    border-color: var(--warning-color);
+}
+
+.checklist-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.start-btn {
+    margin-top: 1rem;
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+/* === Элементы чек-листа === */
+.check-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: var(--radius);
+    transition: var(--transition);
+    cursor: pointer;
+    position: relative;
+}
+
+.check-item:hover {
+    background: var(--bg-tertiary);
+    transform: translateX(4px);
+}
+
+.check-item.checked {
+    background: var(--success-light);
+}
+
+.check-item.critical {
+    border-left: 4px solid var(--error-color);
+}
+
+.check-item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.check-text {
+    flex: 1;
+    line-height: 1.4;
+}
+
+.critical-badge {
+    background: var(--error-light);
+    color: var(--error-color);
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* === Прогресс-бары === */
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    margin-top: 1rem;
+}
+
+.progress-bar.large {
+    height: 12px;
+    margin: 1.5rem 0;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--gradient-success);
+    border-radius: var(--radius-full);
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    display: inline-block;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+/* === Карточки статистики === */
+.stat-card {
+    background: var(--bg-primary);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.stat-label {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
+
+/* === Поисковая строка === */
+.search-container {
+    background: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-md);
+    display: flex;
+    gap: 1rem;
+}
+
+.search-input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius);
+    transition: var(--transition);
+    background: var(--bg-primary);
+}
+
+.search-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px var(--primary-light);
+    outline: none;
+}
+
+.search-btn {
+    padding: 0.75rem 1.5rem;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.search-btn:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* === Уведомления === */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    min-width: 300px;
+    background: var(--success-color);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-xl);
+    z-index: 1000;
+    animation: slideInRight 0.3s ease;
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+}
+
+/* === Кнопка "Назад" === */
+.back-btn {
+    background: var(--bg-secondary);
+    border: none;
+    padding: 0.625rem 1.25rem;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.back-btn:hover {
+    background: var(--bg-tertiary);
+    transform: translateX(-4px);
+}
+
+/* === Блоки контента === */
+.overview {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: var(--bg-secondary);
+    border-radius: var(--radius);
+    line-height: 1.8;
+}
+
+.important-block {
+    background: var(--warning-light);
+    border-left: 4px solid var(--warning-color);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    margin: 2rem 0;
+    font-weight: 500;
+}
+
+/* === Story карточки === */
+.story-card {
+    background: var(--bg-primary);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 1.5rem;
+}
+
+.story-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.story-avatar {
+    width: 40px;
+    height: 40px;
+    background: var(--bg-secondary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.story-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.story-action {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: var(--transition);
+    font-size: 0.875rem;
+}
+
+.story-action:hover {
+    color: var(--primary-color);
+}
