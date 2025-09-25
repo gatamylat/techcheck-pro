@@ -30,6 +30,13 @@
     background-clip: text;
 }
 
+.hero h1.gradient-text {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
 .hero p {
     font-size: 1.125rem;
     color: var(--text-secondary);
