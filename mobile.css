@@ -816,3 +816,61 @@
         font-size: 1.25rem;
     }
 }
+/* === Мобильные стили главной страницы === */
+@media (max-width: 767px) {
+    .home-container {
+        gap: 1rem;
+    }
+    
+    .main-grid,
+    .special-modules {
+        grid-template-columns: 1fr;
+    }
+    
+    .docs-card {
+        padding: 1.5rem;
+        min-height: 150px;
+    }
+    
+    /* Документы мобильные */
+    .documents-page {
+        padding: 0;
+    }
+    
+    .page-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .page-header p {
+        font-size: 1rem;
+    }
+    
+    .document-card {
+        padding: 1rem;
+        gap: 1rem;
+    }
+    
+    .doc-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .doc-details {
+        padding: 1.25rem;
+        margin: 1.25rem 0;
+    }
+    
+    .detail-section {
+        margin-bottom: 1.5rem;
+    }
+    
+    .doc-actions {
+        flex-direction: column;
+    }
+    
+    .doc-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
