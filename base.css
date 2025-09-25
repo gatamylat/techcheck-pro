@@ -303,10 +303,11 @@ label {
 .text-light { color: var(--text-light); }
 
 .gradient-text {
-    background: var(--gradient-primary);
+    background: linear-gradient(135deg, #0056D2, #00BFA5);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    color: transparent; /* Добавлено для совместимости */
     font-weight: 700;
 }
 
