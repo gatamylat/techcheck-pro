@@ -121,6 +121,23 @@ a:hover {
     transition: opacity 0.3s;
 }
 
+.loader-content {
+    text-align: center;
+}
+
+/* === Контейнер приложения === */
+#app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+#app.loaded {
+    opacity: 1;
+}
+
 .loader-spinner {
     width: 48px;
     height: 48px;
@@ -224,6 +241,48 @@ main {
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* === Модули === */
+.module-container {
+    background: var(--bg-primary);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.module-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--bg-secondary);
+}
+
+.module-header h1 {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.module-icon {
+    font-size: 2rem;
+}
+
+.module-description {
+    color: var(--text-secondary);
+}
+
+.module-content {
+    padding: 1rem 0;
+}
+
+.module-footer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
 /* === Кнопки === */
 .btn {
     display: inline-flex;
@@ -286,6 +345,88 @@ main {
 
 .card:hover {
     box-shadow: var(--shadow-md);
+}
+
+.module-card {
+    background: var(--bg-primary);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.module-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-color);
+}
+
+/* === Статусы модулей === */
+.module-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.375rem 0.875rem;
+    border-radius: var(--radius-full);
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.status-ready {
+    background: var(--success-light);
+    color: #166534;
+}
+
+.status-beta {
+    background: var(--warning-light);
+    color: #92400e;
+}
+
+.status-soon {
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+}
+
+/* === Поисковая строка === */
+.search-input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius);
+    transition: var(--transition);
+    background: var(--bg-primary);
+}
+
+.search-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px var(--primary-light);
+    outline: none;
+}
+
+.search-container {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.search-btn {
+    padding: 0.75rem 1.5rem;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.search-btn:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
 }
 
 /* === Формы === */
@@ -460,4 +601,77 @@ footer {
 
 ::-webkit-scrollbar-thumb:hover {
     background: var(--text-secondary);
+}
+/* === Сетки === */
+.modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.articles-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+/* === Дополнительные элементы === */
+.breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.breadcrumbs span {
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.breadcrumbs span:hover:not(:last-child) {
+    color: var(--primary-color);
+}
+
+/* === Debug панель === */
+.debug-panel {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 1rem;
+    border-radius: var(--radius);
+    font-family: monospace;
+    font-size: 0.75rem;
+    max-width: 300px;
+    max-height: 400px;
+    overflow-y: auto;
+    display: none;
+    z-index: 1000;
+}
+
+.debug-panel.active {
+    display: block;
+}
+
+.debug-panel h4 {
+    margin-bottom: 0.5rem;
+    color: #10b981;
+}
+
+.debug-log {
+    margin-bottom: 0.25rem;
+    padding: 0.25rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
 }
