@@ -206,7 +206,6 @@ export default class Router {
 
                     <!-- База знаний -->
                     <div class="module-card" onclick="app.router.navigate('/knowledge-base')">
-                        <span class="module-status status-ready">Готово</span>
                         <div class="module-header">
                             <div class="module-icon">📚</div>
                             <div class="module-info">
@@ -218,7 +217,6 @@ export default class Router {
 
                     <!-- Чек-листы -->
                     <div class="module-card" onclick="app.router.navigate('/checklist')">
-                        <span class="module-status status-ready">Готово</span>
                         <div class="module-header">
                             <div class="module-icon">✓</div>
                             <div class="module-info">
