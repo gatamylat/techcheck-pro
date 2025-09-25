@@ -210,15 +210,15 @@
 }
 
 .module-icon {
-    width: 64px;
-    height: 64px;
+    width: 48px;
+    height: 48px;
     background: linear-gradient(135deg, var(--primary-light), var(--bg-secondary));
     border-radius: var(--radius-lg);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 1.5rem;
-    font-size: 2rem;
+    margin-bottom: 0.75rem;
+    font-size: 1.5rem;
     transition: var(--transition);
 }
 
