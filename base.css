@@ -4,10 +4,12 @@
 
 /* === CSS Переменные === */
 :root {
-    /* Цвета */
+    /* Цвета - профессиональная палитра */
     --primary-color: #2563eb;
     --primary-hover: #1d4ed8;
     --primary-light: #dbeafe;
+    --primary-gradient: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    
     --success-color: #10b981;
     --success-light: #d1fae5;
     --warning-color: #f59e0b;
@@ -16,6 +18,14 @@
     --error-light: #fee2e2;
     --info-color: #3b82f6;
     --info-light: #dbeafe;
+    
+    /* Новые градиенты и тени */
+    --card-gradient: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+    --hover-gradient: linear-gradient(145deg, #f8fafc 0%, #e2e8f0 100%);
+    --glass-gradient: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+    --soft-shadow: 0 20px 40px rgba(37, 99, 235, 0.08);
+    --hover-shadow: 0 30px 60px rgba(37, 99, 235, 0.15);
+    --glow-shadow: 0 0 40px rgba(37, 99, 235, 0.1);
     
     /* Фоны */
     --bg-primary: #ffffff;
