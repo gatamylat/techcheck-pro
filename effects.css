@@ -230,7 +230,11 @@ a, .nav-link {
     transition: all 0.3s ease;
 }
 
-a::after, .nav-link::after {
+.nav-link::after {
+    display: none;  /* Убираем подчеркивание у навигации */
+}
+
+a::after {
     content: '';
     position: absolute;
     bottom: -2px;
@@ -241,7 +245,7 @@ a::after, .nav-link::after {
     transition: width 0.3s ease;
 }
 
-a:hover::after, .nav-link:hover::after {
+a:hover::after {
     width: 100%;
 }
 
