@@ -4,86 +4,52 @@
 
 /* === CSS Переменные === */
 :root {
-    /* === Новые градиенты и цвета === */
-    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --secondary-gradient: linear-gradient(135deg, #667eea 0%, #4299e1 100%);
-    --card-gradient: linear-gradient(145deg, #ffffff 0%, #f7fafc 100%);
-    --hover-gradient: linear-gradient(145deg, #f7fafc 0%, #edf2f7 100%);
+    /* Цвета */
+    --primary-color: #2563eb;
+    --primary-hover: #1d4ed8;
+    --primary-light: #dbeafe;
+    --success-color: #10b981;
+    --success-light: #d1fae5;
+    --warning-color: #f59e0b;
+    --warning-light: #fed7aa;
+    --error-color: #ef4444;
+    --error-light: #fee2e2;
+    --info-color: #3b82f6;
+    --info-light: #dbeafe;
     
-    /* === Основные цвета === */
-    --primary-color: #667eea;
-    --primary-hover: #5a67d8;
-    --primary-light: rgba(102, 126, 234, 0.1);
-    --primary-glow: rgba(102, 126, 234, 0.3);
-    
-    /* === Акцентные цвета === */
-    --accent-blue: #4299e1;
-    --accent-purple: #9f7aea;
-    --accent-pink: #ed64a6;
-    --accent-orange: #f6ad55;
-    --accent-teal: #38b2ac;
-    
-    /* === Статусы === */
-    --success-color: #48bb78;
-    --success-light: rgba(72, 187, 120, 0.1);
-    --warning-color: #ed8936;
-    --warning-light: rgba(237, 137, 54, 0.1);
-    --error-color: #f56565;
-    --error-light: rgba(245, 101, 101, 0.1);
-    --info-color: #4299e1;
-    --info-light: rgba(66, 153, 225, 0.1);
-    
-    /* === Фоны === */
+    /* Фоны */
     --bg-primary: #ffffff;
-    --bg-secondary: #f7fafc;
-    --bg-tertiary: #edf2f7;
-    --bg-glass: rgba(255, 255, 255, 0.8);
-    --bg-overlay: rgba(0, 0, 0, 0.5);
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #f1f5f9;
+    --bg-dark: #1e293b;
     
-    /* === Текст === */
-    --text-primary: #2d3748;
-    --text-secondary: #718096;
-    --text-light: #a0aec0;
+    /* Текст */
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --text-light: #94a3b8;
     --text-white: #ffffff;
     
-    /* === Границы === */
+    /* Границы */
     --border-color: #e2e8f0;
-    --border-light: #edf2f7;
-    --border-dark: #cbd5e0;
+    --border-light: #f1f5f9;
+    --border-dark: #cbd5e1;
     
-    /* === Новые тени === */
-    --shadow-xs: 0 0 0 1px rgba(0, 0, 0, 0.05);
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-    --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    --shadow-glow: 0 10px 40px rgba(102, 126, 234, 0.15);
-    --shadow-colored: 0 20px 40px rgba(102, 126, 234, 0.2);
+    /* Тени */
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
+    --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+    --shadow-xl: 0 20px 25px rgba(0,0,0,0.1);
     
-    /* === Размеры === */
-    --radius-sm: 6px;
-    --radius: 12px;
-    --radius-lg: 16px;
-    --radius-xl: 24px;
+    /* Размеры */
+    --radius: 8px;
+    --radius-sm: 4px;
+    --radius-lg: 12px;
     --radius-full: 9999px;
     --max-width: 1280px;
     
-    /* === Анимации === */
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-fast: all 0.15s ease;
-    --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    
-    /* === Размеры шрифтов === */
-    --text-xs: 0.75rem;
-    --text-sm: 0.875rem;
-    --text-base: 1rem;
-    --text-lg: 1.125rem;
-    --text-xl: 1.25rem;
-    --text-2xl: 1.5rem;
-    --text-3xl: 1.875rem;
-    --text-4xl: 2.25rem;
-    --text-5xl: 3rem;
+    /* Анимации */
+    --transition: all 0.2s ease;
+    --transition-slow: all 0.3s ease;
 }
 
 /* === Сброс стилей === */
@@ -317,41 +283,19 @@ main {
     color: var(--text-secondary);
 }
 
-/* === Современные кнопки === */
+/* === Кнопки === */
 .btn {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
     gap: 0.5rem;
     padding: 0.75rem 1.5rem;
     border: none;
     border-radius: var(--radius);
-    font-size: var(--text-base);
+    font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
     transition: var(--transition);
     text-decoration: none;
-    position: relative;
-    overflow: hidden;
-    white-space: nowrap;
-}
-
-.btn::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.5);
-    transform: translate(-50%, -50%);
-    transition: width 0.6s, height 0.6s;
-}
-
-.btn:active::before {
-    width: 300px;
-    height: 300px;
 }
 
 .btn:disabled {
@@ -359,194 +303,64 @@ main {
     cursor: not-allowed;
 }
 
-/* === Primary кнопка с градиентом === */
 .btn-primary {
-    background: var(--primary-gradient);
+    background: var(--primary-color);
     color: white;
-    box-shadow: var(--shadow-md);
 }
 
 .btn-primary:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-colored);
-}
-
-.btn-primary:active:not(:disabled) {
-    transform: translateY(0);
-}
-
-/* === Secondary кнопка === */
-.btn-secondary {
-    background: var(--bg-primary);
-    color: var(--primary-color);
-    border: 2px solid var(--primary-color);
-}
-
-.btn-secondary:hover:not(:disabled) {
-    background: var(--primary-light);
+    background: var(--primary-hover);
     transform: translateY(-2px);
     box-shadow: var(--shadow-lg);
 }
 
-/* === Success кнопка === */
+.btn-secondary {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: var(--border-color);
+}
+
 .btn-success {
-    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    background: var(--success-color);
     color: white;
 }
 
 .btn-success:hover:not(:disabled) {
+    background: #059669;
     transform: translateY(-2px);
-    box-shadow: 0 20px 40px rgba(72, 187, 120, 0.3);
-}
-
-/* === Floating Action Button === */
-.btn-fab {
-    width: 56px;
-    height: 56px;
-    border-radius: var(--radius-full);
-    padding: 0;
-    box-shadow: var(--shadow-xl);
-    font-size: 1.5rem;
-}
-
-.btn-fab:hover {
-    transform: rotate(90deg) scale(1.1);
-}
-
-/* === Улучшенные карточки === */
-.card {
-    background: var(--card-gradient);
-    border-radius: var(--radius-lg);
-    padding: 1.5rem;
     box-shadow: var(--shadow-lg);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    transition: var(--transition);
-    position: relative;
-    overflow: hidden;
 }
 
-.card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: var(--primary-gradient);
-    transform: scaleX(0);
+/* === Карточки === */
+.card {
+    background: var(--bg-primary);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
     transition: var(--transition);
 }
 
 .card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-colored);
+    box-shadow: var(--shadow-md);
 }
 
-.card:hover::before {
-    transform: scaleX(1);
-}
-
-/* === Glass эффект для особых карточек === */
-.card-glass {
-    background: var(--bg-glass);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: var(--shadow-glow);
-}
-
-
-/* === Красивые модульные карточки === */
 .module-card {
     background: var(--bg-primary);
-    border-radius: var(--radius-xl);
-    padding: 2rem;
-    box-shadow: var(--shadow-lg);
-    transition: var(--transition-slow);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s;
     cursor: pointer;
     border: 2px solid transparent;
-    position: relative;
-    overflow: hidden;
-    animation: fadeInUp 0.5s ease backwards;
-}
-
-.module-card:nth-child(1) { animation-delay: 0.1s; }
-.module-card:nth-child(2) { animation-delay: 0.2s; }
-.module-card:nth-child(3) { animation-delay: 0.3s; }
-.module-card:nth-child(4) { animation-delay: 0.4s; }
-.module-card:nth-child(5) { animation-delay: 0.5s; }
-.module-card:nth-child(6) { animation-delay: 0.6s; }
-
-.module-card::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -50%;
-    width: 200%;
-    height: 200%;
-    background: var(--primary-gradient);
-    opacity: 0;
-    transform: rotate(45deg);
-    transition: var(--transition-slow);
-    z-index: -1;
 }
 
 .module-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: var(--shadow-colored);
-    border-color: var(--primary-color);
-}
-
-.module-card:hover::after {
-    opacity: 0.1;
-}
-
-.module-icon {
-    width: 64px;
-    height: 64px;
-    background: var(--primary-gradient);
-    border-radius: var(--radius-lg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 1.5rem;
-    font-size: 2rem;
-    color: white;
+    transform: translateY(-2px);
     box-shadow: var(--shadow-lg);
-    transition: var(--transition);
-}
-
-.module-card:hover .module-icon {
-    transform: rotate(10deg) scale(1.1);
-    box-shadow: var(--shadow-colored);
-}
-
-.module-status {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    border-radius: var(--radius-full);
-    font-size: var(--text-sm);
-    font-weight: 600;
-    margin-top: 1rem;
-    animation: pulse 2s infinite;
-}
-
-.status-ready {
-    background: var(--success-light);
-    color: var(--success-color);
-}
-
-.status-beta {
-    background: var(--warning-light);
-    color: var(--warning-color);
-}
-
-.status-soon {
-    background: var(--info-light);
-    color: var(--info-color);
+    border-color: var(--primary-color);
 }
 
 /* === Статусы модулей === */
@@ -768,81 +582,6 @@ footer {
 @keyframes slideUp {
     from { transform: translateY(100%); }
     to { transform: translateY(0); }
-}
-
-/* === Новые анимации === */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes slideInLeft {
-    from {
-        opacity: 0;
-        transform: translateX(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@keyframes pulse {
-    0%, 100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.5;
-    }
-}
-
-@keyframes bounce {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-10px);
-    }
-}
-
-@keyframes glow {
-    0%, 100% {
-        box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
-    }
-    50% {
-        box-shadow: 0 0 40px rgba(102, 126, 234, 0.8);
-    }
-}
-
-@keyframes ripple {
-    to {
-        transform: scale(4);
-        opacity: 0;
-    }
-}
-
-@keyframes float {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-10px);
-    }
-}
-
-@keyframes shimmer {
-    0% {
-        background-position: -1000px 0;
-    }
-    100% {
-        background-position: 1000px 0;
-    }
 }
 
 /* === Скроллбар === */
@@ -1447,147 +1186,4 @@ footer {
 .doc-actions {
     display: flex;
     gap: 0.75rem;
-}
-/* === Дополнительные утилиты === */
-.gradient-text {
-    background: var(--primary-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    font-weight: bold;
-}
-
-.glow {
-    box-shadow: var(--shadow-glow);
-}
-
-.hover-lift {
-    transition: var(--transition);
-}
-
-.hover-lift:hover {
-    transform: translateY(-4px);
-}
-
-.hover-grow {
-    transition: var(--transition);
-}
-
-.hover-grow:hover {
-    transform: scale(1.05);
-}
-
-/* === Загрузчик === */
-.loader-spinner {
-    width: 48px;
-    height: 48px;
-    border: 4px solid var(--bg-tertiary);
-    border-top-color: var(--primary-color);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-}
-
-/* === Бейджи === */
-.badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.25rem 0.75rem;
-    border-radius: var(--radius-full);
-    font-size: var(--text-xs);
-    font-weight: 600;
-    background: var(--primary-gradient);
-    color: white;
-}
-
-.badge.new {
-    background: linear-gradient(135deg, #f56565, #ed64a6);
-    animation: pulse 2s infinite;
-}
-
-/* === Floating labels === */
-.form-group {
-    position: relative;
-    margin-bottom: 1.5rem;
-}
-
-.form-group input:focus + label,
-.form-group input:not(:placeholder-shown) + label {
-    transform: translateY(-25px) scale(0.85);
-    color: var(--primary-color);
-}
-
-.form-group label {
-    position: absolute;
-    left: 1rem;
-    top: 1rem;
-    transition: var(--transition);
-    color: var(--text-secondary);
-    pointer-events: none;
-    background: var(--bg-primary);
-    padding: 0 0.5rem;
-}
-
-/* === Tooltips === */
-[data-tooltip] {
-    position: relative;
-}
-
-[data-tooltip]:hover::before {
-    content: attr(data-tooltip);
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--text-primary);
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: var(--radius);
-    font-size: var(--text-sm);
-    white-space: nowrap;
-    z-index: 1000;
-    animation: fadeInUp 0.2s ease;
-}
-
-/* === Разделители === */
-.divider {
-    height: 1px;
-    background: linear-gradient(
-        90deg,
-        transparent,
-        var(--border-color),
-        transparent
-    );
-    margin: 2rem 0;
-}
-
-/* === Focus стили === */
-*:focus-visible {
-    outline: 2px solid var(--primary-color);
-    outline-offset: 2px;
-}
-
-/* === Selection === */
-::selection {
-    background: var(--primary-light);
-    color: var(--primary-color);
-}
-
-/* === Scrollbar кастомизация === */
-::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-}
-
-::-webkit-scrollbar-track {
-    background: var(--bg-secondary);
-    border-radius: var(--radius);
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--primary-gradient);
-    border-radius: var(--radius);
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: var(--primary-color);
 }
