@@ -882,3 +882,9 @@
     padding: 0.75rem;
     border-radius: var(--radius);
 }
+@media (max-width: 767px) {
+    .main-grid,
+    .special-modules {
+        grid-template-columns: 1fr;
+    }
+}
