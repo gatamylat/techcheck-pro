@@ -145,7 +145,7 @@
     }
     
     .module-card {
-        padding: 1.5rem;
+    padding: 1rem;
         border-radius: var(--radius);
     }
     
@@ -159,10 +159,10 @@
     }
     
     .module-icon {
-        width: 48px;
-        height: 48px;
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
+    width: 40px;
+    height: 40px;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
     }
     
     .module-card h3 {
