@@ -876,3 +876,9 @@
         justify-content: center;
     }
 }
+/* Подложка под эмодзи в мобильной версии */
+.module-icon {
+    background: var(--bg-secondary);
+    padding: 0.75rem;
+    border-radius: var(--radius);
+}
