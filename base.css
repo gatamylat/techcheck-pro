@@ -602,6 +602,118 @@ footer {
 ::-webkit-scrollbar-thumb:hover {
     background: var(--text-secondary);
 }
+
+/* === Главная страница === */
+.home-container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+}
+
+.hero {
+    background: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    padding: 3rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--primary-color), #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero p {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto 2rem;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* === Секция документации === */
+.docs-section {
+    background: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-md);
+}
+
+.docs-list {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.doc-item {
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: var(--radius);
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.doc-item:hover {
+    background: var(--bg-tertiary);
+    transform: translateX(4px);
+}
+
+.doc-number {
+    width: 36px;
+    height: 36px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: var(--primary-color);
+    box-shadow: var(--shadow-sm);
+}
+
+.doc-content {
+    min-width: 0;
+}
+
+.doc-title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.doc-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.doc-arrow {
+    color: var(--text-secondary);
+    font-size: 1.25rem;
+}
+
+/* === Секция модулей === */
+.modules-section {
+    margin-top: 3rem;
+}
+
+.modules-section h2 {
+    margin-bottom: 1.5rem;
+}
+
 /* === Сетки === */
 .modules-grid {
     display: grid;
@@ -641,6 +753,199 @@ footer {
 
 .breadcrumbs span:hover:not(:last-child) {
     color: var(--primary-color);
+}
+/* === Чек-листы === */
+.checklist-card {
+    background: var(--bg-primary);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.checklist-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.checklist-card.completed {
+    border-color: var(--success-color);
+}
+
+.checklist-card.in-progress {
+    border-color: var(--warning-color);
+}
+
+.checklist-section {
+    background: var(--bg-primary);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.checks-list {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.check-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: var(--radius);
+    transition: var(--transition);
+    cursor: pointer;
+    position: relative;
+}
+
+.check-item:hover {
+    background: var(--bg-tertiary);
+}
+
+.check-item.checked {
+    background: var(--success-light);
+}
+
+.check-item.critical {
+    border-left: 4px solid var(--error-color);
+}
+
+.check-item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.check-text {
+    flex: 1;
+    line-height: 1.4;
+}
+
+.critical-badge {
+    background: var(--error-light);
+    color: var(--error-color);
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    margin-top: 1rem;
+}
+
+.progress-bar.large {
+    height: 12px;
+    margin: 1.5rem 0;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+    border-radius: var(--radius-full);
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    display: inline-block;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+/* === Статистика чек-листов === */
+.stats-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: var(--bg-primary);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.stat-label {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
+
+/* === Табы категорий === */
+.categories-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin: 1rem 0;
+    overflow-x: auto;
+}
+
+.tab {
+    padding: 0.5rem 1rem;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: var(--transition);
+}
+
+.tab:hover {
+    background: var(--bg-tertiary);
+}
+
+.tab.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* === Страница чек-листа === */
+.checklist-page {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.checklist-header {
+    background: var(--bg-primary);
+    border-radius: var(--radius);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-md);
+}
+
+.checklist-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+.section-progress {
+    margin-left: auto;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
 }
 
 /* === Debug панель === */
