@@ -185,11 +185,11 @@
 
 /* === Отступы для блоков главной страницы === */
 .main-grid {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 .special-modules {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 .module-card {
     background: var(--bg-primary);
