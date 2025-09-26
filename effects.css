@@ -5,10 +5,8 @@
 
 /* === АНИМАЦИИ === */
 
-/* Вращение */
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
+/* Вращение (удалил) */
+
 
 /* Появление снизу вверх */
 @keyframes fadeInUp {
