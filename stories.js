@@ -473,6 +473,10 @@ export default class Stories extends BaseModule {
     goToSlide(index) {
         this.currentSlide = index;
         // Используем 100% вместо пикселей для правильной работы
+        // Защита от выхода за границы
+if (index < 0 || index >= this.totalSlides) {
+    index = 0;
+}
 this.elements.storiesCarousel.style.transform = `translateX(-${index * 100}%)`;
 
         
