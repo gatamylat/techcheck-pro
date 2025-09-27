@@ -110,36 +110,31 @@ export default class Stories extends BaseModule {
     }
     
     initHomePage() {
-    // Проверяем, что мы на главной
-    if (window.location.hash !== '' && window.location.hash !== '#/') {
-        return;
+        // Перерисовываем элементы на случай если DOM изменился
+        this.initDOMElements();
+        
+        // Проверяем ширину экрана
+        const isMobile = window.innerWidth < 768;
+        
+        if (isMobile) {
+            // Мобильная версия со Stories
+            this.renderStoriesSlides();
+            this.renderIndicators();
+            this.renderHomeModules();
+            this.initCarouselEvents();
+            this.initPanelDragging();
+            this.initSearchButton();
+            this.startAutoPlay();
+            this.log('Mobile home page initialized with Stories', 'success');
+        } else {
+            // Десктопная версия
+            this.renderDesktopHome();
+            this.log('Desktop home page initialized', 'success');
+        }
+        
+        // Слушаем изменение размера окна
+        this.handleResize();
     }
-    
-    // Перерисовываем элементы на случай если DOM изменился
-    this.initDOMElements();
-    
-    // Проверяем ширину экрана
-    const isMobile = window.innerWidth < 768;
-    
-    if (isMobile) {
-        // Мобильная версия со Stories
-        this.renderStoriesSlides();
-        this.renderIndicators();
-        this.renderHomeModules();
-        this.initCarouselEvents();
-        this.initPanelDragging();
-        this.initSearchButton();
-        this.startAutoPlay();
-        this.log('Mobile home page initialized with Stories', 'success');
-    } else {
-        // Десктопная версия
-        this.renderDesktopHome();
-        this.log('Desktop home page initialized', 'success');
-    }
-    
-    // Слушаем изменение размера окна
-    this.handleResize();
-}
     
     renderStoriesSlides() {
         if (!this.elements.storiesCarousel) return;
@@ -568,14 +563,15 @@ export default class Stories extends BaseModule {
     }
     
     getPublicMethods() {
-        return {
-            goToSlide: (index) => this.goToSlide(index),
-            openStory: (index) => this.openStory(index),
-            showHomePage: () => this.showHomePage(),
-            hideHomePage: () => this.hideHomePage(),
-            expandPanel: () => this.expandPanel(),
-            collapsePanel: () => this.collapsePanel()
-            initHomePage: () => this.initHomePage()
-        };
-    }
+            return {
+                goToSlide: (index) => this.goToSlide(index),
+                openStory: (index) => this.openStory(index),
+                showHomePage: () => this.showHomePage(),
+                hideHomePage: () => this.hideHomePage(),
+                expandPanel: () => this.expandPanel(),
+                collapsePanel: () => this.collapsePanel(),
+                initHomePage: () => this.initHomePage(),
+                renderDesktopHome: () => this.renderDesktopHome()  // <-- Добавьте эту строку!
+            };
+        }
 }
