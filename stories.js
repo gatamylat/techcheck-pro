@@ -1,7 +1,7 @@
 /**
  * @module Stories
  * @description Stories карусель и управление главной страницей
- * @version 2.1.0 - FIXED
+ * @version 3.0.0 - COMPLETELY FIXED
  * @dependencies ['_state', '_router']
  */
 
@@ -11,7 +11,7 @@ export default class Stories extends BaseModule {
     constructor(app) {
         super(app);
         this.name = 'stories';
-        this.version = '2.1.0';
+        this.version = '3.0.0';
         this.dependencies = ['_state', '_router'];
         
         this.meta = {
@@ -24,9 +24,9 @@ export default class Stories extends BaseModule {
         
         // Состояние карусели
         this.currentSlide = 0;
-        this.totalSlides = 5; // Устанавливаем сразу!
+        this.totalSlides = 5;
         this.autoPlayInterval = null;
-        this.autoPlayEnabled = false; // ОТКЛЮЧАЕМ автопрокрутку!
+        this.autoPlayEnabled = false; // ОТКЛЮЧЕНО!
         
         // Состояние панели
         this.isExpanded = false;
@@ -40,12 +40,15 @@ export default class Stories extends BaseModule {
         
         // DOM элементы
         this.elements = {};
+        
+        // ВАЖНО: Флаг инициализации
+        this.isInitialized = false;
     }
     
     async init() {
         await super.init();
         this.initDOMElements();
-        // НЕ вызываем initHomePage здесь - она вызовется из роутера
+        // НЕ вызываем initHomePage здесь - роутер сделает это сам!
     }
     
     initDOMElements() {
@@ -72,7 +75,7 @@ export default class Stories extends BaseModule {
                 {
                     id: 1,
                     title: 'TechCheck Pro',
-                    subtitle: 'Система проверки документациии',
+                    subtitle: 'Система проверки документации',
                     gradient: 'rainbow',
                     action: null
                 },
@@ -112,10 +115,15 @@ export default class Stories extends BaseModule {
     }
     
     initHomePage() {
-        // Перерисовываем элементы на случай если DOM изменился
+        // ЗАЩИТА ОТ ПОВТОРНОЙ ИНИЦИАЛИЗАЦИИ
+        if (this.isInitialized && window.innerWidth < 768) {
+            this.log('Home page already initialized, skipping...', 'info');
+            return;
+        }
+        
+        // Обновляем DOM элементы
         this.initDOMElements();
         
-        // Проверяем ширину экрана
         const isMobile = window.innerWidth < 768;
         
         if (isMobile) {
@@ -128,6 +136,9 @@ export default class Stories extends BaseModule {
                 this.elements.homeContainer.classList.remove('hidden');
             }
             
+            // ИСПРАВЛЕНИЕ: Добавляем стили для слайдов
+            this.injectSlideStyles();
+            
             // Мобильная версия со Stories
             this.renderStoriesSlides();
             this.renderIndicators();
@@ -136,13 +147,11 @@ export default class Stories extends BaseModule {
             this.initPanelDragging();
             this.initSearchButton();
             
-            // НЕ запускаем автопрокрутку!
-            // this.startAutoPlay(); - ЗАКОММЕНТИРОВАНО
-            
-            // Устанавливаем первый слайд явно
+            // Устанавливаем на первый слайд
             this.currentSlide = 0;
             this.goToSlide(0);
             
+            this.isInitialized = true;
             this.log('Mobile home page initialized with Stories', 'success');
         } else {
             // Скрываем мобильную версию
@@ -156,6 +165,7 @@ export default class Stories extends BaseModule {
             
             // Десктопная версия
             this.renderDesktopHome();
+            this.isInitialized = false; // Для десктопа можем перерисовывать
             this.log('Desktop home page initialized', 'success');
         }
         
@@ -163,27 +173,96 @@ export default class Stories extends BaseModule {
         this.handleResize();
     }
     
+    /**
+     * НОВЫЙ МЕТОД: Внедрение стилей для исправления белых слайдов
+     */
+    injectSlideStyles() {
+        // Проверяем, не добавили ли уже стили
+        if (document.getElementById('stories-slide-fix')) return;
+        
+        const style = document.createElement('style');
+        style.id = 'stories-slide-fix';
+        style.innerHTML = `
+            /* ФИКС: Правильное позиционирование слайдов */
+            .stories-carousel {
+                position: relative;
+                width: 100%;
+                height: 100%;
+            }
+            
+            .story-slide {
+                position: relative !important;
+                width: 100% !important;
+                height: 100% !important;
+                flex-shrink: 0 !important;
+            }
+            
+            /* ФИКС: Убеждаемся что градиенты видны */
+            .story-gradient-rainbow {
+                background: linear-gradient(135deg, 
+                    #FF006E 0%, 
+                    #8338EC 20%, 
+                    #3A86FF 40%, 
+                    #06FFB4 60%, 
+                    #FFBE0B 80%, 
+                    #FB5607 100%) !important;
+                background-size: 400% 400% !important;
+            }
+            
+            .story-gradient-purple {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            }
+            
+            .story-gradient-pink {
+                background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%) !important;
+            }
+            
+            .story-gradient-blue {
+                background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%) !important;
+            }
+            
+            .story-gradient-green {
+                background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%) !important;
+            }
+        `;
+        document.head.appendChild(style);
+        this.log('Injected slide fix styles', 'success');
+    }
+    
     renderStoriesSlides() {
         if (!this.elements.storiesCarousel) {
-            this.log('Stories carousel element not found', 'warning');
+            this.log('Stories carousel element not found', 'error');
             return;
         }
         
-        // Сбрасываем текущий слайд
+        // Очищаем и перерисовываем
+        this.elements.storiesCarousel.innerHTML = '';
+        
+        // Создаем слайды с правильными классами
+        const slidesHTML = this.data.slides.map((slide, index) => {
+            // ВАЖНО: Добавляем data-атрибут для отладки
+            return `
+                <div class="story-slide story-gradient-${slide.gradient}" 
+                     data-slide-index="${index}"
+                     data-slide-gradient="${slide.gradient}"
+                     onclick="app.getModule('stories').openStory(${index})">
+                    <h1 class="story-title">${slide.title}</h1>
+                    <p class="story-subtitle">${slide.subtitle}</p>
+                </div>
+            `;
+        }).join('');
+        
+        this.elements.storiesCarousel.innerHTML = slidesHTML;
+        
+        // Сброс позиции
+        this.elements.storiesCarousel.style.transform = 'translateX(0)';
         this.currentSlide = 0;
         
-        // Рендерим слайды
-        this.elements.storiesCarousel.innerHTML = this.data.slides.map((slide, index) => `
-            <div class="story-slide story-gradient-${slide.gradient}">
-                <h1 class="story-title">${slide.title}</h1>
-                <p class="story-subtitle">${slide.subtitle}</p>
-            </div>
-        `).join('');
-        
-        // Устанавливаем начальную позицию
-        this.elements.storiesCarousel.style.transform = 'translateX(0)';
-        
         this.log(`Rendered ${this.totalSlides} story slides`, 'success');
+        
+        // Проверка слайдов
+        const renderedSlides = this.elements.storiesCarousel.querySelectorAll('.story-slide');
+        this.log(`Actual slides in DOM: ${renderedSlides.length}`, 'info');
     }
     
     renderIndicators() {
@@ -194,6 +273,7 @@ export default class Stories extends BaseModule {
         
         this.elements.carouselIndicators.innerHTML = this.data.slides.map((_, index) => `
             <button class="carousel-indicator ${index === 0 ? 'active' : ''}" 
+                    data-indicator-index="${index}"
                     onclick="app.getModule('stories').goToSlide(${index})"></button>
         `).join('');
     }
@@ -383,6 +463,7 @@ export default class Stories extends BaseModule {
                 
                 // Если изменился тип устройства - перерисовываем
                 if ((isMobile && !wasMobile) || (!isMobile && wasMobile)) {
+                    this.isInitialized = false; // Сбрасываем флаг для перерисовки
                     this.initHomePage();
                 }
             }, 250);
@@ -393,6 +474,11 @@ export default class Stories extends BaseModule {
     
     initCarouselEvents() {
         if (!this.elements.storiesHero) return;
+        
+        // Удаляем старые обработчики если есть
+        const newHero = this.elements.storiesHero.cloneNode(true);
+        this.elements.storiesHero.parentNode.replaceChild(newHero, this.elements.storiesHero);
+        this.elements.storiesHero = newHero;
         
         let touchStartX = 0;
         let touchEndX = 0;
@@ -439,11 +525,6 @@ export default class Stories extends BaseModule {
                 this.collapsePanel();
             });
         }
-        
-        // Предотвращаем выделение текста при перетаскивании
-        panel.addEventListener('selectstart', (e) => {
-            if (this.isDragging) e.preventDefault();
-        });
     }
     
     startDrag(e) {
@@ -503,7 +584,7 @@ export default class Stories extends BaseModule {
         }
         
         this.elements.mainContentPanel.style.top = this.currentTop + 'px';
-        this.stopAutoPlay(); // На всякий случай
+        this.stopAutoPlay();
     }
     
     collapsePanel() {
@@ -534,7 +615,7 @@ export default class Stories extends BaseModule {
     }
     
     goToSlide(index) {
-        // Проверка границ
+        // Проверка границ и цикличность
         if (index < 0) {
             index = this.totalSlides - 1;
         } else if (index >= this.totalSlides) {
@@ -562,7 +643,12 @@ export default class Stories extends BaseModule {
             });
         }
         
-        this.log(`Switched to slide ${index + 1}/${this.totalSlides}`, 'info');
+        // Отладочная информация
+        const currentSlideEl = this.elements.storiesCarousel.querySelector(`[data-slide-index="${index}"]`);
+        if (currentSlideEl) {
+            const gradient = currentSlideEl.getAttribute('data-slide-gradient');
+            this.log(`Slide ${index + 1}/${this.totalSlides} - gradient: ${gradient}`, 'info');
+        }
     }
     
     nextSlide() {
@@ -575,9 +661,9 @@ export default class Stories extends BaseModule {
         this.goToSlide(prevIndex);
     }
     
-    // Методы автопрокрутки оставляем, но НЕ используем
+    // Методы автопрокрутки (отключены)
     startAutoPlay() {
-        if (!this.autoPlayEnabled) return; // Блокировка!
+        if (!this.autoPlayEnabled) return;
         
         this.stopAutoPlay();
         this.autoPlayInterval = setInterval(() => {
@@ -601,6 +687,12 @@ export default class Stories extends BaseModule {
             window.removeEventListener('resize', this.resizeHandler);
         }
         
+        // Удаляем добавленные стили
+        const styleEl = document.getElementById('stories-slide-fix');
+        if (styleEl) {
+            styleEl.remove();
+        }
+        
         // Очищаем DOM
         if (this.elements.homeContainer) {
             this.elements.homeContainer.classList.add('hidden');
@@ -608,6 +700,9 @@ export default class Stories extends BaseModule {
         if (this.elements.desktopHomeContainer) {
             this.elements.desktopHomeContainer.classList.add('hidden');
         }
+        
+        // Сбрасываем флаг инициализации
+        this.isInitialized = false;
         
         super.destroy();
     }
@@ -651,54 +746,10 @@ export default class Stories extends BaseModule {
         alert('Информация о команде будет добавлена в следующей версии');
     }
     
-    // Показать главную страницу
-    showHomePage() {
-        // Показываем контейнер главной
-        if (this.elements.homeContainer) {
-            this.elements.homeContainer.classList.remove('hidden');
-        }
-        // Скрываем остальное
-        if (this.elements.mainHeader) {
-            this.elements.mainHeader.classList.add('hidden');
-        }
-        if (this.elements.mainContent) {
-            this.elements.mainContent.classList.add('hidden');
-        }
-        if (this.elements.mainFooter) {
-            this.elements.mainFooter.classList.add('hidden');
-        }
-        
-        // Инициализируем интерфейс
-        this.initHomePage();
-    }
-    
-    // Скрыть главную страницу
-    hideHomePage() {
-        // Скрываем контейнер главной
-        if (this.elements.homeContainer) {
-            this.elements.homeContainer.classList.add('hidden');
-        }
-        // Показываем остальное
-        if (this.elements.mainHeader) {
-            this.elements.mainHeader.classList.remove('hidden');
-        }
-        if (this.elements.mainContent) {
-            this.elements.mainContent.classList.remove('hidden');
-        }
-        if (this.elements.mainFooter) {
-            this.elements.mainFooter.classList.remove('hidden');
-        }
-        
-        // Останавливаем автопрокрутку
-        this.stopAutoPlay();
-    }
-    
     getPublicMethods() {
         return {
             goToSlide: (index) => this.goToSlide(index),
             openStory: (index) => this.openStory(index),
-            showHomePage: () => this.showHomePage(),
-            hideHomePage: () => this.hideHomePage(),
             expandPanel: () => this.expandPanel(),
             collapsePanel: () => this.collapsePanel(),
             initHomePage: () => this.initHomePage(),
