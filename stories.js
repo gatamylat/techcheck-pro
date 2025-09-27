@@ -117,20 +117,39 @@ export default class Stories extends BaseModule {
         const isMobile = window.innerWidth < 768;
         
         if (isMobile) {
-            // Мобильная версия со Stories
-            this.renderStoriesSlides();
-            this.renderIndicators();
-            this.renderHomeModules();
-            this.initCarouselEvents();
-            this.initPanelDragging();
-            this.initSearchButton();
-            this.startAutoPlay();
-            this.log('Mobile home page initialized with Stories', 'success');
-        } else {
-            // Десктопная версия
-            this.renderDesktopHome();
-            this.log('Desktop home page initialized', 'success');
-        }
+    // Скрываем десктопную версию
+    if (this.elements.desktopHomeContainer) {
+        this.elements.desktopHomeContainer.classList.add('hidden');
+    }
+    // Показываем мобильную версию
+    if (this.elements.homeContainer) {
+        this.elements.homeContainer.classList.remove('hidden');
+    }
+    
+    // Мобильная версия со Stories
+    this.renderStoriesSlides();
+    this.renderIndicators();
+    this.renderHomeModules();
+    this.initCarouselEvents();
+    this.initPanelDragging();
+    this.initSearchButton();
+    this.startAutoPlay();
+    this.log('Mobile home page initialized with Stories', 'success');
+} else {
+    // Скрываем мобильную версию
+    if (this.elements.homeContainer) {
+        this.elements.homeContainer.classList.add('hidden');
+    }
+    // Показываем десктопную версию
+    if (this.elements.desktopHomeContainer) {
+        this.elements.desktopHomeContainer.classList.remove('hidden');
+    }
+    
+    // Десктопная версия
+    this.renderDesktopHome();
+    this.stopAutoPlay(); // Останавливаем автопрокрутку
+    this.log('Desktop home page initialized', 'success');
+}
         
         // Слушаем изменение размера окна
         this.handleResize();
@@ -218,7 +237,11 @@ export default class Stories extends BaseModule {
         }
         
         const modules = this.app.moduleMeta || {};
-        
+
+        // Очищаем мобильные элементы
+if (this.elements.homeContainer) {
+    this.elements.homeContainer.classList.add('hidden');
+}
         this.elements.desktopHomeContainer.innerHTML = `
             <!-- Hero блок -->
             <div class="desktop-hero">
@@ -509,6 +532,26 @@ this.elements.storiesCarousel.style.transform = `translateX(-${index * 100}%)`;
             this.autoPlayInterval = null;
         }
     }
+
+    destroy() {
+    // Останавливаем все интервалы и слушатели
+    this.stopAutoPlay();
+    
+    // Удаляем обработчик resize
+    if (this.resizeHandler) {
+        window.removeEventListener('resize', this.resizeHandler);
+    }
+    
+    // Очищаем DOM
+    if (this.elements.homeContainer) {
+        this.elements.homeContainer.classList.add('hidden');
+    }
+    if (this.elements.desktopHomeContainer) {
+        this.elements.desktopHomeContainer.classList.add('hidden');
+    }
+    
+    super.destroy();
+}
     
     openStory(index) {
         const slide = this.data.slides[index];
