@@ -612,3 +612,38 @@
         scroll-behavior: auto !important;
     }
 }
+/* === АДАПТИВНОСТЬ STORIES === */
+
+@media (max-width: 767px) {
+    .story-title {
+        font-size: 2.5rem;
+    }
+    
+    .future-modules {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 374px) {
+    .story-title {
+        font-size: 2rem;
+    }
+    
+    .home-header-content {
+        font-size: 1.5rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .main-content {
+        max-width: 768px;
+        left: 50%;
+        transform: translateX(-50%);
+        right: auto;
+        width: 100%;
+    }
+    
+    .main-content.is-dragging {
+        transform: translateX(-50%);
+    }
+}
