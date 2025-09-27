@@ -1,7 +1,7 @@
 /**
  * @module Stories
- * @description Кейсы, примеры решений, обсуждения
- * @version 1.0.0
+ * @description Stories карусель и управление главной страницей
+ * @version 2.0.0
  * @dependencies ['_state', '_router']
  */
 
@@ -11,196 +11,420 @@ export default class Stories extends BaseModule {
     constructor(app) {
         super(app);
         this.name = 'stories';
-        this.version = '1.0.0';
+        this.version = '2.0.0';
         this.dependencies = ['_state', '_router'];
         
         this.meta = {
             title: 'Stories',
             icon: '💬',
-            description: 'Кейсы, примеры решений, обсуждения',
+            description: 'Главная страница со Stories и модулями',
             navLabel: 'Stories',
-            status: 'beta'
+            status: 'ready'
+        };
+        
+        // Состояние карусели
+        this.currentSlide = 0;
+        this.totalSlides = 5;
+        this.autoPlayInterval = null;
+        
+        // Состояние панели
+        this.isExpanded = false;
+        this.isDragging = false;
+        this.startY = 0;
+        this.startTop = 380;
+        this.currentTop = 380;
+        this.expandedTop = 40;
+        this.collapsedTop = 380;
+        this.threshold = 230;
+        
+        // DOM элементы
+        this.elements = {};
+    }
+    
+    async init() {
+        await super.init();
+        this.initDOMElements();
+        this.initHomeInterface();
+    }
+    
+    initDOMElements() {
+        this.elements = {
+            homeContainer: document.getElementById('home-container'),
+            mainHeader: document.getElementById('main-header'),
+            mainContent: document.getElementById('content'),
+            mainFooter: document.getElementById('main-footer'),
+            homeHeader: document.getElementById('homeHeader'),
+            storiesHero: document.getElementById('storiesHero'),
+            storiesCarousel: document.getElementById('storiesCarousel'),
+            carouselIndicators: document.getElementById('carouselIndicators'),
+            mainContentPanel: document.getElementById('mainContent'),
+            homeModules: document.getElementById('homeModules'),
+            searchFab: document.getElementById('searchFab')
         };
     }
     
     async loadData() {
-        // Демо данные для Stories
+        // Stories слайды
         this.data = {
-            stories: [
+            slides: [
                 {
                     id: 1,
-                    title: 'Успешная проверка сложного проекта',
-                    author: 'Иван Петров',
-                    avatar: '👤',
-                    date: '2 дня назад',
-                    category: 'Кейс',
-                    content: 'Делюсь опытом проверки проекта кухни-гостиной площадью 45м². Основные сложности были с...',
-                    likes: 24,
-                    comments: 8,
-                    image: null,
-                    tags: ['кухня', 'проверка', 'опыт']
+                    title: 'TechCheck Pro',
+                    subtitle: 'Система проверки документации',
+                    gradient: 'rainbow',
+                    action: null
                 },
                 {
                     id: 2,
-                    title: 'Лайфхак: быстрая проверка спецификаций',
-                    author: 'Мария Сидорова',
-                    avatar: '👩',
-                    date: '1 неделю назад',
-                    category: 'Совет',
-                    content: 'Нашла способ как сократить время проверки спецификаций в 2 раза. Использую макрос который...',
-                    likes: 45,
-                    comments: 12,
-                    image: null,
-                    tags: ['спецификация', 'оптимизация', 'совет']
+                    title: 'Новости',
+                    subtitle: 'Обновления системы',
+                    gradient: 'purple',
+                    action: 'news'
                 },
                 {
                     id: 3,
-                    title: 'Проблема с фасадами выше 1950мм',
-                    author: 'Алексей Козлов',
-                    avatar: '👨',
-                    date: '3 недели назад',
-                    category: 'Вопрос',
-                    content: 'Столкнулся с проблемой при проектировании высоких фасадов. Забыл про выпрямители и...',
-                    likes: 15,
-                    comments: 23,
-                    image: null,
-                    tags: ['фасады', 'проблема', 'решение']
+                    title: 'Совет дня',
+                    subtitle: 'Полезные лайфхаки',
+                    gradient: 'pink',
+                    action: 'tips'
+                },
+                {
+                    id: 4,
+                    title: '127',
+                    subtitle: 'Проверок за неделю',
+                    gradient: 'blue',
+                    action: 'stats'
+                },
+                {
+                    id: 5,
+                    title: 'Команда',
+                    subtitle: 'Лучшие проверяющие',
+                    gradient: 'green',
+                    action: 'team'
                 }
-            ],
-            
-            categories: [
-                { id: 'case', name: 'Кейсы', count: 12 },
-                { id: 'tip', name: 'Советы', count: 28 },
-                { id: 'question', name: 'Вопросы', count: 15 },
-                { id: 'discussion', name: 'Обсуждения', count: 7 }
             ]
         };
         
         this.setCache(this.data);
     }
     
-    renderContent() {
-        return `
-            <div class="stories-container">
-                <div class="stories-header">
-                    <h1>${this.meta.icon} ${this.meta.title}</h1>
-                    <p>${this.meta.description}</p>
-                </div>
-                
-                <div class="stories-toolbar" style="display: flex; gap: 1rem; margin: 2rem 0; align-items: center;">
-                    <button class="btn btn-primary" onclick="app.getModule('stories').createStory()">
-                        ✍️ Написать
-                    </button>
-                    
-                    <div class="stories-filters" style="display: flex; gap: 0.5rem; margin-left: auto;">
-                        ${this.data.categories.map(cat => `
-                            <button class="tab" style="padding: 0.5rem 1rem; background: var(--bg-secondary); 
-                                    border: none; border-radius: var(--radius); cursor: pointer;">
-                                ${cat.name} (${cat.count})
-                            </button>
-                        `).join('')}
-                    </div>
-                </div>
-                
-                <div class="stories-feed">
-                    ${this.data.stories.map(story => this.renderStory(story)).join('')}
-                </div>
-                
-                <div style="text-align: center; padding: 2rem;">
-                    <button class="btn btn-secondary">
-                        Загрузить ещё
-                    </button>
+    initHomeInterface() {
+        // Проверяем, что мы на главной
+        if (window.location.hash !== '' && window.location.hash !== '#/') {
+            return;
+        }
+        
+        this.renderStoriesSlides();
+        this.renderIndicators();
+        this.renderHomeModules();
+        this.initCarouselEvents();
+        this.initPanelDragging();
+        this.initSearchButton();
+        this.startAutoPlay();
+    }
+    
+    renderStoriesSlides() {
+        if (!this.elements.storiesCarousel) return;
+        
+        this.elements.storiesCarousel.innerHTML = this.data.slides.map((slide, index) => `
+            <div class="story-slide story-gradient-${slide.gradient}" 
+                 onclick="app.getModule('stories').openStory(${index})">
+                <h1 class="story-title">${slide.title}</h1>
+                <p class="story-subtitle">${slide.subtitle}</p>
+            </div>
+        `).join('');
+    }
+    
+    renderIndicators() {
+        if (!this.elements.carouselIndicators) return;
+        
+        this.elements.carouselIndicators.innerHTML = this.data.slides.map((_, index) => `
+            <button class="carousel-indicator ${index === 0 ? 'active' : ''}" 
+                    onclick="app.getModule('stories').goToSlide(${index})"></button>
+        `).join('');
+    }
+    
+    renderHomeModules() {
+        if (!this.elements.homeModules) return;
+        
+        const modules = [
+            { id: 'knowledge-base', icon: '📚', title: 'База знаний', desc: 'ГОСТ стандарты' },
+            { id: 'checklist', icon: '✓', title: 'Чек-листы', desc: 'Проверка документов' },
+            { id: 'documents', icon: '📋', title: 'Документы', desc: 'Состав КБ' },
+            { id: 'wiki', icon: '📖', title: 'Wiki', desc: 'База команды', status: 'beta' }
+        ];
+        
+        const futureModules = [
+            { icon: '📊', title: 'Статистика', desc: 'Аналитика проверок', date: 'Q2 2025' },
+            { icon: '🤖', title: 'AI Проверка', desc: 'Автоматический анализ', date: 'Q3 2025' }
+        ];
+        
+        this.elements.homeModules.innerHTML = `
+            <!-- Основные модули -->
+            <div class="home-modules">
+                <div class="grid grid-2">
+                    ${modules.map(module => `
+                        <div class="module-card" onclick="window.location.hash = '/${module.id}'">
+                            ${module.status ? `<span class="module-status status-${module.status}">Beta</span>` : ''}
+                            <div class="module-header">
+                                <div class="module-icon">${module.icon}</div>
+                                <div class="module-info">
+                                    <h3>${module.title}</h3>
+                                    <p>${module.desc}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
                 </div>
             </div>
+            
+            <!-- Будущие модули -->
+            <section class="future-section">
+                <h2>Скоро</h2>
+                <div class="future-modules">
+                    ${futureModules.map(module => `
+                        <div class="future-card">
+                            <span class="future-badge">${module.date}</span>
+                            <div class="future-icon">${module.icon}</div>
+                            <div class="future-title">${module.title}</div>
+                            <div class="future-desc">${module.desc}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            </section>
         `;
     }
     
-    renderStory(story) {
-        return `
-            <article class="story-card card" style="margin-bottom: 1.5rem;">
-                <div class="story-header" style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                    <div class="story-avatar" style="width: 40px; height: 40px; background: var(--bg-secondary); 
-                         border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-                         font-size: 1.5rem;">
-                        ${story.avatar}
-                    </div>
-                    <div>
-                        <div style="font-weight: 600;">${story.author}</div>
-                        <div style="font-size: 0.875rem; color: var(--text-secondary);">
-                            ${story.date} • ${story.category}
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="story-content">
-                    <h3 style="margin-bottom: 1rem;">${story.title}</h3>
-                    <p style="color: var(--text-secondary); line-height: 1.6;">
-                        ${story.content}
-                    </p>
-                    
-                    <div class="story-tags" style="display: flex; gap: 0.5rem; margin-top: 1rem;">
-                        ${story.tags.map(tag => `
-                            <span style="padding: 0.25rem 0.75rem; background: var(--bg-secondary); 
-                                  border-radius: var(--radius-full); font-size: 0.875rem;">
-                                #${tag}
-                            </span>
-                        `).join('')}
-                    </div>
-                </div>
-                
-                <div class="story-actions" style="display: flex; gap: 1rem; margin-top: 1.5rem; 
-                     padding-top: 1rem; border-top: 1px solid var(--border-color);">
-                    <button class="story-action" style="display: flex; align-items: center; gap: 0.5rem; 
-                            background: none; border: none; cursor: pointer; color: var(--text-secondary);"
-                            onclick="app.getModule('stories').likeStory(${story.id})">
-                        ❤️ ${story.likes}
-                    </button>
-                    <button class="story-action" style="display: flex; align-items: center; gap: 0.5rem; 
-                            background: none; border: none; cursor: pointer; color: var(--text-secondary);"
-                            onclick="app.getModule('stories').openComments(${story.id})">
-                        💬 ${story.comments}
-                    </button>
-                    <button class="story-action" style="display: flex; align-items: center; gap: 0.5rem; 
-                            background: none; border: none; cursor: pointer; color: var(--text-secondary); 
-                            margin-left: auto;">
-                        🔗 Поделиться
-                    </button>
-                </div>
-            </article>
-        `;
+    initCarouselEvents() {
+        if (!this.elements.storiesHero) return;
+        
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        this.elements.storiesHero.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+        }, { passive: true });
+        
+        this.elements.storiesHero.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].clientX;
+            this.handleSwipe(touchStartX - touchEndX);
+        }, { passive: true });
+    }
+    
+    handleSwipe(diff) {
+        const swipeThreshold = 50;
+        
+        if (Math.abs(diff) > swipeThreshold) {
+            if (diff > 0) {
+                this.nextSlide();
+            } else {
+                this.prevSlide();
+            }
+        }
+    }
+    
+    initPanelDragging() {
+        const panel = this.elements.mainContentPanel;
+        if (!panel) return;
+        
+        // Touch события
+        panel.addEventListener('touchstart', (e) => this.startDrag(e), { passive: false });
+        document.addEventListener('touchmove', (e) => this.drag(e), { passive: false });
+        document.addEventListener('touchend', (e) => this.endDrag(e), { passive: true });
+        
+        // Mouse события (для десктопа)
+        panel.addEventListener('mousedown', (e) => this.startDrag(e));
+        document.addEventListener('mousemove', (e) => this.drag(e));
+        document.addEventListener('mouseup', (e) => this.endDrag(e));
+        
+        // Клик на хедер "Домой"
+        this.elements.homeHeader.addEventListener('click', () => {
+            this.collapsePanel();
+        });
+        
+        // Предотвращаем выделение текста при перетаскивании
+        panel.addEventListener('selectstart', (e) => {
+            if (this.isDragging) e.preventDefault();
+        });
+    }
+    
+    startDrag(e) {
+        // Проверяем, что не кликнули на интерактивный элемент
+        if (e.target.closest('.module-card, .future-card, .search-fab, button')) {
+            return;
+        }
+        
+        this.isDragging = true;
+        this.startY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+        this.startTop = this.currentTop;
+        this.elements.mainContentPanel.classList.add('is-dragging');
+    }
+    
+    drag(e) {
+        if (!this.isDragging) return;
+        
+        e.preventDefault();
+        const clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+        const deltaY = clientY - this.startY;
+        let newTop = this.startTop + deltaY;
+        
+        // Ограничиваем движение
+        newTop = Math.max(this.expandedTop, Math.min(this.collapsedTop, newTop));
+        
+        this.elements.mainContentPanel.style.top = newTop + 'px';
+        this.currentTop = newTop;
+    }
+    
+    endDrag(e) {
+        if (!this.isDragging) return;
+        
+        this.isDragging = false;
+        this.elements.mainContentPanel.classList.remove('is-dragging');
+        
+        // Определяем финальную позицию
+        if (this.currentTop < this.threshold) {
+            this.expandPanel();
+        } else {
+            this.collapsePanel();
+        }
+    }
+    
+    expandPanel() {
+        this.isExpanded = true;
+        this.currentTop = this.expandedTop;
+        this.elements.mainContentPanel.classList.add('is-expanded');
+        this.elements.storiesHero.classList.add('is-hidden');
+        this.elements.homeHeader.classList.add('is-visible');
+        this.elements.mainContentPanel.style.top = this.currentTop + 'px';
+        this.stopAutoPlay();
+    }
+    
+    collapsePanel() {
+        this.isExpanded = false;
+        this.currentTop = this.collapsedTop;
+        this.elements.mainContentPanel.classList.remove('is-expanded');
+        this.elements.storiesHero.classList.remove('is-hidden');
+        this.elements.homeHeader.classList.remove('is-visible');
+        this.elements.mainContentPanel.style.top = this.currentTop + 'px';
+        this.startAutoPlay();
+    }
+    
+    initSearchButton() {
+        if (!this.elements.searchFab) return;
+        
+        this.elements.searchFab.addEventListener('click', () => {
+            this.openSearch();
+        });
+    }
+    
+    goToSlide(index) {
+        this.currentSlide = index;
+        this.elements.storiesCarousel.style.transform = `translateX(-${index * 100}%)`;
+        
+        const indicators = this.elements.carouselIndicators.querySelectorAll('.carousel-indicator');
+        indicators.forEach((ind, i) => {
+            ind.classList.toggle('active', i === index);
+        });
+    }
+    
+    nextSlide() {
+        this.currentSlide = (this.currentSlide + 1) % this.totalSlides;
+        this.goToSlide(this.currentSlide);
+    }
+    
+    prevSlide() {
+        this.currentSlide = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
+        this.goToSlide(this.currentSlide);
+    }
+    
+    startAutoPlay() {
+        this.stopAutoPlay();
+        this.autoPlayInterval = setInterval(() => {
+            this.nextSlide();
+        }, 5000);
+    }
+    
+    stopAutoPlay() {
+        if (this.autoPlayInterval) {
+            clearInterval(this.autoPlayInterval);
+            this.autoPlayInterval = null;
+        }
+    }
+    
+    openStory(index) {
+        const slide = this.data.slides[index];
+        this.log(`Opening story: ${slide.title}`);
+        
+        if (slide.action) {
+            switch(slide.action) {
+                case 'news':
+                    this.showNews();
+                    break;
+                case 'tips':
+                    this.showTips();
+                    break;
+                case 'stats':
+                    this.app.router.navigate('/statistics');
+                    break;
+                case 'team':
+                    this.showTeam();
+                    break;
+            }
+        }
+    }
+    
+    openSearch() {
+        this.log('Opening search');
+        // Создаем модальное окно поиска
+        alert('Функция поиска будет добавлена в следующей версии');
+    }
+    
+    showNews() {
+        alert('Новости системы будут добавлены в следующей версии');
+    }
+    
+    showTips() {
+        alert('Советы и лайфхаки будут добавлены в следующей версии');
+    }
+    
+    showTeam() {
+        alert('Информация о команде будет добавлена в следующей версии');
+    }
+    
+    // Показать главную страницу
+    showHomePage() {
+        // Показываем контейнер главной
+        this.elements.homeContainer.classList.remove('hidden');
+        // Скрываем остальное
+        this.elements.mainHeader.classList.add('hidden');
+        this.elements.mainContent.classList.add('hidden');
+        this.elements.mainFooter.classList.add('hidden');
+        
+        // Инициализируем интерфейс
+        this.initHomeInterface();
+    }
+    
+    // Скрыть главную страницу
+    hideHomePage() {
+        // Скрываем контейнер главной
+        this.elements.homeContainer.classList.add('hidden');
+        // Показываем остальное
+        this.elements.mainHeader.classList.remove('hidden');
+        this.elements.mainContent.classList.remove('hidden');
+        this.elements.mainFooter.classList.remove('hidden');
+        
+        // Останавливаем автопрокрутку
+        this.stopAutoPlay();
     }
     
     getPublicMethods() {
         return {
-            createStory: () => this.createStory(),
-            likeStory: (id) => this.likeStory(id),
-            openComments: (id) => this.openComments(id)
+            goToSlide: (index) => this.goToSlide(index),
+            openStory: (index) => this.openStory(index),
+            showHomePage: () => this.showHomePage(),
+            hideHomePage: () => this.hideHomePage(),
+            expandPanel: () => this.expandPanel(),
+            collapsePanel: () => this.collapsePanel()
         };
-    }
-    
-    createStory() {
-        this.log('Creating new story...');
-        alert('Создание историй будет добавлено в следующей версии');
-    }
-    
-    likeStory(id) {
-        this.log(`Liked story ${id}`);
-        const story = this.data.stories.find(s => s.id === id);
-        if (story) {
-            story.likes++;
-            this.render();
-        }
-    }
-    
-    openComments(id) {
-        this.log(`Opening comments for story ${id}`);
-        alert('Комментарии будут добавлены в следующей версии');
-    }
-    
-    render() {
-        const container = document.getElementById('content');
-        if (container) {
-            container.innerHTML = this.renderContent();
-        }
     }
 }
