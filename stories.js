@@ -238,10 +238,17 @@ export default class Stories extends BaseModule {
             <!-- Основные модули -->
             <div class="desktop-modules-grid">
                 <!-- Большая карточка документации -->
-                <div class="desktop-docs-card" onclick="window.location.hash = '/documents'">
-                    <h2>📋 Состав документации</h2>
-                    <p>7 типов документов для проверки</p>
-                </div>
+                <div class="module-card" onclick="window.location.hash = '/documents'">
+    <span class="module-status status-ready">Готово</span>
+    <div class="module-header">
+        <div class="module-icon">📋</div>
+        <div class="module-info">
+            <h3>Состав документации</h3>
+            <p>7 типов документов для проверки</p>
+        </div>
+    </div>
+</div>
+
                 
                 <!-- База знаний -->
                 <div class="module-card" onclick="window.location.hash = '/knowledge-base'">
