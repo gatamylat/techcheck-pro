@@ -43,6 +43,9 @@ export default class Stories extends BaseModule {
         
         // ВАЖНО: Флаг инициализации
         this.isInitialized = false;
+        
+        // AbortController для управления событиями
+        this.carouselController = null;
     }
     
     async init() {
@@ -115,18 +118,14 @@ export default class Stories extends BaseModule {
     }
     
     initHomePage() {
-        // ЗАЩИТА ОТ ПОВТОРНОЙ ИНИЦИАЛИЗАЦИИ
-        if (this.isInitialized && window.innerWidth < 768) {
-            this.log('Home page already initialized, skipping...', 'info');
-            return;
-        }
-        
-        // Обновляем DOM элементы
+        // Обновляем DOM элементы ВСЕГДА
         this.initDOMElements();
         
         const isMobile = window.innerWidth < 768;
         
         if (isMobile) {
+            this.log('Initializing mobile home page...', 'info');
+            
             // Скрываем десктопную версию
             if (this.elements.desktopHomeContainer) {
                 this.elements.desktopHomeContainer.classList.add('hidden');
@@ -139,20 +138,25 @@ export default class Stories extends BaseModule {
             // ИСПРАВЛЕНИЕ: Добавляем стили для слайдов
             this.injectSlideStyles();
             
-            // Мобильная версия со Stories
+            // Мобильная версия со Stories - ВСЕГДА перерисовываем
             this.renderStoriesSlides();
             this.renderIndicators();
             this.renderHomeModules();
-            this.initCarouselEvents();
-            this.initPanelDragging();
-            this.initSearchButton();
             
-            // Устанавливаем на первый слайд
-            this.currentSlide = 0;
-            this.goToSlide(0);
+            // ВАЖНО: Инициализируем события ПОСЛЕ рендеринга
+            setTimeout(() => {
+                this.initCarouselEvents();
+                this.initPanelDragging();
+                this.initSearchButton();
+                
+                // Устанавливаем на первый слайд
+                this.currentSlide = 0;
+                this.goToSlide(0);
+                
+                this.log('Mobile home page initialized successfully', 'success');
+            }, 100); // Даем DOM обновиться
             
             this.isInitialized = true;
-            this.log('Mobile home page initialized with Stories', 'success');
         } else {
             // Скрываем мобильную версию
             if (this.elements.homeContainer) {
@@ -473,35 +477,64 @@ export default class Stories extends BaseModule {
     }
     
     initCarouselEvents() {
-        if (!this.elements.storiesHero) return;
+        if (!this.elements.storiesHero) {
+            this.log('storiesHero not found for events', 'error');
+            return;
+        }
         
-        // Удаляем старые обработчики если есть
-        const newHero = this.elements.storiesHero.cloneNode(true);
-        this.elements.storiesHero.parentNode.replaceChild(newHero, this.elements.storiesHero);
-        this.elements.storiesHero = newHero;
-        
+        // НЕ клонируем, просто добавляем обработчики
         let touchStartX = 0;
         let touchEndX = 0;
+        let touchStartY = 0;
+        let touchEndY = 0;
+        
+        // Удаляем старые обработчики через AbortController
+        if (this.carouselController) {
+            this.carouselController.abort();
+        }
+        this.carouselController = new AbortController();
+        const signal = this.carouselController.signal;
         
         this.elements.storiesHero.addEventListener('touchstart', (e) => {
             touchStartX = e.touches[0].clientX;
-        }, { passive: true });
+            touchStartY = e.touches[0].clientY;
+            this.log(`Touch start: X=${touchStartX}`, 'info');
+        }, { passive: true, signal });
         
         this.elements.storiesHero.addEventListener('touchend', (e) => {
             touchEndX = e.changedTouches[0].clientX;
-            this.handleSwipe(touchStartX - touchEndX);
-        }, { passive: true });
+            touchEndY = e.changedTouches[0].clientY;
+            
+            const diffX = touchStartX - touchEndX;
+            const diffY = Math.abs(touchStartY - touchEndY);
+            
+            // Проверяем что свайп горизонтальный
+            if (Math.abs(diffX) > diffY) {
+                this.log(`Touch end: diffX=${diffX}`, 'info');
+                this.handleSwipe(diffX);
+            }
+        }, { passive: true, signal });
+        
+        this.log('Carousel events initialized', 'success');
     }
     
     handleSwipe(diff) {
-        const swipeThreshold = 50;
+        const swipeThreshold = 30; // Уменьшили порог для более чувствительного свайпа
+        
+        this.log(`Swipe detected: diff=${diff}, threshold=${swipeThreshold}`, 'info');
         
         if (Math.abs(diff) > swipeThreshold) {
             if (diff > 0) {
+                // Свайп влево - следующий слайд
+                this.log('Swiping to next slide', 'info');
                 this.nextSlide();
             } else {
+                // Свайп вправо - предыдущий слайд
+                this.log('Swiping to previous slide', 'info');
                 this.prevSlide();
             }
+        } else {
+            this.log('Swipe too small, ignoring', 'info');
         }
     }
     
@@ -615,6 +648,16 @@ export default class Stories extends BaseModule {
     }
     
     goToSlide(index) {
+        // Проверяем что карусель существует
+        if (!this.elements.storiesCarousel) {
+            // Пробуем найти элемент заново
+            this.elements.storiesCarousel = document.getElementById('storiesCarousel');
+            if (!this.elements.storiesCarousel) {
+                this.log('Stories carousel not found!', 'error');
+                return;
+            }
+        }
+        
         // Проверка границ и цикличность
         if (index < 0) {
             index = this.totalSlides - 1;
@@ -625,17 +668,18 @@ export default class Stories extends BaseModule {
         // Устанавливаем текущий слайд
         this.currentSlide = index;
         
-        // Проверяем наличие элементов
-        if (!this.elements.storiesCarousel) {
-            this.log('Stories carousel not found', 'error');
-            return;
-        }
-        
         // Применяем трансформацию
         const translateValue = -index * 100;
         this.elements.storiesCarousel.style.transform = `translateX(${translateValue}%)`;
+        this.elements.storiesCarousel.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+        
+        this.log(`Moving to slide ${index + 1}/${this.totalSlides} (translateX: ${translateValue}%)`, 'info');
         
         // Обновляем индикаторы
+        if (!this.elements.carouselIndicators) {
+            this.elements.carouselIndicators = document.getElementById('carouselIndicators');
+        }
+        
         if (this.elements.carouselIndicators) {
             const indicators = this.elements.carouselIndicators.querySelectorAll('.carousel-indicator');
             indicators.forEach((ind, i) => {
@@ -647,18 +691,24 @@ export default class Stories extends BaseModule {
         const currentSlideEl = this.elements.storiesCarousel.querySelector(`[data-slide-index="${index}"]`);
         if (currentSlideEl) {
             const gradient = currentSlideEl.getAttribute('data-slide-gradient');
-            this.log(`Slide ${index + 1}/${this.totalSlides} - gradient: ${gradient}`, 'info');
+            this.log(`Current slide gradient: ${gradient}`, 'info');
+        } else {
+            this.log(`Slide element ${index} not found in DOM`, 'warning');
         }
     }
     
     nextSlide() {
-        const nextIndex = this.currentSlide + 1;
+        const prevIndex = this.currentSlide;
+        const nextIndex = (this.currentSlide + 1) % this.totalSlides;
+        this.log(`nextSlide: ${prevIndex} -> ${nextIndex}`, 'info');
         this.goToSlide(nextIndex);
     }
     
     prevSlide() {
-        const prevIndex = this.currentSlide - 1;
-        this.goToSlide(prevIndex);
+        const prevIndex = this.currentSlide;
+        const nextIndex = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
+        this.log(`prevSlide: ${prevIndex} -> ${nextIndex}`, 'info');
+        this.goToSlide(nextIndex);
     }
     
     // Методы автопрокрутки (отключены)
@@ -681,6 +731,12 @@ export default class Stories extends BaseModule {
     destroy() {
         // Останавливаем все интервалы и слушатели
         this.stopAutoPlay();
+        
+        // Удаляем обработчики карусели
+        if (this.carouselController) {
+            this.carouselController.abort();
+            this.carouselController = null;
+        }
         
         // Удаляем обработчик resize
         if (this.resizeHandler) {
