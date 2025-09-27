@@ -472,8 +472,8 @@ export default class Stories extends BaseModule {
     
     goToSlide(index) {
         this.currentSlide = index;
-        const slideWidth = this.elements.storiesCarousel.offsetWidth;
-this.elements.storiesCarousel.style.transform = `translateX(-${index * slideWidth}px)`;
+        // Используем 100% вместо пикселей для правильной работы
+this.elements.storiesCarousel.style.transform = `translateX(-${index * 100}%)`;
 
         
         const indicators = this.elements.carouselIndicators.querySelectorAll('.carousel-indicator');
