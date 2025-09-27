@@ -152,16 +152,11 @@ export default class Router {
         if (mainContent) mainContent.classList.add('hidden');
         if (mainFooter) mainFooter.classList.add('hidden');
         
-        // ВАЖНО: Вызываем initHomePage только если это первый раз
+        // Всегда вызываем initHomePage для stories
         const stories = this.app.getModule('stories');
         if (stories) {
-            // Проверяем, инициализирован ли уже модуль
-            if (!stories.isInitialized) {
-                stories.initHomePage();
-                this.app.log('Stories initialized from router', 'info');
-            } else {
-                this.app.log('Stories already initialized, skipping', 'info');
-            }
+            stories.initHomePage();
+            this.app.log('Stories home page initialized', 'info');
         }
     }
     
