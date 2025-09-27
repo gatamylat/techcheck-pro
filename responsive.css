@@ -513,6 +513,37 @@
     button, .btn, .card, .module-card, .check-item {
         touch-action: manipulation;
     }
+   /* --- Фикс сторис: скролл по одной --- */
+#storiesCarousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  gap: 1rem;
+}
+
+.story-slide {
+  flex: 0 0 80%;
+  scroll-snap-align: start;
+}
+
+#storiesCarousel::-webkit-scrollbar {
+  display: none;
+}
+
+/* --- Две кнопки на мобилке --- */
+.hero-actions {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.hero-actions .btn {
+  flex: 1 1 calc(50% - 0.75rem);
+  width: auto;
+  justify-content: center;
+}
+
 }
 
 /* === МАЛЕНЬКИЕ ЭКРАНЫ (max 374px) === */
