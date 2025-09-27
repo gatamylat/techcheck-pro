@@ -1,7 +1,7 @@
 /**
  * @module Router
  * @description Клиентский роутер для навигации между модулями
- * @version 1.0.0
+ * @version 1.0.1 - FIXED
  */
 
 export default class Router {
@@ -88,13 +88,13 @@ export default class Router {
         // Обновляем активный пункт меню
         this.updateNavigation(hash);
         
-        // НОВОЕ: Специальная обработка для главной страницы со Stories
+        // Специальная обработка для главной страницы со Stories
         if (hash === '/' || hash === '') {
             this.showHomePage();
             return;
         }
         
-        // НОВОЕ: Для всех остальных страниц показываем стандартный интерфейс
+        // Для всех остальных страниц показываем стандартный интерфейс
         this.showStandardPage();
         
         // Ищем обработчик
@@ -123,7 +123,8 @@ export default class Router {
     }
     
     /**
-     * НОВОЕ: Показать главную страницу со Stories
+     * Показать главную страницу со Stories
+     * ИСПРАВЛЕНО: убрана повторная инициализация
      */
     showHomePage() {
         // Получаем элементы
@@ -144,12 +145,6 @@ export default class Router {
             // Показываем десктопную версию
             if (homeContainer) homeContainer.classList.add('hidden');
             if (desktopHomeContainer) desktopHomeContainer.classList.remove('hidden');
-            
-            // Рендерим десктопную версию через Stories модуль
-            const stories = this.app.getModule('stories');
-            if (stories && stories.renderDesktopHome) {
-                stories.renderDesktopHome();
-            }
         }
         
         // Скрываем стандартный интерфейс для обеих версий
@@ -157,41 +152,44 @@ export default class Router {
         if (mainContent) mainContent.classList.add('hidden');
         if (mainFooter) mainFooter.classList.add('hidden');
         
-        // Инициализируем Stories для мобильной версии
-        if (isMobile) {
-            const stories = this.app.getModule('stories');
-            if (stories && stories.initHomePage) {
+        // ВАЖНО: Вызываем initHomePage только если это первый раз
+        const stories = this.app.getModule('stories');
+        if (stories) {
+            // Проверяем, инициализирован ли уже модуль
+            if (!stories.isInitialized) {
                 stories.initHomePage();
+                this.app.log('Stories initialized from router', 'info');
+            } else {
+                this.app.log('Stories already initialized, skipping', 'info');
             }
         }
     }
     
     /**
-     * НОВОЕ: Показать стандартную страницу
+     * Показать стандартную страницу
      */
     showStandardPage() {
-    const homeContainer = document.getElementById('home-container');
-    const desktopHomeContainer = document.getElementById('desktop-home-container');
-    const mainHeader = document.getElementById('main-header');
-    const mainContent = document.getElementById('content');
-    const mainFooter = document.getElementById('main-footer');
-    
-    // Скрываем интерфейс главной (и мобильный, и десктопный)
-    if (homeContainer) homeContainer.classList.add('hidden');
-    if (desktopHomeContainer) desktopHomeContainer.classList.add('hidden');
-    
-    // Показываем стандартный интерфейс
-    if (mainHeader) mainHeader.classList.remove('hidden');
-    if (mainContent) mainContent.classList.remove('hidden');
-    if (mainFooter) mainFooter.classList.remove('hidden');
-    
-    // Останавливаем автопрокрутку Stories если она есть
-    const stories = this.app.getModule('stories');
-    if (stories && stories.stopAutoPlay) {
-        stories.stopAutoPlay();
+        const homeContainer = document.getElementById('home-container');
+        const desktopHomeContainer = document.getElementById('desktop-home-container');
+        const mainHeader = document.getElementById('main-header');
+        const mainContent = document.getElementById('content');
+        const mainFooter = document.getElementById('main-footer');
+        
+        // Скрываем интерфейс главной (и мобильный, и десктопный)
+        if (homeContainer) homeContainer.classList.add('hidden');
+        if (desktopHomeContainer) desktopHomeContainer.classList.add('hidden');
+        
+        // Показываем стандартный интерфейс
+        if (mainHeader) mainHeader.classList.remove('hidden');
+        if (mainContent) mainContent.classList.remove('hidden');
+        if (mainFooter) mainFooter.classList.remove('hidden');
+        
+        // Останавливаем автопрокрутку Stories если она есть
+        const stories = this.app.getModule('stories');
+        if (stories && stories.stopAutoPlay) {
+            stories.stopAutoPlay();
+        }
     }
-}
-
     
     /**
      * Обновление активной навигации
@@ -254,11 +252,6 @@ export default class Router {
             });
         });
     }
-    
-    /**
-     * Рендер главной страницы (резервный вариант)
-     * ОБНОВЛЕНО: Теперь это резервная заглушка, основная главная в stories.js
-     */
     
     /**
      * 404 страница
