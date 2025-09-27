@@ -24,7 +24,7 @@ export default class Stories extends BaseModule {
         
         // Состояние карусели
         this.currentSlide = 0;
-        this.totalSlides = 5;
+        this.totalSlides = 0;
         this.autoPlayInterval = null;
         
         // Состояние панели
@@ -146,6 +146,7 @@ export default class Stories extends BaseModule {
                 <p class="story-subtitle">${slide.subtitle}</p>
             </div>
         `).join('');
+        this.totalSlides = this.data.slides.length;
     }
     
     renderIndicators() {
@@ -471,7 +472,9 @@ export default class Stories extends BaseModule {
     
     goToSlide(index) {
         this.currentSlide = index;
-        this.elements.storiesCarousel.style.transform = `translateX(-${index * 100}%)`;
+        const slideWidth = this.elements.storiesCarousel.offsetWidth;
+this.elements.storiesCarousel.style.transform = `translateX(-${index * slideWidth}px)`;
+
         
         const indicators = this.elements.carouselIndicators.querySelectorAll('.carousel-indicator');
         indicators.forEach((ind, i) => {
