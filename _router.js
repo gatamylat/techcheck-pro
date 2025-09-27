@@ -145,6 +145,12 @@ export default class Router {
             // Показываем десктопную версию
             if (homeContainer) homeContainer.classList.add('hidden');
             if (desktopHomeContainer) desktopHomeContainer.classList.remove('hidden');
+            
+            // Рендерим десктопную версию через Stories модуль
+            const stories = this.app.getModule('stories');
+            if (stories && stories.renderDesktopHome) {
+                stories.renderDesktopHome();
+            }
         }
         
         // Скрываем стандартный интерфейс для обеих версий
@@ -152,10 +158,12 @@ export default class Router {
         if (mainContent) mainContent.classList.add('hidden');
         if (mainFooter) mainFooter.classList.add('hidden');
         
-        // Инициализируем Stories модуль
-        const stories = this.app.getModule('stories');
-        if (stories && stories.initHomePage) {
-            stories.initHomePage();
+        // Инициализируем Stories для мобильной версии
+        if (isMobile) {
+            const stories = this.app.getModule('stories');
+            if (stories && stories.initHomePage) {
+                stories.initHomePage();
+            }
         }
     }
     
