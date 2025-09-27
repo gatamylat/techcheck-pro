@@ -72,7 +72,7 @@ export default class Stories extends BaseModule {
                 {
                     id: 1,
                     title: 'TechCheck Pro',
-                    subtitle: 'Система проверки документации',
+                    subtitle: 'Система проверки документациии',
                     gradient: 'rainbow',
                     action: null
                 },
