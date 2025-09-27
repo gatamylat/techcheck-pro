@@ -12,7 +12,6 @@ export default class Router {
         this.history = [];
         
         // Базовые маршруты
-        this.routes.set('/', () => this.renderHome());
         this.routes.set('/404', () => this.render404());
     }
     
@@ -258,97 +257,6 @@ export default class Router {
      * Рендер главной страницы (резервный вариант)
      * ОБНОВЛЕНО: Теперь это резервная заглушка, основная главная в stories.js
      */
-    renderHome() {
-        // Эта функция теперь не используется, так как главная страница 
-        // управляется через Stories модуль, но оставляем как fallback
-        return `
-            <div class="home-container">
-                <!-- Hero блок -->
-                <section class="hero">
-                    <h1>Проверяйте документацию быстро и точно</h1>
-                    <p>Стандарты Массивбург • Интерактивные чек-листы • База знаний</p>
-                    <div class="hero-actions">
-                        <button class="btn btn-primary" onclick="app.router.navigate('/checklist')">
-                            🚀 Начать проверку
-                        </button>
-                        <button class="btn btn-secondary" onclick="app.router.navigate('/knowledge-base')">
-                            📖 База знаний
-                        </button>
-                    </div>
-                </section>
-
-                <!-- Основная сетка -->
-                <div class="main-grid">
-                    <!-- Документация - большая карточка -->
-                    <div class="docs-card" onclick="app.router.navigate('/documents')">
-                        <h2>📋 Состав документации</h2>
-                        <p>7 типов документов для проверки</p>
-                    </div>
-
-                    <!-- База знаний -->
-                    <div class="module-card" onclick="app.router.navigate('/knowledge-base')">
-                        <div class="module-header">
-                            <div class="module-icon">📚</div>
-                            <div class="module-info">
-                                <h3>База знаний</h3>
-                                <p>Нормы проектирования, ГОСТ стандарты</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Чек-листы -->
-                    <div class="module-card" onclick="app.router.navigate('/checklist')">
-                        <div class="module-header">
-                            <div class="module-icon">✓</div>
-                            <div class="module-info">
-                                <h3>Чек-листы</h3>
-                                <p>Интерактивная проверка документов</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Дополнительные модули -->
-                <div class="special-modules">
-                    <!-- Wiki -->
-                    <div class="module-card" onclick="app.router.navigate('/wiki')">
-                        <span class="module-status status-beta">Beta</span>
-                        <div class="module-header">
-                            <div class="module-icon">📖</div>
-                            <div class="module-info">
-                                <h3>Wiki</h3>
-                                <p>База знаний команды</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Stories -->
-                    <div class="module-card" onclick="app.router.navigate('/stories')">
-                        <span class="module-status status-beta">Beta</span>
-                        <div class="module-header">
-                            <div class="module-icon">💬</div>
-                            <div class="module-info">
-                                <h3>Stories</h3>
-                                <p>Кейсы и обсуждения</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Статистика -->
-                    <div class="special-card" onclick="app.router.navigate('/statistics')">
-                        <h3>📊 Статистика</h3>
-                        <p>Скоро</p>
-                    </div>
-
-                    <!-- AI Проверка -->
-                    <div class="special-card" onclick="app.router.navigate('/llm-check')">
-                        <h3>🤖 AI Проверка</h3>
-                        <p>Скоро</p>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
     
     /**
      * 404 страница
