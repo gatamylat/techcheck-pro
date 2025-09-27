@@ -44,12 +44,13 @@ export default class Stories extends BaseModule {
     async init() {
         await super.init();
         this.initDOMElements();
-        this.initHomeInterface();
+        this.initHomePage();
     }
     
     initDOMElements() {
         this.elements = {
             homeContainer: document.getElementById('home-container'),
+            desktopHomeContainer: document.getElementById('desktop-home-container'),
             mainHeader: document.getElementById('main-header'),
             mainContent: document.getElementById('content'),
             mainFooter: document.getElementById('main-footer'),
@@ -108,12 +109,20 @@ export default class Stories extends BaseModule {
         this.setCache(this.data);
     }
     
-    initHomeInterface() {
-        // Проверяем, что мы на главной
-        if (window.location.hash !== '' && window.location.hash !== '#/') {
-            return;
-        }
-        
+    initHomePage() {
+    // Проверяем, что мы на главной
+    if (window.location.hash !== '' && window.location.hash !== '#/') {
+        return;
+    }
+    
+    // Перерисовываем элементы на случай если DOM изменился
+    this.initDOMElements();
+    
+    // Проверяем ширину экрана
+    const isMobile = window.innerWidth < 768;
+    
+    if (isMobile) {
+        // Мобильная версия со Stories
         this.renderStoriesSlides();
         this.renderIndicators();
         this.renderHomeModules();
@@ -121,7 +130,16 @@ export default class Stories extends BaseModule {
         this.initPanelDragging();
         this.initSearchButton();
         this.startAutoPlay();
+        this.log('Mobile home page initialized with Stories', 'success');
+    } else {
+        // Десктопная версия
+        this.renderDesktopHome();
+        this.log('Desktop home page initialized', 'success');
     }
+    
+    // Слушаем изменение размера окна
+    this.handleResize();
+}
     
     renderStoriesSlides() {
         if (!this.elements.storiesCarousel) return;
@@ -193,6 +211,138 @@ export default class Stories extends BaseModule {
                 </div>
             </section>
         `;
+    }
+    /**
+     * Рендер десктопной версии главной страницы
+     */
+    renderDesktopHome() {
+        if (!this.elements.desktopHomeContainer) {
+            this.log('Desktop home container not found', 'warning');
+            return;
+        }
+        
+        const modules = this.app.moduleMeta || {};
+        
+        this.elements.desktopHomeContainer.innerHTML = `
+            <!-- Hero блок -->
+            <div class="desktop-hero">
+                <div class="desktop-hero-content">
+                    <h1 class="gradient-text">Проверяйте документацию быстро и точно</h1>
+                    <p class="text-secondary mb-3">Стандарты Массивбург • Интерактивные чек-листы • База знаний</p>
+                    <div class="hero-actions">
+                        <button class="btn btn-primary" onclick="window.location.hash = '/checklist'">
+                            🚀 Начать проверку
+                        </button>
+                        <button class="btn btn-secondary" onclick="window.location.hash = '/knowledge-base'">
+                            📖 База знаний
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Основные модули -->
+            <div class="desktop-modules-grid">
+                <!-- Большая карточка документации -->
+                <div class="desktop-docs-card" onclick="window.location.hash = '/documents'">
+                    <h2>📋 Состав документации</h2>
+                    <p>7 типов документов для проверки</p>
+                </div>
+                
+                <!-- База знаний -->
+                <div class="module-card" onclick="window.location.hash = '/knowledge-base'">
+                    <span class="module-status status-ready">Готово</span>
+                    <div class="module-header">
+                        <div class="module-icon">📚</div>
+                        <div class="module-info">
+                            <h3>База знаний</h3>
+                            <p>Нормы проектирования, ГОСТ стандарты</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Чек-листы -->
+                <div class="module-card" onclick="window.location.hash = '/checklist'">
+                    <span class="module-status status-ready">Готово</span>
+                    <div class="module-header">
+                        <div class="module-icon">✓</div>
+                        <div class="module-info">
+                            <h3>Чек-листы</h3>
+                            <p>Интерактивная проверка документов</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Дополнительные модули -->
+            <h2 class="mt-4 mb-3">Дополнительные модули</h2>
+            <div class="desktop-special-grid">
+                <!-- Wiki -->
+                <div class="module-card" onclick="window.location.hash = '/wiki'">
+                    <span class="module-status status-beta">Beta</span>
+                    <div class="module-header">
+                        <div class="module-icon">📖</div>
+                        <div class="module-info">
+                            <h3>Wiki</h3>
+                            <p>База знаний команды</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Статистика -->
+                <div class="module-card" style="opacity: 0.6; cursor: not-allowed;">
+                    <span class="module-status status-soon">Скоро</span>
+                    <div class="module-header">
+                        <div class="module-icon">📊</div>
+                        <div class="module-info">
+                            <h3>Статистика</h3>
+                            <p>Аналитика проверок</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- AI Проверка -->
+                <div class="module-card" style="opacity: 0.6; cursor: not-allowed;">
+                    <span class="module-status status-soon">Скоро</span>
+                    <div class="module-header">
+                        <div class="module-icon">🤖</div>
+                        <div class="module-info">
+                            <h3>AI Проверка</h3>
+                            <p>Автоматическая проверка с LLM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        this.log('Desktop home rendered', 'success');
+    }
+
+    /**
+     * Обработка изменения размера окна
+     */
+    handleResize() {
+        // Удаляем старый обработчик если есть
+        if (this.resizeHandler) {
+            window.removeEventListener('resize', this.resizeHandler);
+        }
+        
+        // Создаем новый обработчик с debounce
+        let resizeTimer;
+        this.resizeHandler = () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                const isMobile = window.innerWidth < 768;
+                const wasMobile = this.elements.homeContainer && 
+                                !this.elements.homeContainer.classList.contains('hidden');
+                
+                // Если изменился тип устройства - перерисовываем
+                if ((isMobile && !wasMobile) || (!isMobile && wasMobile)) {
+                    this.initHomePage();
+                }
+            }, 250);
+        };
+        
+        window.addEventListener('resize', this.resizeHandler);
     }
     
     initCarouselEvents() {
@@ -401,7 +551,7 @@ export default class Stories extends BaseModule {
         this.elements.mainFooter.classList.add('hidden');
         
         // Инициализируем интерфейс
-        this.initHomeInterface();
+        this.initHomePage();
     }
     
     // Скрыть главную страницу
@@ -425,6 +575,7 @@ export default class Stories extends BaseModule {
             hideHomePage: () => this.hideHomePage(),
             expandPanel: () => this.expandPanel(),
             collapsePanel: () => this.collapsePanel()
+            initHomePage: () => this.initHomePage()
         };
     }
 }
