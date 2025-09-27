@@ -527,10 +527,6 @@
   overflow: hidden;
 }
 
-/* Ширину и анимацию слайдов уже задаёт components.css */
-/* .story-slide { min-width: 100%; } — есть в components (2).css */
-
-
 /* === МАЛЕНЬКИЕ ЭКРАНЫ (max 374px) === */
 @media (max-width: 374px) {
     /* Еще более компактные стили */
