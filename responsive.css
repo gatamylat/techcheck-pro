@@ -526,8 +526,9 @@
 .stories-carousel {
   overflow: hidden;
 }
-
+}
 /* === МАЛЕНЬКИЕ ЭКРАНЫ (max 374px) === */
+   
 @media (max-width: 374px) {
     /* Еще более компактные стили */
     .categories-grid {
