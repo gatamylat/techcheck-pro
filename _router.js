@@ -129,19 +129,30 @@ export default class Router {
     showHomePage() {
         // Получаем элементы
         const homeContainer = document.getElementById('home-container');
+        const desktopHomeContainer = document.getElementById('desktop-home-container');
         const mainHeader = document.getElementById('main-header');
         const mainContent = document.getElementById('content');
         const mainFooter = document.getElementById('main-footer');
         
-        // Показываем Stories интерфейс
-        if (homeContainer) homeContainer.classList.remove('hidden');
+        // Определяем тип устройства
+        const isMobile = window.innerWidth < 768;
         
-        // Скрываем стандартный интерфейс
+        if (isMobile) {
+            // Показываем мобильную версию со Stories
+            if (homeContainer) homeContainer.classList.remove('hidden');
+            if (desktopHomeContainer) desktopHomeContainer.classList.add('hidden');
+        } else {
+            // Показываем десктопную версию
+            if (homeContainer) homeContainer.classList.add('hidden');
+            if (desktopHomeContainer) desktopHomeContainer.classList.remove('hidden');
+        }
+        
+        // Скрываем стандартный интерфейс для обеих версий
         if (mainHeader) mainHeader.classList.add('hidden');
         if (mainContent) mainContent.classList.add('hidden');
         if (mainFooter) mainFooter.classList.add('hidden');
         
-        // Инициализируем Stories модуль если он есть
+        // Инициализируем Stories модуль
         const stories = this.app.getModule('stories');
         if (stories && stories.initHomePage) {
             stories.initHomePage();
