@@ -89,6 +89,15 @@ export default class Router {
         // Обновляем активный пункт меню
         this.updateNavigation(hash);
         
+        // НОВОЕ: Специальная обработка для главной страницы со Stories
+        if (hash === '/' || hash === '') {
+            this.showHomePage();
+            return;
+        }
+        
+        // НОВОЕ: Для всех остальных страниц показываем стандартный интерфейс
+        this.showStandardPage();
+        
         // Ищем обработчик
         const handler = this.routes.get(hash);
         
@@ -112,6 +121,56 @@ export default class Router {
         
         // Скроллим вверх
         window.scrollTo(0, 0);
+    }
+    
+    /**
+     * НОВОЕ: Показать главную страницу со Stories
+     */
+    showHomePage() {
+        // Получаем элементы
+        const homeContainer = document.getElementById('home-container');
+        const mainHeader = document.getElementById('main-header');
+        const mainContent = document.getElementById('content');
+        const mainFooter = document.getElementById('main-footer');
+        
+        // Показываем Stories интерфейс
+        if (homeContainer) homeContainer.classList.remove('hidden');
+        
+        // Скрываем стандартный интерфейс
+        if (mainHeader) mainHeader.classList.add('hidden');
+        if (mainContent) mainContent.classList.add('hidden');
+        if (mainFooter) mainFooter.classList.add('hidden');
+        
+        // Инициализируем Stories модуль если он есть
+        const stories = this.app.getModule('stories');
+        if (stories && stories.initHomePage) {
+            stories.initHomePage();
+        }
+    }
+    
+    /**
+     * НОВОЕ: Показать стандартную страницу
+     */
+    showStandardPage() {
+        // Получаем элементы
+        const homeContainer = document.getElementById('home-container');
+        const mainHeader = document.getElementById('main-header');
+        const mainContent = document.getElementById('content');
+        const mainFooter = document.getElementById('main-footer');
+        
+        // Скрываем Stories интерфейс
+        if (homeContainer) homeContainer.classList.add('hidden');
+        
+        // Показываем стандартный интерфейс
+        if (mainHeader) mainHeader.classList.remove('hidden');
+        if (mainContent) mainContent.classList.remove('hidden');
+        if (mainFooter) mainFooter.classList.remove('hidden');
+        
+        // Останавливаем автопрокрутку Stories если она есть
+        const stories = this.app.getModule('stories');
+        if (stories && stories.stopAutoPlay) {
+            stories.stopAutoPlay();
+        }
     }
     
     /**
@@ -177,9 +236,12 @@ export default class Router {
     }
     
     /**
-     * Рендер главной страницы
+     * Рендер главной страницы (резервный вариант)
+     * ОБНОВЛЕНО: Теперь это резервная заглушка, основная главная в stories.js
      */
     renderHome() {
+        // Эта функция теперь не используется, так как главная страница 
+        // управляется через Stories модуль, но оставляем как fallback
         return `
             <div class="home-container">
                 <!-- Hero блок -->
@@ -267,38 +329,6 @@ export default class Router {
                 </div>
             </div>
         `;
-    }
-    
-    /**
-     * Hero секция
-     */
-    renderHero() {
-        // Удаляем этот метод, так как теперь все в renderHome()
-        return '';
-    }
-    
-    /**
-     * Блок документации
-     */
-    renderDocuments() {
-        // Удаляем этот метод, так как теперь все в renderHome()
-        return '';
-    }
-    
-    /**
-     * Блок модулей
-     */
-    renderModules(modules) {
-        // Удаляем этот метод, так как теперь все в renderHome()
-        return '';
-    }
-    
-    /**
-     * Карточка модуля
-     */
-    renderModuleCard(moduleInfo) {
-        // Удаляем этот метод, так как теперь все в renderHome()
-        return '';
     }
     
     /**
