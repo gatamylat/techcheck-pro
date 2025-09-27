@@ -638,6 +638,104 @@
     background-size: 200% 200%;
     animation: gradientWave 8s ease infinite;
 }
+/* === ДЕСКТОПНАЯ ГЛАВНАЯ СТРАНИЦА === */
+.desktop-home {
+    display: none; /* По умолчанию скрыта */
+    padding: 2rem var(--container-padding);
+    max-width: var(--max-width);
+    margin: 0 auto;
+}
+
+/* Показываем на больших экранах */
+@media (min-width: 768px) {
+    .desktop-home {
+        display: block;
+    }
+    
+    /* Скрываем мобильную версию */
+    #home-container .stories-hero,
+    #home-container .main-content,
+    #home-container .search-fab,
+    #home-container .home-header {
+        display: none !important;
+    }
+}
+
+/* Сетка для десктопной главной */
+.desktop-hero {
+    background: var(--bg-primary);
+    border-radius: var(--radius-xl);
+    padding: 4rem;
+    text-align: center;
+    margin-bottom: 3rem;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+}
+
+.desktop-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, var(--primary-light) 0%, transparent 70%);
+    opacity: 0.3;
+    z-index: 0;
+    animation: float 20s ease-in-out infinite;
+}
+
+.desktop-hero-content {
+    position: relative;
+    z-index: 1;
+}
+
+.desktop-modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.desktop-special-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Большая карточка документации для десктопа */
+.desktop-docs-card {
+    grid-column: span 2;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: var(--radius-lg);
+    padding: 3rem;
+    color: white;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+}
+
+.desktop-docs-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(102, 126, 234, 0.4);
+}
+
+.desktop-docs-card h2 {
+    color: white;
+    margin-bottom: 0.5rem;
+    font-size: 2rem;
+}
+
+.desktop-docs-card p {
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0;
+    font-size: 1.125rem;
+}
 
 /* Stories контейнер */
 .stories-hero {
