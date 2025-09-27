@@ -170,26 +170,28 @@ export default class Router {
      * НОВОЕ: Показать стандартную страницу
      */
     showStandardPage() {
-        // Получаем элементы
-        const homeContainer = document.getElementById('home-container');
-        const mainHeader = document.getElementById('main-header');
-        const mainContent = document.getElementById('content');
-        const mainFooter = document.getElementById('main-footer');
-        
-        // Скрываем Stories интерфейс
-        if (homeContainer) homeContainer.classList.add('hidden');
-        
-        // Показываем стандартный интерфейс
-        if (mainHeader) mainHeader.classList.remove('hidden');
-        if (mainContent) mainContent.classList.remove('hidden');
-        if (mainFooter) mainFooter.classList.remove('hidden');
-        
-        // Останавливаем автопрокрутку Stories если она есть
-        const stories = this.app.getModule('stories');
-        if (stories && stories.stopAutoPlay) {
-            stories.stopAutoPlay();
-        }
+    const homeContainer = document.getElementById('home-container');
+    const desktopHomeContainer = document.getElementById('desktop-home-container');
+    const mainHeader = document.getElementById('main-header');
+    const mainContent = document.getElementById('content');
+    const mainFooter = document.getElementById('main-footer');
+    
+    // Скрываем интерфейс главной (и мобильный, и десктопный)
+    if (homeContainer) homeContainer.classList.add('hidden');
+    if (desktopHomeContainer) desktopHomeContainer.classList.add('hidden');
+    
+    // Показываем стандартный интерфейс
+    if (mainHeader) mainHeader.classList.remove('hidden');
+    if (mainContent) mainContent.classList.remove('hidden');
+    if (mainFooter) mainFooter.classList.remove('hidden');
+    
+    // Останавливаем автопрокрутку Stories если она есть
+    const stories = this.app.getModule('stories');
+    if (stories && stories.stopAutoPlay) {
+        stories.stopAutoPlay();
     }
+}
+
     
     /**
      * Обновление активной навигации
