@@ -165,21 +165,23 @@
         margin-bottom: 1.5rem;
     }
     
-    /* Кнопки по две в ряд на мобильных */
+ /* Кнопки по две в ряд на мобильных - ИСПРАВЛЕНО */
 .hero-actions {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 0.75rem !important;
+    width: 100% !important;
 }
 
 .hero-actions .btn {
     width: 100% !important;
     justify-content: center !important;
-    padding: 0.625rem 0.75rem !important; /* Уменьшаем паддинги */
-    font-size: 0.875rem !important; /* Уменьшаем шрифт */
-}
-   .hero-actions .btn {
-    min-width: 0; /* не даём кнопке раздвинуть колонку */
+    padding: 0.625rem 0.5rem !important; /* Еще меньше паддинги для мобильных */
+    font-size: 0.875rem !important;
+    min-width: 0 !important; /* Объединили с предыдущим блоком */
+    white-space: normal !important; /* ВАЖНО: разрешаем перенос текста */
+    line-height: 1.2 !important; /* Уменьшаем межстрочный интервал */
+    text-align: center !important; /* Центрируем текст */
 }
 
     
