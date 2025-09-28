@@ -1,7 +1,7 @@
 /**
  * @module Router
  * @description Клиентский роутер для навигации между модулями
- * @version 1.0.1 - FIXED
+ * @version 1.0.0
  */
 
 export default class Router {
@@ -12,6 +12,7 @@ export default class Router {
         this.history = [];
         
         // Базовые маршруты
+        this.routes.set('/', () => this.renderHome());
         this.routes.set('/404', () => this.render404());
     }
     
@@ -88,15 +89,6 @@ export default class Router {
         // Обновляем активный пункт меню
         this.updateNavigation(hash);
         
-        // Специальная обработка для главной страницы со Stories
-        if (hash === '/' || hash === '') {
-            this.showHomePage();
-            return;
-        }
-        
-        // Для всех остальных страниц показываем стандартный интерфейс
-        this.showStandardPage();
-        
         // Ищем обработчик
         const handler = this.routes.get(hash);
         
@@ -120,70 +112,6 @@ export default class Router {
         
         // Скроллим вверх
         window.scrollTo(0, 0);
-    }
-    
-    /**
-     * Показать главную страницу со Stories
-     * ИСПРАВЛЕНО: убрана повторная инициализация
-     */
-    showHomePage() {
-        // Получаем элементы
-        const homeContainer = document.getElementById('home-container');
-        const desktopHomeContainer = document.getElementById('desktop-home-container');
-        const mainHeader = document.getElementById('main-header');
-        const mainContent = document.getElementById('content');
-        const mainFooter = document.getElementById('main-footer');
-        
-        // Определяем тип устройства
-        const isMobile = window.innerWidth < 768;
-        
-        if (isMobile) {
-            // Показываем мобильную версию со Stories
-            if (homeContainer) homeContainer.classList.remove('hidden');
-            if (desktopHomeContainer) desktopHomeContainer.classList.add('hidden');
-        } else {
-            // Показываем десктопную версию
-            if (homeContainer) homeContainer.classList.add('hidden');
-            if (desktopHomeContainer) desktopHomeContainer.classList.remove('hidden');
-        }
-        
-        // Скрываем стандартный интерфейс для обеих версий
-        if (mainHeader) mainHeader.classList.add('hidden');
-        if (mainContent) mainContent.classList.add('hidden');
-        if (mainFooter) mainFooter.classList.add('hidden');
-        
-        // Всегда вызываем initHomePage для stories
-        const stories = this.app.getModule('stories');
-        if (stories) {
-            stories.initHomePage();
-            this.app.log('Stories home page initialized', 'info');
-        }
-    }
-    
-    /**
-     * Показать стандартную страницу
-     */
-    showStandardPage() {
-        const homeContainer = document.getElementById('home-container');
-        const desktopHomeContainer = document.getElementById('desktop-home-container');
-        const mainHeader = document.getElementById('main-header');
-        const mainContent = document.getElementById('content');
-        const mainFooter = document.getElementById('main-footer');
-        
-        // Скрываем интерфейс главной (и мобильный, и десктопный)
-        if (homeContainer) homeContainer.classList.add('hidden');
-        if (desktopHomeContainer) desktopHomeContainer.classList.add('hidden');
-        
-        // Показываем стандартный интерфейс
-        if (mainHeader) mainHeader.classList.remove('hidden');
-        if (mainContent) mainContent.classList.remove('hidden');
-        if (mainFooter) mainFooter.classList.remove('hidden');
-        
-        // Останавливаем автопрокрутку Stories если она есть
-        const stories = this.app.getModule('stories');
-        if (stories && stories.stopAutoPlay) {
-            stories.stopAutoPlay();
-        }
     }
     
     /**
@@ -246,6 +174,131 @@ export default class Router {
                 }
             });
         });
+    }
+    
+    /**
+     * Рендер главной страницы
+     */
+    renderHome() {
+        return `
+            <div class="home-container">
+                <!-- Hero блок -->
+                <section class="hero">
+                    <h1>Проверяйте документацию быстро и точно</h1>
+                    <p>Стандарты Массивбург • Интерактивные чек-листы • База знаний</p>
+                    <div class="hero-actions">
+                        <button class="btn btn-primary" onclick="app.router.navigate('/checklist')">
+                            🚀 Начать проверку
+                        </button>
+                        <button class="btn btn-secondary" onclick="app.router.navigate('/knowledge-base')">
+                            📖 База знаний
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Основная сетка -->
+                <div class="main-grid">
+                    <!-- Документация - большая карточка -->
+                    <div class="docs-card" onclick="app.router.navigate('/documents')">
+                        <h2>📋 Состав документации</h2>
+                        <p>7 типов документов для проверки</p>
+                    </div>
+
+                    <!-- База знаний -->
+                    <div class="module-card" onclick="app.router.navigate('/knowledge-base')">
+                        <div class="module-header">
+                            <div class="module-icon">📚</div>
+                            <div class="module-info">
+                                <h3>База знаний</h3>
+                                <p>Нормы проектирования, ГОСТ стандарты</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Чек-листы -->
+                    <div class="module-card" onclick="app.router.navigate('/checklist')">
+                        <div class="module-header">
+                            <div class="module-icon">✓</div>
+                            <div class="module-info">
+                                <h3>Чек-листы</h3>
+                                <p>Интерактивная проверка документов</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Дополнительные модули -->
+                <div class="special-modules">
+                    <!-- Wiki -->
+                    <div class="module-card" onclick="app.router.navigate('/wiki')">
+                        <span class="module-status status-beta">Beta</span>
+                        <div class="module-header">
+                            <div class="module-icon">📖</div>
+                            <div class="module-info">
+                                <h3>Wiki</h3>
+                                <p>База знаний команды</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stories -->
+                    <div class="module-card" onclick="app.router.navigate('/stories')">
+                        <span class="module-status status-beta">Beta</span>
+                        <div class="module-header">
+                            <div class="module-icon">💬</div>
+                            <div class="module-info">
+                                <h3>Stories</h3>
+                                <p>Кейсы и обсуждения</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Статистика -->
+                    <div class="special-card" onclick="app.router.navigate('/statistics')">
+                        <h3>📊 Статистика</h3>
+                        <p>Скоро</p>
+                    </div>
+
+                    <!-- AI Проверка -->
+                    <div class="special-card" onclick="app.router.navigate('/llm-check')">
+                        <h3>🤖 AI Проверка</h3>
+                        <p>Скоро</p>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+    
+    /**
+     * Hero секция
+     */
+    renderHero() {
+        // Удаляем этот метод, так как теперь все в renderHome()
+        return '';
+    }
+    
+    /**
+     * Блок документации
+     */
+    renderDocuments() {
+        // Удаляем этот метод, так как теперь все в renderHome()
+        return '';
+    }
+    
+    /**
+     * Блок модулей
+     */
+    renderModules(modules) {
+        // Удаляем этот метод, так как теперь все в renderHome()
+        return '';
+    }
+    
+    /**
+     * Карточка модуля
+     */
+    renderModuleCard(moduleInfo) {
+        // Удаляем этот метод, так как теперь все в renderHome()
+        return '';
     }
     
     /**
