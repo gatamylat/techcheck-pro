@@ -218,8 +218,12 @@ export default class Documents extends BaseModule {
     }
     
     renderDocumentsList() {
-        return `
-            <div class="documents-page">
+    const isMobile = window.innerWidth <= 767;
+    
+    return `
+        <div class="documents-page">
+            ${isMobile ? '<h1 class="gradient-text mobile-page-title">Документация</h1>' : ''}
+            ${!isMobile ? `
                 <div class="page-header">
                     <button class="back-btn" onclick="window.location.hash = '/'">
                         ← Назад
@@ -227,6 +231,7 @@ export default class Documents extends BaseModule {
                     <h1>${this.meta.icon} ${this.meta.title}</h1>
                     <p>${this.meta.description}</p>
                 </div>
+            ` : ''}
                 
                 <div class="documents-grid">
                     ${this.data.documents.map(doc => `
