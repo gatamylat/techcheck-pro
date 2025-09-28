@@ -248,10 +248,12 @@ export default class Checklist extends BaseModule {
     }
     
     renderMain() {
-        const stats = this.getStatistics();
-        
-        return `
-            <div class="checklists-container">
+    const stats = this.getStatistics();
+    const isMobile = window.innerWidth <= 767;
+    
+    return `
+        <div class="checklists-container">
+            ${isMobile ? '<h1 class="gradient-text mobile-page-title">Чек-листы</h1>' : ''}
                 <div class="checklists-header">
                     <div class="stats-cards">
                         <div class="stat-card">
