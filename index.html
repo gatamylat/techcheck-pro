@@ -27,48 +27,7 @@
 
     <!-- Основное приложение -->
     <div id="app">
-        <!-- НОВОЕ: Контейнер для главной страницы со Stories -->
-        <div id="home-container" class="hidden">
-            <!-- Хедер "Домой" (появляется когда контент развернут) -->
-            <header class="home-header" id="homeHeader">
-                <div class="home-header-content">TechCheck Pro</div>
-            </header>
-            
-            <!-- Stories карусель -->
-            <div class="stories-hero" id="storiesHero">
-                <div class="stories-carousel" id="storiesCarousel">
-                    <!-- Слайды генерируются динамически в stories.js -->
-                </div>
-                
-                <!-- Индикаторы -->
-                <div class="carousel-indicators" id="carouselIndicators">
-                    <!-- Генерируются динамически -->
-                </div>
-            </div>
-            
-            <!-- Перетягиваемая панель с контентом -->
-            <main class="main-content" id="mainContent">
-                <!-- Зона для свайпа -->
-                <div class="swipe-zone">
-                    <div class="swipe-indicator"></div>
-                </div>
-                
-                <div class="content-wrapper" id="homeModules">
-                    <!-- Контент генерируется динамически -->
-                </div>
-            </main>
-            
-            <!-- Плавающая кнопка поиска -->
-            <button class="search-fab" id="searchFab" aria-label="Поиск">
-                🔍
-            </button>
-        </div>
-<!-- Десктопная версия главной страницы -->
-<div id="desktop-home-container" class="desktop-home hidden">
-    <!-- Будет заполнено через JavaScript -->
-</div>
-        <!-- СУЩЕСТВУЮЩИЙ: Стандартный хедер для внутренних страниц -->
-        <header id="main-header">
+        <header>
             <div class="header-container">
                 <a class="logo" href="#/">
                     <div class="logo-icon">✓</div>
@@ -80,9 +39,21 @@
             </div>
         </header>
 
-        <!-- СУЩЕСТВУЮЩИЙ: Основной контент для модулей -->
         <main id="content">
-            <!-- Стартовая страница будет заменена роутером или stories.js -->
+            <!-- Стартовая страница (будет заменена роутером) -->
+            <div class="home-container">
+                <!-- Hero блок -->
+                <section class="hero">
+                    <h1 class="gradient-text">Проверяйте документацию быстро и точно</h1>
+                    <p>Стандарты Массивбург • Интерактивные чек-листы • База знаний</p>
+                    <div class="hero-actions">
+                        <button class="btn btn-primary" onclick="window.location.hash = '/checklist'">
+                            🚀 Начать проверку
+                        </button>
+                        <button class="btn btn-secondary" onclick="window.location.hash = '/knowledge-base'">
+                            📖 База знаний
+                        </button>
+                    </div>
                 </section>
 
                 <!-- Основная сетка -->
@@ -159,8 +130,7 @@
             </div>
         </main>
 
-        <!-- СУЩЕСТВУЮЩИЙ: Футер для внутренних страниц -->
-        <footer id="main-footer">
+        <footer>
             <p>© 2025 TechCheck Pro • Система проверки документации</p>
             <p class="text-secondary">
                 Версия: <span id="app-version">1.0.0</span>
@@ -203,15 +173,13 @@
             }
         });
         
-        // Липкий хедер при скролле (для внутренних страниц)
+        // Липкий хедер при скролле
         window.addEventListener('scroll', () => {
-            const header = document.querySelector('#main-header');
-            if (header && !header.classList.contains('hidden')) {
-                if (window.scrollY > 50) {
-                    header.classList.add('scrolled');
-                } else {
-                    header.classList.remove('scrolled');
-                }
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
             }
         });
     </script>
