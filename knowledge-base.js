@@ -400,11 +400,4 @@ export default class KnowledgeBase extends BaseModule {
     getPopularArticles() {
         return this.data.articles.slice(0, 3);
     }
-    
-    render() {
-        const container = document.getElementById('content');
-        if (container) {
-            container.innerHTML = this.renderContent();
-        }
-    }
 }
