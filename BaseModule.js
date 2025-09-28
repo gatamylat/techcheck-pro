@@ -146,7 +146,9 @@ render() {
     if (isMobile) {
         // Проверяем, не существует ли уже сайдбар на странице
         const existingSidebar = document.getElementById('globalMobileSidebar');
-        const sidebarHtml = !existingSidebar ? this.renderMobileSidebar() : '';
+if (existingSidebar) existingSidebar.remove();
+const sidebarHtml = this.renderMobileSidebar();
+        
         
         // НЕ используем mobile-content класс - управляем через CSS
         return `
