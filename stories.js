@@ -156,7 +156,8 @@ export default class Stories extends BaseModule {
         // Используем структуру из версии 2.0.0, которая работала
         this.elements.storiesCarousel.innerHTML = this.data.slides.map((slide, index) => `
             <div class="story-slide story-gradient-${slide.gradient}" 
-                 onclick="app.getModule('stories').openStory(${index})">
+     onclick="app.getModule('stories').openStory(${index})"
+     style="min-width: 100%; flex-shrink: 0;">>
                 <h1 class="story-title">${slide.title}</h1>
                 <p class="story-subtitle">${slide.subtitle}</p>
             </div>
