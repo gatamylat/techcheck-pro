@@ -724,13 +724,13 @@
     
     /* Первый экран с логотипом */
     .mobile-hero-screen {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-        padding: 2rem;
-        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem 2rem 2rem 60px; /* Добавили отступ слева для сайдбара */
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
     
     .mobile-hero-screen.hidden {
         opacity: 0;
@@ -790,16 +790,16 @@
     
     /* Второй экран с модулями */
     .mobile-modules-screen {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        min-height: 100vh;
-        padding: 1.5rem 1rem 2rem 60px;
-        opacity: 0;
-        pointer-events: none;
-        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    }
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    min-height: 100vh;
+    padding: 2rem 1rem 2rem 60px; /* Уменьшили верхний отступ с 4rem до 2rem */
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
     
     .mobile-modules-screen.active {
         opacity: 1;
@@ -954,7 +954,59 @@
         display: none;
     }
 }
-
+/* === САЙДБАР НА ВСЕХ СТРАНИЦАХ МОДУЛЕЙ === */
+@media (max-width: 767px) {
+    /* Добавляем сайдбар на страницы модулей */
+    .knowledge-base,
+    .checklists-container,
+    .documents-page,
+    .wiki-container,
+    .stories-container,
+    .statistics-container,
+    .llm-check-container {
+        padding-left: 60px !important; /* Отступ для сайдбара */
+        min-height: 100vh;
+    }
+    
+    /* Скрываем старые мобильные хедеры */
+    .knowledge-base .page-header,
+    .checklists-container .page-header,
+    .documents-page .page-header {
+        display: none !important;
+    }
+    
+    /* Градиентные заголовки для всех страниц */
+    .knowledge-base > h1:first-of-type,
+    .checklists-container h1,
+    .checklist-page h1,
+    .category-page h2,
+    .article-page h1,
+    .document-detail h1 {
+        background: linear-gradient(135deg, #0056D2, #00BFA5);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-weight: 800;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+    
+    /* Убираем дублирование заголовков */
+    .module-header {
+        display: none !important;
+    }
+    
+    /* Поднимаем контент выше */
+    main {
+        padding-top: 1rem !important;
+    }
+    
+    /* Хлебные крошки делаем кликабельными */
+    .breadcrumbs span:first-child {
+        font-weight: 600;
+        color: var(--primary-color);
+    }
+}
 /* Скрываем мобильную версию на десктопе */
 @media (min-width: 768px) {
     .mobile-home {
