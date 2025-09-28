@@ -1119,3 +1119,10 @@
         padding-right: 0.25rem !important;
     }
 }
+@media (max-width: 767px) {
+  /* на мобильных корректируем паддинг именно у контейнера модуля */
+  .module-container[data-module="checklist"],
+  .module-container[data-module="knowledge-base"],
+  .module-container[data-module="documents"] {
+    /* выбери значение под себя: 0.5rem / 1rem / var(--container-padding) */
+    padding-right: 0.1rem !important;
