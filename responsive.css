@@ -55,6 +55,17 @@
     }
     
     /* База знаний */
+
+   /* Убираем дополнительные отступы у контейнеров модулей на мобильных */
+@media (max-width: 767px) {
+    .knowledge-base,
+    .checklists-container,
+    .documents-page {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+}
+   
     .categories-grid {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -281,9 +292,16 @@
 
     /* Отступ для контента с учетом сайдбара */
     .mobile-content {
-        padding-left: 60px !important;
-        min-height: 100vh;
-    }
+    margin-left: 48px; /* Отступ равен ширине сайдбара */
+    min-height: 100vh;
+    padding: 1rem; /* Внутренние отступы для контента */
+}
+
+/* Когда сайдбар раскрыт, увеличиваем отступ */
+.mobile-sidebar.expanded ~ .mobile-content {
+    margin-left: 240px;
+    transition: margin-left 0.3s ease;
+}
     
     /* Активный пункт в сайдбаре */
     .mobile-sidebar-item.active {
