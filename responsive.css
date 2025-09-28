@@ -279,17 +279,6 @@
     display: block !important;
 }
 
-/* Контент модулей с отступом от сайдбара */
-.knowledge-base,
-.checklists-container,
-.documents-page,
-.wiki-container,
-.stories-container,
-.statistics-container,
-.llm-check-container {
-    padding-left: 60px !important;
-    min-height: 100vh;
-}
     /* Отступ для контента с учетом сайдбара */
     .mobile-content {
         padding-left: 60px !important;
