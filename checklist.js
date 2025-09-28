@@ -573,11 +573,5 @@ export default class Checklist extends BaseModule {
             setTimeout(() => notification.remove(), 300);
         }, 3000);
     }
-    
-    render() {
-        const container = document.getElementById('content');
-        if (container) {
-            container.innerHTML = this.renderContent();
-        }
-    }
+   
 }
