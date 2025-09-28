@@ -136,15 +136,21 @@ export default class BaseModule {
     /**
      * Основной метод рендеринга
      */
-    render() {
-        return `
-            <div class="module-container" data-module="${this.name}">
-                ${this.renderHeader()}
-                ${this.renderContent()}
-                ${this.renderFooter()}
-            </div>
-        `;
-    }
+    /**
+ * Основной метод рендеринга
+ */
+render() {
+    const isMobile = window.innerWidth <= 767;
+    
+    return `
+        ${isMobile ? this.renderMobileSidebar() : ''}
+        <div class="module-container ${isMobile ? 'mobile-content' : ''}" data-module="${this.name}">
+            ${this.renderHeader()}
+            ${this.renderContent()}
+            ${this.renderFooter()}
+        </div>
+    `;
+}
     
     /**
      * Рендер заголовка модуля
@@ -171,6 +177,78 @@ export default class BaseModule {
             </div>
         `;
     }
+    /**
+ * Рендер мобильного сайдбара (единый для всех модулей)
+ */
+renderMobileSidebar() {
+    // Только для мобильных устройств
+    if (window.innerWidth > 767) return '';
+    
+    return `
+        <aside class="mobile-sidebar" id="globalMobileSidebar">
+            <div class="mobile-sidebar-toggle" onclick="this.parentElement.classList.toggle('expanded')">
+                ☰
+            </div>
+            <div class="mobile-sidebar-content">
+                <div class="mobile-sidebar-item" onclick="app.router.navigate('/')">
+                    <div class="mobile-sidebar-icon">⚡</div>
+                    <span class="mobile-sidebar-label">Главная</span>
+                </div>
+                
+                <div class="mobile-sidebar-divider"></div>
+                
+                <div class="mobile-sidebar-item ${this.name === 'knowledge-base' ? 'active' : ''}" 
+                     onclick="app.router.navigate('/knowledge-base')">
+                    <div class="mobile-sidebar-icon">📚</div>
+                    <span class="mobile-sidebar-label">База знаний</span>
+                    <span class="mobile-sidebar-status mobile-status-ready">ok</span>
+                </div>
+                
+                <div class="mobile-sidebar-item ${this.name === 'checklist' ? 'active' : ''}"
+                     onclick="app.router.navigate('/checklist')">
+                    <div class="mobile-sidebar-icon">✓</div>
+                    <span class="mobile-sidebar-label">Чек-листы</span>
+                    <span class="mobile-sidebar-status mobile-status-ready">ok</span>
+                </div>
+                
+                <div class="mobile-sidebar-item ${this.name === 'documents' ? 'active' : ''}"
+                     onclick="app.router.navigate('/documents')">
+                    <div class="mobile-sidebar-icon">📋</div>
+                    <span class="mobile-sidebar-label">Документы</span>
+                    <span class="mobile-sidebar-status mobile-status-ready">ok</span>
+                </div>
+                
+                <div class="mobile-sidebar-item ${this.name === 'wiki' ? 'active' : ''}"
+                     onclick="app.router.navigate('/wiki')">
+                    <div class="mobile-sidebar-icon">📖</div>
+                    <span class="mobile-sidebar-label">Wiki</span>
+                    <span class="mobile-sidebar-status mobile-status-beta">beta</span>
+                </div>
+                
+                <div class="mobile-sidebar-item ${this.name === 'stories' ? 'active' : ''}"
+                     onclick="app.router.navigate('/stories')">
+                    <div class="mobile-sidebar-icon">💬</div>
+                    <span class="mobile-sidebar-label">Stories</span>
+                    <span class="mobile-sidebar-status mobile-status-beta">beta</span>
+                </div>
+                
+                <div class="mobile-sidebar-divider"></div>
+                
+                <div class="mobile-sidebar-item disabled">
+                    <div class="mobile-sidebar-icon">📊</div>
+                    <span class="mobile-sidebar-label">Статистика</span>
+                    <span class="mobile-sidebar-status mobile-status-soon">soon</span>
+                </div>
+                
+                <div class="mobile-sidebar-item disabled">
+                    <div class="mobile-sidebar-icon">🤖</div>
+                    <span class="mobile-sidebar-label">AI Check</span>
+                    <span class="mobile-sidebar-status mobile-status-soon">soon</span>
+                </div>
+            </div>
+        </aside>
+    `;
+}
     
     /**
      * Рендер футера модуля
