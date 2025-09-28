@@ -1112,3 +1112,11 @@
         display: none !important;
     }
 }
+@media (max-width: 767px) {
+    main .knowledge-base,
+    main .checklists-container,
+    main .documents-page {
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+    }
+}
