@@ -270,7 +270,64 @@
     .article-card {
         padding: 1rem;
     }
+
+   /* === ЕДИНЫЙ МОБИЛЬНЫЙ САЙДБАР ДЛЯ ВСЕХ СТРАНИЦ === */
+    /* Отступ для контента с учетом сайдбара */
+    .mobile-content {
+        padding-left: 60px !important;
+        min-height: 100vh;
+    }
     
+    /* Активный пункт в сайдбаре */
+    .mobile-sidebar-item.active {
+        background: var(--bg-secondary);
+        border-left: 3px solid var(--primary-color);
+    }
+    
+    /* Мобильный заголовок страницы */
+    .mobile-page-title {
+        text-align: center;
+        font-size: 2rem;
+        margin: 1.5rem 0;
+        font-weight: 800;
+    }
+    
+    /* Скрываем десктопные элементы на всех страницах */
+    .module-header,
+    .page-header,
+    header {
+        display: none !important;
+    }
+    
+    /* Убираем лишние отступы */
+    main {
+        padding: 0 !important;
+    }
+    
+    /* Фикс для модальных окон */
+    #globalMobileSidebar {
+        z-index: 100;
+    }
+    
+    .modal-backdrop {
+        z-index: 200;
+    }
+    
+    /* Анимация раскрытия сайдбара */
+    .mobile-sidebar-item {
+        position: relative;
+    }
+    
+    .mobile-sidebar-item.active::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: var(--primary-color);
+    }
+   
     /* Чек-листы */
     .stats-cards {
         grid-template-columns: repeat(2, 1fr);
