@@ -152,6 +152,10 @@ setTimeout(() => {
     slides.forEach(slide => {
         slide.style.cssText = 'min-width: 100%; width: 100%; flex: 0 0 100%;';
     });
+    // Устанавливаем z-index для правильного порядка
+slides.forEach((slide, index) => {
+    slide.style.zIndex = slides.length - index;
+});
     
     // Устанавливаем общую ширину карусели
     carousel.style.cssText = `
@@ -181,13 +185,13 @@ setTimeout(() => {
         
         // Используем структуру из версии 2.0.0, которая работала
         this.elements.storiesCarousel.innerHTML = this.data.slides.map((slide, index) => `
-            <div class="story-slide story-gradient-${slide.gradient}" 
-     onclick="app.getModule('stories').openStory(${index})"
-     style="min-width: 100%; flex-shrink: 0;">>
-                <h1 class="story-title">${slide.title}</h1>
-                <p class="story-subtitle">${slide.subtitle}</p>
-            </div>
-        `).join('');
+    <div class="story-slide story-gradient-${slide.gradient}" 
+         onclick="app.getModule('stories').openStory(${index})"
+         style="min-width: 100%; flex-shrink: 0;">
+        <h1 class="story-title">${slide.title}</h1>
+        <p class="story-subtitle">${slide.subtitle}</p>
+    </div>
+`).join('');
         
         // Добавляем стиль для карусели
         this.elements.storiesCarousel.style.cssText = `
