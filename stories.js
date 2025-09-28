@@ -1,7 +1,8 @@
 /**
  * @module Stories
- * @description ПРОСТЕЙШАЯ версия Stories - только база
- * @version 5.0.0 - SIMPLE
+ * @description Stories карусель и управление главной страницей
+ * @version 2.0.1 - FIXED
+ * @dependencies ['_state', '_router']
  */
 
 import BaseModule from './BaseModule.js';
@@ -10,258 +11,461 @@ export default class Stories extends BaseModule {
     constructor(app) {
         super(app);
         this.name = 'stories';
-        this.version = '5.0.0-simple';
+        this.version = '2.0.1-fixed';
         this.dependencies = ['_state', '_router'];
         
         this.meta = {
             title: 'Stories',
             icon: '💬',
-            description: 'Главная страница',
+            description: 'Главная страница со Stories и модулями',
             navLabel: 'Stories',
             status: 'ready'
         };
         
-        // Простое состояние
+        // Состояние карусели
         this.currentSlide = 0;
         this.totalSlides = 5;
+        this.autoPlayInterval = null;
+        this.autoPlayEnabled = false; // ОТКЛЮЧАЕМ АВТОПРОКРУТКУ!
+        
+        // Состояние панели
+        this.isExpanded = false;
+        this.isDragging = false;
+        this.startY = 0;
+        this.startTop = 380;
+        this.currentTop = 380;
+        this.expandedTop = 40;
+        this.collapsedTop = 380;
+        this.threshold = 230;
+        
+        // DOM элементы
+        this.elements = {};
+        
+        // Защита от двойного свайпа
+        this.isAnimating = false;
     }
     
     async init() {
         await super.init();
+        this.initDOMElements();
+        this.initHomeInterface();
     }
     
-    async loadData() {
-        // Простые данные - только цвета и текст
-        this.data = {
-            slides: [
-                { text: 'Слайд 1', color: '#FF006E' },
-                { text: 'Слайд 2', color: '#667eea' },
-                { text: 'Слайд 3', color: '#f093fb' },
-                { text: 'Слайд 4', color: '#4facfe' },
-                { text: 'Слайд 5', color: '#43e97b' }
-            ]
+    initDOMElements() {
+        this.elements = {
+            homeContainer: document.getElementById('home-container'),
+            mainHeader: document.getElementById('main-header'),
+            mainContent: document.getElementById('content'),
+            mainFooter: document.getElementById('main-footer'),
+            homeHeader: document.getElementById('homeHeader'),
+            storiesHero: document.getElementById('storiesHero'),
+            storiesCarousel: document.getElementById('storiesCarousel'),
+            carouselIndicators: document.getElementById('carouselIndicators'),
+            mainContentPanel: document.getElementById('mainContent'),
+            homeModules: document.getElementById('homeModules'),
+            searchFab: document.getElementById('searchFab')
         };
     }
     
-    initHomePage() {
-        const isMobile = window.innerWidth < 768;
+    async loadData() {
+        // Stories слайды
+        this.data = {
+            slides: [
+                {
+                    id: 1,
+                    title: 'TechCheck Pro',
+                    subtitle: 'Система проверки документации',
+                    gradient: 'rainbow',
+                    action: null
+                },
+                {
+                    id: 2,
+                    title: 'Новости',
+                    subtitle: 'Обновления системы',
+                    gradient: 'purple',
+                    action: 'news'
+                },
+                {
+                    id: 3,
+                    title: 'Совет дня',
+                    subtitle: 'Полезные лайфхаки',
+                    gradient: 'pink',
+                    action: 'tips'
+                },
+                {
+                    id: 4,
+                    title: '127',
+                    subtitle: 'Проверок за неделю',
+                    gradient: 'blue',
+                    action: 'stats'
+                },
+                {
+                    id: 5,
+                    title: 'Команда',
+                    subtitle: 'Лучшие проверяющие',
+                    gradient: 'green',
+                    action: 'team'
+                }
+            ]
+        };
         
-        if (isMobile) {
-            // Показываем мобильную версию
-            this.showMobileHome();
-        } else {
-            // Показываем десктоп версию
-            this.showDesktopHome();
-        }
+        this.setCache(this.data);
     }
     
-    showMobileHome() {
-        // Скрываем всё лишнее
-        document.getElementById('main-header').classList.add('hidden');
-        document.getElementById('content').classList.add('hidden');
-        document.getElementById('main-footer').classList.add('hidden');
-        document.getElementById('desktop-home-container').classList.add('hidden');
-        
-        // Показываем мобильный контейнер
-        const homeContainer = document.getElementById('home-container');
-        homeContainer.classList.remove('hidden');
-        
-        // ПРОСТЕЙШИЕ СЛАЙДЫ - ПРОСТО ЦВЕТНЫЕ БЛОКИ С ТЕКСТОМ
-        const storiesCarousel = document.getElementById('storiesCarousel');
-        if (storiesCarousel) {
-            // ВАЖНО: Устанавливаем высоту родителя
-            const storiesHero = document.getElementById('storiesHero');
-            if (storiesHero) {
-                storiesHero.style.cssText = 'height: 420px; overflow: hidden; position: relative;';
-            }
-            
-            // Создаем HTML строкой (более надежно)
-            let slidesHTML = '';
-            this.data.slides.forEach((slide, index) => {
-                slidesHTML += `
-                    <div style="
-                        min-width: 100%;
-                        height: 420px;
-                        background-color: ${slide.color};
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        color: white;
-                        font-size: 3rem;
-                        font-weight: bold;
-                        flex-shrink: 0;
-                        position: relative;
-                    ">${slide.text}</div>
-                `;
-            });
-            
-            // Вставляем все слайды разом
-            storiesCarousel.innerHTML = slidesHTML;
-            
-            // Стиль для карусели
-            storiesCarousel.style.cssText = `
-                display: flex;
-                height: 420px;
-                transition: transform 0.3s ease;
-                transform: translateX(0);
-                position: relative;
-            `;
-            
-            // Проверяем что слайды создались
-            const createdSlides = storiesCarousel.children;
-            console.log(`✅ Created ${createdSlides.length} slides`);
-            for(let i = 0; i < createdSlides.length; i++) {
-                console.log(`Slide ${i + 1}: bg=${createdSlides[i].style.backgroundColor}`);
-            }
+    initHomeInterface() {
+        // Проверяем, что мы на главной
+        if (window.location.hash !== '' && window.location.hash !== '#/') {
+            return;
         }
         
-        // ПРОСТЕЙШИЕ индикаторы
-        const indicators = document.getElementById('carouselIndicators');
-        if (indicators) {
-            indicators.innerHTML = '';
-            
-            this.data.slides.forEach((_, index) => {
-                const dot = document.createElement('button');
-                dot.style.cssText = `
-                    width: 8px;
-                    height: 8px;
-                    border-radius: 50%;
-                    background: white;
-                    opacity: ${index === 0 ? '1' : '0.5'};
-                    border: none;
-                    margin: 0 4px;
-                    cursor: pointer;
-                `;
-                dot.onclick = () => this.goToSlide(index);
-                indicators.appendChild(dot);
-            });
-        }
-        
-        // ПРОСТЕЙШАЯ панель с модулями
-        const homeModules = document.getElementById('homeModules');
-        if (homeModules) {
-            homeModules.innerHTML = `
-                <div style="padding: 20px;">
-                    <h2>Модули</h2>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                        <button onclick="window.location.hash='/knowledge-base'" style="padding: 20px; background: white; border: 1px solid #ccc; border-radius: 8px;">
-                            📚 База знаний
-                        </button>
-                        <button onclick="window.location.hash='/checklist'" style="padding: 20px; background: white; border: 1px solid #ccc; border-radius: 8px;">
-                            ✓ Чек-листы
-                        </button>
-                        <button onclick="window.location.hash='/documents'" style="padding: 20px; background: white; border: 1px solid #ccc; border-radius: 8px;">
-                            📋 Документы
-                        </button>
-                        <button onclick="window.location.hash='/wiki'" style="padding: 20px; background: white; border: 1px solid #ccc; border-radius: 8px;">
-                            📖 Wiki
-                        </button>
-                    </div>
-                </div>
-            `;
-        }
-        
-        // ПРОСТЕЙШИЕ события свайпа
-        this.initSimpleSwipe();
-        
-        console.log('✅ Mobile home initialized (SIMPLE VERSION)');
+        this.renderStoriesSlides();
+        this.renderIndicators();
+        this.renderHomeModules();
+        this.initCarouselEvents();
+        this.initPanelDragging();
+        this.initSearchButton();
+        // НЕ запускаем автопрокрутку!
+        // this.startAutoPlay(); // ЗАКОММЕНТИРОВАНО
     }
     
-    showDesktopHome() {
-        // Скрываем мобильную версию
-        document.getElementById('home-container').classList.add('hidden');
+    renderStoriesSlides() {
+        if (!this.elements.storiesCarousel) return;
         
-        // Показываем десктоп
-        const desktopContainer = document.getElementById('desktop-home-container');
-        desktopContainer.classList.remove('hidden');
+        this.elements.storiesCarousel.innerHTML = this.data.slides.map((slide, index) => `
+            <div class="story-slide story-gradient-${slide.gradient}" 
+                 onclick="app.getModule('stories').openStory(${index})">
+                <h1 class="story-title">${slide.title}</h1>
+                <p class="story-subtitle">${slide.subtitle}</p>
+            </div>
+        `).join('');
+    }
+    
+    renderIndicators() {
+        if (!this.elements.carouselIndicators) return;
         
-        // ПРОСТЕЙШАЯ десктоп версия
-        desktopContainer.innerHTML = `
-            <div style="padding: 40px; text-align: center;">
-                <h1>TechCheck Pro (Desktop)</h1>
-                <p>Система проверки документации</p>
-                
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px;">
-                    <div onclick="window.location.hash='/documents'" style="padding: 30px; background: #f0f0f0; border-radius: 8px; cursor: pointer;">
-                        <h2>📋 Документы</h2>
-                    </div>
-                    <div onclick="window.location.hash='/knowledge-base'" style="padding: 30px; background: #f0f0f0; border-radius: 8px; cursor: pointer;">
-                        <h2>📚 База знаний</h2>
-                    </div>
-                    <div onclick="window.location.hash='/checklist'" style="padding: 30px; background: #f0f0f0; border-radius: 8px; cursor: pointer;">
-                        <h2>✓ Чек-листы</h2>
-                    </div>
+        this.elements.carouselIndicators.innerHTML = this.data.slides.map((_, index) => `
+            <button class="carousel-indicator ${index === 0 ? 'active' : ''}" 
+                    onclick="app.getModule('stories').goToSlide(${index})"></button>
+        `).join('');
+    }
+    
+    renderHomeModules() {
+        if (!this.elements.homeModules) return;
+        
+        const modules = [
+            { id: 'knowledge-base', icon: '📚', title: 'База знаний', desc: 'ГОСТ стандарты' },
+            { id: 'checklist', icon: '✓', title: 'Чек-листы', desc: 'Проверка документов' },
+            { id: 'documents', icon: '📋', title: 'Документы', desc: 'Состав КБ' },
+            { id: 'wiki', icon: '📖', title: 'Wiki', desc: 'База команды', status: 'beta' }
+        ];
+        
+        const futureModules = [
+            { icon: '📊', title: 'Статистика', desc: 'Аналитика проверок', date: 'Q2 2025' },
+            { icon: '🤖', title: 'AI Проверка', desc: 'Автоматический анализ', date: 'Q3 2025' }
+        ];
+        
+        this.elements.homeModules.innerHTML = `
+            <!-- Основные модули -->
+            <div class="home-modules">
+                <div class="grid grid-2">
+                    ${modules.map(module => `
+                        <div class="module-card" onclick="window.location.hash = '/${module.id}'">
+                            ${module.status ? `<span class="module-status status-${module.status}">Beta</span>` : ''}
+                            <div class="module-header">
+                                <div class="module-icon">${module.icon}</div>
+                                <div class="module-info">
+                                    <h3>${module.title}</h3>
+                                    <p>${module.desc}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
                 </div>
             </div>
+            
+            <!-- Будущие модули -->
+            <section class="future-section">
+                <h2>Скоро</h2>
+                <div class="future-modules">
+                    ${futureModules.map(module => `
+                        <div class="future-card">
+                            <span class="future-badge">${module.date}</span>
+                            <div class="future-icon">${module.icon}</div>
+                            <div class="future-title">${module.title}</div>
+                            <div class="future-desc">${module.desc}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            </section>
         `;
-        
-        console.log('✅ Desktop home initialized (SIMPLE VERSION)');
     }
     
-    initSimpleSwipe() {
-        const hero = document.getElementById('storiesHero');
-        if (!hero) return;
+    initCarouselEvents() {
+        if (!this.elements.storiesHero) return;
         
-        let startX = 0;
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchEndX = 0;
+        let touchEndY = 0;
         
-        hero.addEventListener('touchstart', (e) => {
-            startX = e.touches[0].clientX;
-        });
+        // Удаляем старые обработчики (если есть)
+        const newHero = this.elements.storiesHero.cloneNode(true);
+        this.elements.storiesHero.parentNode.replaceChild(newHero, this.elements.storiesHero);
+        this.elements.storiesHero = newHero;
         
-        hero.addEventListener('touchend', (e) => {
-            const endX = e.changedTouches[0].clientX;
-            const diff = startX - endX;
+        this.elements.storiesHero.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+        
+        this.elements.storiesHero.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].clientX;
+            touchEndY = e.changedTouches[0].clientY;
             
-            if (Math.abs(diff) > 50) {
-                if (diff > 0) {
-                    this.nextSlide();
-                } else {
-                    this.prevSlide();
-                }
+            const diffX = touchStartX - touchEndX;
+            const diffY = Math.abs(touchStartY - touchEndY);
+            
+            // Проверяем что это горизонтальный свайп
+            if (Math.abs(diffX) > diffY && Math.abs(diffX) > 50) {
+                this.handleSwipe(diffX);
             }
-        });
+        }, { passive: true });
+    }
+    
+    handleSwipe(diff) {
+        // Защита от двойного срабатывания
+        if (this.isAnimating) return;
         
-        console.log('✅ Swipe events initialized');
+        if (diff > 0) {
+            this.nextSlide();
+        } else {
+            this.prevSlide();
+        }
+    }
+    
+    initPanelDragging() {
+        const panel = this.elements.mainContentPanel;
+        if (!panel) return;
+        
+        // Touch события
+        panel.addEventListener('touchstart', (e) => this.startDrag(e), { passive: false });
+        document.addEventListener('touchmove', (e) => this.drag(e), { passive: false });
+        document.addEventListener('touchend', (e) => this.endDrag(e), { passive: true });
+        
+        // Mouse события (для десктопа)
+        panel.addEventListener('mousedown', (e) => this.startDrag(e));
+        document.addEventListener('mousemove', (e) => this.drag(e));
+        document.addEventListener('mouseup', (e) => this.endDrag(e));
+        
+        // Клик на хедер "Домой"
+        if (this.elements.homeHeader) {
+            this.elements.homeHeader.addEventListener('click', () => {
+                this.collapsePanel();
+            });
+        }
+        
+        // Предотвращаем выделение текста при перетаскивании
+        panel.addEventListener('selectstart', (e) => {
+            if (this.isDragging) e.preventDefault();
+        });
+    }
+    
+    startDrag(e) {
+        // Проверяем, что не кликнули на интерактивный элемент
+        if (e.target.closest('.module-card, .future-card, .search-fab, button')) {
+            return;
+        }
+        
+        this.isDragging = true;
+        this.startY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+        this.startTop = this.currentTop;
+        this.elements.mainContentPanel.classList.add('is-dragging');
+    }
+    
+    drag(e) {
+        if (!this.isDragging) return;
+        
+        e.preventDefault();
+        const clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+        const deltaY = clientY - this.startY;
+        let newTop = this.startTop + deltaY;
+        
+        // Ограничиваем движение
+        newTop = Math.max(this.expandedTop, Math.min(this.collapsedTop, newTop));
+        
+        this.elements.mainContentPanel.style.top = newTop + 'px';
+        this.currentTop = newTop;
+    }
+    
+    endDrag(e) {
+        if (!this.isDragging) return;
+        
+        this.isDragging = false;
+        this.elements.mainContentPanel.classList.remove('is-dragging');
+        
+        // Определяем финальную позицию
+        if (this.currentTop < this.threshold) {
+            this.expandPanel();
+        } else {
+            this.collapsePanel();
+        }
+    }
+    
+    expandPanel() {
+        this.isExpanded = true;
+        this.currentTop = this.expandedTop;
+        this.elements.mainContentPanel.classList.add('is-expanded');
+        this.elements.storiesHero.classList.add('is-hidden');
+        this.elements.homeHeader.classList.add('is-visible');
+        this.elements.mainContentPanel.style.top = this.currentTop + 'px';
+        this.stopAutoPlay();
+    }
+    
+    collapsePanel() {
+        this.isExpanded = false;
+        this.currentTop = this.collapsedTop;
+        this.elements.mainContentPanel.classList.remove('is-expanded');
+        this.elements.storiesHero.classList.remove('is-hidden');
+        this.elements.homeHeader.classList.remove('is-visible');
+        this.elements.mainContentPanel.style.top = this.currentTop + 'px';
+        // НЕ запускаем автопрокрутку при сворачивании!
+        // this.startAutoPlay(); // ЗАКОММЕНТИРОВАНО
+    }
+    
+    initSearchButton() {
+        if (!this.elements.searchFab) return;
+        
+        this.elements.searchFab.addEventListener('click', () => {
+            this.openSearch();
+        });
     }
     
     goToSlide(index) {
-        // Проверка границ
-        if (index < 0) index = this.totalSlides - 1;
-        if (index >= this.totalSlides) index = 0;
+        // Защита от двойного срабатывания
+        if (this.isAnimating) return;
         
+        this.isAnimating = true;
         this.currentSlide = index;
         
-        // Простое перемещение
-        const carousel = document.getElementById('storiesCarousel');
-        if (carousel) {
-            const translateX = -index * 100;
-            carousel.style.transform = `translateX(${translateX}%)`;
-            console.log(`📍 Moved to slide ${index + 1}`);
+        if (this.elements.storiesCarousel) {
+            this.elements.storiesCarousel.style.transform = `translateX(-${index * 100}%)`;
         }
         
-        // Обновляем точки
-        const dots = document.querySelectorAll('#carouselIndicators button');
-        dots.forEach((dot, i) => {
-            dot.style.opacity = i === index ? '1' : '0.5';
-        });
+        const indicators = this.elements.carouselIndicators?.querySelectorAll('.carousel-indicator');
+        if (indicators) {
+            indicators.forEach((ind, i) => {
+                ind.classList.toggle('active', i === index);
+            });
+        }
+        
+        // Снимаем блокировку после завершения анимации
+        setTimeout(() => {
+            this.isAnimating = false;
+        }, 300);
     }
     
     nextSlide() {
-        console.log('➡️ Next slide');
-        this.goToSlide(this.currentSlide + 1);
+        if (this.isAnimating) return;
+        this.currentSlide = (this.currentSlide + 1) % this.totalSlides;
+        this.goToSlide(this.currentSlide);
     }
     
     prevSlide() {
-        console.log('⬅️ Previous slide');
-        this.goToSlide(this.currentSlide - 1);
+        if (this.isAnimating) return;
+        this.currentSlide = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
+        this.goToSlide(this.currentSlide);
+    }
+    
+    startAutoPlay() {
+        // Проверяем флаг
+        if (!this.autoPlayEnabled) return;
+        
+        this.stopAutoPlay();
+        this.autoPlayInterval = setInterval(() => {
+            this.nextSlide();
+        }, 5000);
+    }
+    
+    stopAutoPlay() {
+        if (this.autoPlayInterval) {
+            clearInterval(this.autoPlayInterval);
+            this.autoPlayInterval = null;
+        }
+    }
+    
+    openStory(index) {
+        const slide = this.data.slides[index];
+        this.log(`Opening story: ${slide.title}`);
+        
+        if (slide.action) {
+            switch(slide.action) {
+                case 'news':
+                    this.showNews();
+                    break;
+                case 'tips':
+                    this.showTips();
+                    break;
+                case 'stats':
+                    this.app.router.navigate('/statistics');
+                    break;
+                case 'team':
+                    this.showTeam();
+                    break;
+            }
+        }
+    }
+    
+    openSearch() {
+        this.log('Opening search');
+        alert('Функция поиска будет добавлена в следующей версии');
+    }
+    
+    showNews() {
+        alert('Новости системы будут добавлены в следующей версии');
+    }
+    
+    showTips() {
+        alert('Советы и лайфхаки будут добавлены в следующей версии');
+    }
+    
+    showTeam() {
+        alert('Информация о команде будет добавлена в следующей версии');
+    }
+    
+    // Показать главную страницу
+    showHomePage() {
+        // Показываем контейнер главной
+        this.elements.homeContainer.classList.remove('hidden');
+        // Скрываем остальное
+        this.elements.mainHeader.classList.add('hidden');
+        this.elements.mainContent.classList.add('hidden');
+        this.elements.mainFooter.classList.add('hidden');
+        
+        // Инициализируем интерфейс
+        this.initHomeInterface();
+    }
+    
+    // Скрыть главную страницу
+    hideHomePage() {
+        // Скрываем контейнер главной
+        this.elements.homeContainer.classList.add('hidden');
+        // Показываем остальное
+        this.elements.mainHeader.classList.remove('hidden');
+        this.elements.mainContent.classList.remove('hidden');
+        this.elements.mainFooter.classList.remove('hidden');
+        
+        // Останавливаем автопрокрутку
+        this.stopAutoPlay();
     }
     
     getPublicMethods() {
         return {
             goToSlide: (index) => this.goToSlide(index),
-            nextSlide: () => this.nextSlide(),
-            prevSlide: () => this.prevSlide(),
-            initHomePage: () => this.initHomePage()
+            openStory: (index) => this.openStory(index),
+            showHomePage: () => this.showHomePage(),
+            hideHomePage: () => this.hideHomePage(),
+            expandPanel: () => this.expandPanel(),
+            collapsePanel: () => this.collapsePanel()
         };
     }
 }
