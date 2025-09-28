@@ -102,7 +102,7 @@ export default class Router {
             const module = this.app.getModule(moduleName);
             
             if (module) {
-                const content = module.render ? module.render() : 'Module has no render method';
+                const content = module.render ? module.render() : module.renderContent ? module.renderContent() : 'Module has no render method';
                 this.render(content);
             } else {
                 // 404
@@ -132,9 +132,14 @@ export default class Router {
         if (!container) return;
         
         // Если это строка - вставляем HTML
-        if (typeof content === 'string') {
-            container.innerHTML = content;
-        } 
+if (typeof content === 'string') {
+    // Очищаем существующий сайдбар если есть
+    const existingSidebar = document.getElementById('globalMobileSidebar');
+    if (existingSidebar && !content.includes('globalMobileSidebar')) {
+        existingSidebar.remove();
+    }
+    container.innerHTML = content;
+} 
         // Если это Promise - ждём
         else if (content instanceof Promise) {
             container.innerHTML = '<div class="loading">Загрузка...</div>';
