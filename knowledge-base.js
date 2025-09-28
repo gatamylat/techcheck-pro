@@ -179,21 +179,27 @@ export default class KnowledgeBase extends BaseModule {
     }
     
     renderContent() {
-        if (this.currentArticle) {
-            return this.renderArticle();
-        }
-        
-        if (this.currentCategory) {
-            return this.renderCategory();
-        }
-        
-        return this.renderMain();
+    // Добавляем сайдбар для мобильных
+    const isMobile = window.innerWidth <= 767;
+    const sidebarHTML = isMobile ? this.renderMobileSidebar() : '';
+    
+    if (this.currentArticle) {
+        return sidebarHTML + this.renderArticle();
     }
     
+    if (this.currentCategory) {
+        return sidebarHTML + this.renderCategory();
+    }
+    
+    return sidebarHTML + this.renderMain();
+}
+    
     renderMain() {
-        return `
-            <div class="knowledge-base">
-                ${this.renderSearch()}
+    const isMobile = window.innerWidth <= 767;
+    return `
+        <div class="knowledge-base">
+            ${isMobile ? '<h1 style="text-align: center; margin: 1.5rem 0;">База знаний</h1>' : ''}
+            ${this.renderSearch()}
                 
                 <div class="categories-grid">
                     ${this.categories.map(cat => this.renderCategoryCard(cat)).join('')}
@@ -363,7 +369,38 @@ export default class KnowledgeBase extends BaseModule {
             searchByTag: (tag) => this.searchByTag(tag)
         };
     }
-    
+    renderMobileSidebar() {
+    return `
+        <aside class="mobile-sidebar" id="mobileSidebar" style="position: fixed; top: 0; left: 0; height: 100vh; width: 48px; background: var(--bg-primary); border-right: 1px solid var(--border-color); z-index: 200; transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden;">
+            <div class="mobile-sidebar-toggle" onclick="this.parentElement.classList.toggle('expanded')" style="position: absolute; top: 12px; right: 12px; width: 32px; height: 32px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 201;">
+                ☰
+            </div>
+            <div class="mobile-sidebar-content" style="padding: 60px 0 24px;">
+                <div class="mobile-sidebar-item" onclick="app.router.navigate('/')" style="display: flex; align-items: center; height: 44px; padding: 0 12px; cursor: pointer;">
+                    <div class="mobile-sidebar-icon" style="min-width: 24px; font-size: 1.125rem;">⚡</div>
+                    <span class="mobile-sidebar-label" style="margin-left: 16px; white-space: nowrap;">Главная</span>
+                </div>
+                
+                <div style="height: 1px; background: var(--border-color); margin: 8px 12px;"></div>
+                
+                <div class="mobile-sidebar-item" onclick="app.router.navigate('/knowledge-base')" style="display: flex; align-items: center; height: 44px; padding: 0 12px; cursor: pointer; background: var(--bg-secondary);">
+                    <div class="mobile-sidebar-icon" style="min-width: 24px; font-size: 1.125rem;">📚</div>
+                    <span class="mobile-sidebar-label" style="margin-left: 16px;">База знаний</span>
+                </div>
+                
+                <div class="mobile-sidebar-item" onclick="app.router.navigate('/checklist')" style="display: flex; align-items: center; height: 44px; padding: 0 12px; cursor: pointer;">
+                    <div class="mobile-sidebar-icon" style="min-width: 24px; font-size: 1.125rem;">✓</div>
+                    <span class="mobile-sidebar-label" style="margin-left: 16px;">Чек-листы</span>
+                </div>
+            </div>
+        </aside>
+        <style>
+            .mobile-sidebar.expanded { width: 240px !important; }
+            .mobile-sidebar.expanded .mobile-sidebar-label { opacity: 1 !important; }
+            .mobile-sidebar-label { opacity: 0; transition: opacity 0.2s; }
+        </style>
+    `;
+}
     search(query) {
         this.searchQuery = query;
         this.log(`Searching: ${query}`);
