@@ -139,13 +139,39 @@ export default class Stories extends BaseModule {
         this.renderIndicators();
         this.renderHomeModules();
         
-        // Инициализация событий с задержкой
-        setTimeout(() => {
-            this.initCarouselEvents();
-            this.initPanelDragging();
-            this.initSearchButton();
-            // НЕ вызываем startAutoPlay()!
-        }, 100);
+        // КРИТИЧЕСКИЙ ФИКС: Принудительно устанавливаем стили после рендера
+setTimeout(() => {
+    // Фиксим размеры слайдов
+    const slides = document.querySelectorAll('.story-slide');
+    const carousel = document.getElementById('storiesCarousel');
+    const hero = document.querySelector('.stories-hero');
+    
+    if (!slides.length || !carousel || !hero) return;
+    
+    // Устанавливаем размер каждого слайда
+    slides.forEach(slide => {
+        slide.style.cssText = 'min-width: 100%; width: 100%; flex: 0 0 100%;';
+    });
+    
+    // Устанавливаем общую ширину карусели
+    carousel.style.cssText = `
+        display: flex;
+        height: 100%;
+        width: ${slides.length * 100}%;
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        transform: translateX(0);
+    `;
+    
+    // Скрываем лишнее
+    hero.style.overflow = 'hidden';
+    
+    // Инициализация событий
+    this.initCarouselEvents();
+    this.initPanelDragging();
+    this.initSearchButton();
+    
+    this.log('Mobile styles fixed and applied', 'success');
+}, 100);
         
         this.log('Mobile home initialized', 'success');
     }
@@ -294,7 +320,8 @@ export default class Stories extends BaseModule {
         this.currentSlide = index;
         
         if (this.elements.storiesCarousel) {
-            this.elements.storiesCarousel.style.transform = `translateX(-${index * 100}%)`;
+            const offset = -(index * (100 / this.totalSlides));
+this.elements.storiesCarousel.style.transform = `translateX(${offset}%)`;
         }
         
         // Обновляем индикаторы
