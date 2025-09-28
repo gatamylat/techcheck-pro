@@ -69,36 +69,50 @@ export default class Stories extends BaseModule {
         // ПРОСТЕЙШИЕ СЛАЙДЫ - ПРОСТО ЦВЕТНЫЕ БЛОКИ С ТЕКСТОМ
         const storiesCarousel = document.getElementById('storiesCarousel');
         if (storiesCarousel) {
-            // Очищаем
-            storiesCarousel.innerHTML = '';
+            // ВАЖНО: Устанавливаем высоту родителя
+            const storiesHero = document.getElementById('storiesHero');
+            if (storiesHero) {
+                storiesHero.style.cssText = 'height: 420px; overflow: hidden; position: relative;';
+            }
             
-            // Создаем ПРОСТЕЙШИЕ слайды
+            // Создаем HTML строкой (более надежно)
+            let slidesHTML = '';
             this.data.slides.forEach((slide, index) => {
-                const slideDiv = document.createElement('div');
-                slideDiv.style.cssText = `
-                    min-width: 100%;
-                    height: 100%;
-                    background-color: ${slide.color};
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: white;
-                    font-size: 3rem;
-                    font-weight: bold;
+                slidesHTML += `
+                    <div style="
+                        min-width: 100%;
+                        height: 420px;
+                        background-color: ${slide.color};
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: white;
+                        font-size: 3rem;
+                        font-weight: bold;
+                        flex-shrink: 0;
+                        position: relative;
+                    ">${slide.text}</div>
                 `;
-                slideDiv.textContent = slide.text;
-                slideDiv.onclick = () => console.log('Clicked slide', index);
-                
-                storiesCarousel.appendChild(slideDiv);
             });
+            
+            // Вставляем все слайды разом
+            storiesCarousel.innerHTML = slidesHTML;
             
             // Стиль для карусели
             storiesCarousel.style.cssText = `
                 display: flex;
-                height: 100%;
-                transition: transform 0.3s;
+                height: 420px;
+                transition: transform 0.3s ease;
                 transform: translateX(0);
+                position: relative;
             `;
+            
+            // Проверяем что слайды создались
+            const createdSlides = storiesCarousel.children;
+            console.log(`✅ Created ${createdSlides.length} slides`);
+            for(let i = 0; i < createdSlides.length; i++) {
+                console.log(`Slide ${i + 1}: bg=${createdSlides[i].style.backgroundColor}`);
+            }
         }
         
         // ПРОСТЕЙШИЕ индикаторы
