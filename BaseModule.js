@@ -144,17 +144,20 @@ render() {
     
     // Для мобильных добавляем сайдбар и класс mobile-content
     if (isMobile) {
-        // Проверяем, не существует ли уже сайдбар на странице
-        const existingSidebar = document.getElementById('globalMobileSidebar');
-        const sidebarHtml = !existingSidebar ? this.renderMobileSidebar() : '';
-        
-        return `
-            ${sidebarHtml}
-            <div class="module-container mobile-content" data-module="${this.name}">
-                ${this.renderContent()}
-            </div>
-        `;
-    }
+    // Проверяем, не существует ли уже сайдбар на странице
+    const existingSidebar = document.getElementById('globalMobileSidebar');
+    const sidebarHtml = !existingSidebar ? this.renderMobileSidebar() : '';
+    
+    // Не добавляем mobile-content для главной страницы
+    const isHomePage = this.name === 'home' || window.location.hash === '#/' || window.location.hash === '';
+    
+    return `
+        ${sidebarHtml}
+        <div class="module-container ${!isHomePage ? 'mobile-content' : ''}" data-module="${this.name}">
+            ${this.renderContent()}
+        </div>
+    `;
+}
     
     // Десктопная версия
     return `
