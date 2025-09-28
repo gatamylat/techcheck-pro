@@ -425,11 +425,5 @@ export default class Documents extends BaseModule {
         this.app.router.navigate('/documents');
         this.render();
     }
-    
-    render() {
-        const container = document.getElementById('content');
-        if (container) {
-            container.innerHTML = this.renderContent();
-        }
-    }
+  
 }
