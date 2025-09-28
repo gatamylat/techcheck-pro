@@ -1119,4 +1119,4 @@
   .module-container[data-module="knowledge-base"],
   .module-container[data-module="documents"] {
     /* выбери значение под себя: 0.5rem / 1rem / var(--container-padding) */
-    padding-right: 2rem !important;
+    padding-right: 5rem !important;
