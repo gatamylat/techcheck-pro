@@ -142,22 +142,20 @@ export default class BaseModule {
 render() {
     const isMobile = window.innerWidth <= 767;
     
-    // Для мобильных добавляем сайдбар и класс mobile-content
+    // Для мобильных добавляем сайдбар
     if (isMobile) {
-    // Проверяем, не существует ли уже сайдбар на странице
-    const existingSidebar = document.getElementById('globalMobileSidebar');
-    const sidebarHtml = !existingSidebar ? this.renderMobileSidebar() : '';
-    
-    // Не добавляем mobile-content для главной страницы
-    const isHomePage = this.name === 'home' || window.location.hash === '#/' || window.location.hash === '';
-    
-    return `
-        ${sidebarHtml}
-        <div class="module-container ${!isHomePage ? 'mobile-content' : ''}" data-module="${this.name}">
-            ${this.renderContent()}
-        </div>
-    `;
-}
+        // Проверяем, не существует ли уже сайдбар на странице
+        const existingSidebar = document.getElementById('globalMobileSidebar');
+        const sidebarHtml = !existingSidebar ? this.renderMobileSidebar() : '';
+        
+        // НЕ используем mobile-content класс - управляем через CSS
+        return `
+            ${sidebarHtml}
+            <div class="module-container" data-module="${this.name}">
+                ${this.renderContent()}
+            </div>
+        `;
+    }
     
     // Десктопная версия
     return `
