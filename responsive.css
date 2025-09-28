@@ -307,7 +307,7 @@
 .mobile-content {
     padding-left: 30px !important; /* Такой же как на главной */
     min-height: 100vh;
-    padding-right: 0.0625rem;
+    padding-right: 0.2rem;
     padding-top: 1rem;
     padding-bottom: 1rem;
     transition: none; /* Убираем анимацию сдвига */
@@ -1061,7 +1061,7 @@
     .article-page,
     .document-detail {
         padding-left: 30px !important; /* Как на главной */
-        padding-right: 0.0625rem !important;
+        padding-right: 0.2rem !important;
         padding-top: 1rem !important;
         min-height: 100vh;
         position: relative; /* Для правильного позиционирования */
@@ -1119,4 +1119,4 @@
   .module-container[data-module="knowledge-base"],
   .module-container[data-module="documents"] {
     /* выбери значение под себя: 0.5rem / 1rem / var(--container-padding) */
-    padding-right: 1rem !important;
+    padding-right: 2rem !important;
