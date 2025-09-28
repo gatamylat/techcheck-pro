@@ -612,3 +612,352 @@
         scroll-behavior: auto !important;
     }
 }
+/* === НОВЫЙ МОБИЛЬНЫЙ ДИЗАЙН ГЛАВНОЙ СТРАНИЦЫ === */
+@media (max-width: 767px) {
+    /* Скрываем старую главную страницу на мобильных */
+    .home-container {
+        display: none;
+    }
+    
+    /* Показываем новую мобильную главную */
+    .mobile-home {
+        display: block !important;
+    }
+    
+    /* Мобильный сайдбар */
+    .mobile-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 48px;
+        background: var(--bg-primary);
+        border-right: 1px solid var(--border-color);
+        z-index: 200;
+        transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
+    }
+    
+    .mobile-sidebar.expanded {
+        width: 240px;
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
+    }
+    
+    .mobile-sidebar-toggle {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 32px;
+        height: 32px;
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 201;
+        transition: var(--transition);
+    }
+    
+    .mobile-sidebar-content {
+        padding: 60px 0 24px;
+    }
+    
+    .mobile-sidebar-item {
+        display: flex;
+        align-items: center;
+        height: 44px;
+        padding: 0 12px;
+        cursor: pointer;
+        transition: var(--transition);
+        position: relative;
+        color: var(--text-primary);
+    }
+    
+    .mobile-sidebar-item:active {
+        background: var(--bg-secondary);
+    }
+    
+    .mobile-sidebar-icon {
+        min-width: 24px;
+        font-size: 1.125rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .mobile-sidebar-label {
+        margin-left: 16px;
+        white-space: nowrap;
+        opacity: 0;
+        transform: translateX(-10px);
+        transition: all 0.2s ease;
+    }
+    
+    .mobile-sidebar.expanded .mobile-sidebar-label {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    
+    .mobile-sidebar-status {
+        position: absolute;
+        right: 12px;
+        padding: 2px 6px;
+        border-radius: var(--radius-sm);
+        font-size: 0.6rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
+    
+    .mobile-sidebar.expanded .mobile-sidebar-status {
+        opacity: 1;
+    }
+    
+    .mobile-sidebar-divider {
+        height: 1px;
+        background: var(--border-color);
+        margin: 8px 12px;
+    }
+    
+    /* Первый экран с логотипом */
+    .mobile-hero-screen {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 2rem;
+        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .mobile-hero-screen.hidden {
+        opacity: 0;
+        transform: scale(0.95);
+        pointer-events: none;
+        position: absolute;
+    }
+    
+    .mobile-logo-container {
+        text-align: center;
+        animation: mobileHeroFadeIn 0.8s ease;
+    }
+    
+    @keyframes mobileHeroFadeIn {
+        from { 
+            opacity: 0; 
+            transform: translateY(30px); 
+        }
+        to { 
+            opacity: 1; 
+            transform: translateY(0); 
+        }
+    }
+    
+    .mobile-logo {
+        font-size: 3rem;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        background: linear-gradient(135deg, #0056D2, #00BFA5, #8b5cf6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        background-size: 200% 200%;
+        animation: mobileGradientFlow 12s ease infinite;
+        cursor: pointer;
+        user-select: none;
+        transition: all 0.3s ease;
+        display: inline-block;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    @keyframes mobileGradientFlow {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+    }
+    
+    .mobile-logo:active {
+        transform: scale(0.95);
+    }
+    
+    .mobile-tagline {
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+        opacity: 0.8;
+    }
+    
+    /* Второй экран с модулями */
+    .mobile-modules-screen {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        min-height: 100vh;
+        padding: 1.5rem 1rem 2rem 60px;
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .mobile-modules-screen.active {
+        opacity: 1;
+        pointer-events: all;
+        position: relative;
+    }
+    
+    .mobile-modules-title {
+        text-align: center;
+        font-size: 1.75rem;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(135deg, #0056D2, #00BFA5);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .mobile-modules-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.875rem;
+    }
+    
+    .mobile-module-card {
+        background: var(--bg-primary);
+        border-radius: var(--radius);
+        padding: 1.25rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 1px solid var(--border-color);
+        position: relative;
+        overflow: hidden;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    .mobile-module-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--gradient-color), transparent);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .mobile-module-card:active::before {
+        opacity: 1;
+    }
+    
+    .mobile-module-card:active {
+        transform: scale(0.98);
+        background: var(--bg-secondary);
+    }
+    
+    .mobile-module-card:nth-child(1) { --gradient-color: #0056D2; }
+    .mobile-module-card:nth-child(2) { --gradient-color: #00C853; }
+    .mobile-module-card:nth-child(3) { --gradient-color: #8b5cf6; }
+    .mobile-module-card:nth-child(4) { --gradient-color: #FF9800; }
+    .mobile-module-card:nth-child(5) { --gradient-color: #ec4899; }
+    .mobile-module-card:nth-child(6) { --gradient-color: #06b6d4; }
+    .mobile-module-card:nth-child(7) { --gradient-color: #f97316; }
+    
+    .mobile-module-icon {
+        font-size: 1.75rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .mobile-module-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+        color: var(--text-primary);
+    }
+    
+    .mobile-module-description {
+        color: var(--text-secondary);
+        font-size: 0.8125rem;
+        line-height: 1.4;
+        margin-bottom: 0.5rem;
+    }
+    
+    .mobile-module-meta {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.75rem;
+    }
+    
+    .mobile-module-status {
+        padding: 2px 8px;
+        border-radius: var(--radius-full);
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+    
+    .mobile-status-ready {
+        background: var(--success-light);
+        color: var(--success-color);
+    }
+    
+    .mobile-status-beta {
+        background: var(--info-light);
+        color: var(--info-color);
+    }
+    
+    .mobile-status-soon {
+        background: var(--bg-secondary);
+        color: var(--text-light);
+    }
+    
+    .mobile-module-count {
+        color: var(--text-secondary);
+    }
+    
+    .mobile-module-card.disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+    
+    .mobile-module-card.disabled:active {
+        transform: none;
+        background: var(--bg-primary);
+    }
+    
+    /* Фоновый градиент для мобильной версии */
+    .mobile-home::before {
+        content: '';
+        position: fixed;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: 
+            radial-gradient(circle at 20% 30%, rgba(0, 86, 210, 0.05) 0%, transparent 50%),
+            radial-gradient(circle at 80% 70%, rgba(0, 191, 165, 0.05) 0%, transparent 50%);
+        animation: mobileFloat 40s ease-in-out infinite;
+        z-index: -1;
+        pointer-events: none;
+    }
+    
+    @keyframes mobileFloat {
+        0%, 100% { transform: rotate(0deg); }
+        50% { transform: rotate(180deg); }
+    }
+    
+    /* Скрываем стандартные хедер и футер на главной */
+    body:has(.mobile-hero-screen:not(.hidden)) header,
+    body:has(.mobile-hero-screen:not(.hidden)) footer {
+        display: none;
+    }
+}
+
+/* Скрываем мобильную версию на десктопе */
+@media (min-width: 768px) {
+    .mobile-home {
+        display: none !important;
+    }
+}
