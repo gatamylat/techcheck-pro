@@ -305,9 +305,9 @@
 
 /* Отступ для контента - фиксированный, не меняется при раскрытии */
 .mobile-content {
-    padding-left: 60px !important; /* Такой же как на главной */
+    padding-left: 50px !important; /* Такой же как на главной */
     min-height: 100vh;
-    padding-right: 1rem;
+    padding-right: 0.5rem;
     padding-top: 1rem;
     padding-bottom: 1rem;
     transition: none; /* Убираем анимацию сдвига */
@@ -1060,8 +1060,8 @@
     .category-page,
     .article-page,
     .document-detail {
-        padding-left: 60px !important; /* Как на главной */
-        padding-right: 1rem !important;
+        padding-left: 50px !important; /* Как на главной */
+        padding-right: 0.5rem !important;
         padding-top: 1rem !important;
         min-height: 100vh;
         position: relative; /* Для правильного позиционирования */
