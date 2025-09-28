@@ -282,25 +282,40 @@
         padding: 1rem;
     }
 
-   /* === ЕДИНЫЙ МОБИЛЬНЫЙ САЙДБАР ДЛЯ ВСЕХ СТРАНИЦ === */
-   
-   /* Сайдбар всегда видим на страницах модулей */
-.module-container.mobile-content ~ .mobile-sidebar,
+/* === ЕДИНЫЙ САЙДБАР ДЛЯ ВСЕХ СТРАНИЦ === */
+
+/* Базовые стили сайдбара на страницах модулей */
 .mobile-sidebar {
-    display: block !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 48px;
+    background: var(--bg-primary);
+    border-right: 1px solid var(--border-color);
+    z-index: 200; /* Увеличиваем до 200 как на главной */
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
 }
 
-    /* Отступ для контента с учетом сайдбара */
-    .mobile-content {
-    margin-left: 48px; /* Отступ равен ширине сайдбара */
+.mobile-sidebar.expanded {
+    width: 240px;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Отступ для контента - фиксированный, не меняется при раскрытии */
+.mobile-content {
+    padding-left: 60px !important; /* Такой же как на главной */
     min-height: 100vh;
-    padding: 1rem; /* Внутренние отступы для контента */
+    padding-right: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    transition: none; /* Убираем анимацию сдвига */
 }
 
-/* Когда сайдбар раскрыт, увеличиваем отступ */
+/* НЕ двигаем контент при раскрытии сайдбара */
 .mobile-sidebar.expanded ~ .mobile-content {
-    margin-left: 240px;
-    transition: margin-left 0.3s ease;
+    padding-left: 60px !important; /* Остается тем же */
 }
     
     /* Активный пункт в сайдбаре */
@@ -328,12 +343,7 @@
     main {
         padding: 0 !important;
     }
-    
-    /* Фикс для модальных окон */
-    #globalMobileSidebar {
-        z-index: 100;
-    }
-    
+        
     .modal-backdrop {
         z-index: 200;
     }
@@ -1038,16 +1048,23 @@
 }
 /* === САЙДБАР НА ВСЕХ СТРАНИЦАХ МОДУЛЕЙ === */
 @media (max-width: 767px) {
-    /* Добавляем сайдбар на страницы модулей */
+    /* Унифицированные отступы для всех страниц модулей */
     .knowledge-base,
     .checklists-container,
     .documents-page,
     .wiki-container,
     .stories-container,
     .statistics-container,
-    .llm-check-container {
-        padding-left: 60px !important; /* Отступ для сайдбара */
+    .llm-check-container,
+    .checklist-page,
+    .category-page,
+    .article-page,
+    .document-detail {
+        padding-left: 60px !important; /* Как на главной */
+        padding-right: 1rem !important;
+        padding-top: 1rem !important;
         min-height: 100vh;
+        position: relative; /* Для правильного позиционирования */
     }
     
     /* Скрываем старые мобильные хедеры */
