@@ -351,6 +351,10 @@ renderMobileHome() {
                         TechCheck Pro
                     </h1>
                     <p class="mobile-tagline">Свод правил Massivburg</p>
+                    <p class="mobile-tagline"> • </p>
+                    <p class="mobile-tagline">Оформление чертежей</p>
+                    <p class="mobile-tagline"> • </p>
+                    <p class="mobile-tagline">Полезное</p>
                 </div>
             </div>
 
