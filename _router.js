@@ -350,8 +350,7 @@ renderMobileHome() {
                     <h1 class="mobile-logo" onclick="app.router.showMobileModules()">
                         TechCheck Pro
                     </h1>
-                    <p class="mobile-tagline">Свод правил • Оформление чертежей • Полезное</p>
-                    <p class="mobile-tagline"> Massivburg </p>
+                    <p class="mobile-tagline">Правила • Чертежи • Полезное</p>
                 </div>
             </div>
 
