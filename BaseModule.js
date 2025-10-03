@@ -358,6 +358,117 @@ renderMobileSidebar() {
         div.innerHTML = html.trim();
         return div.firstChild;
     }
+
+/**
+     * Показать изображение в модальном окне
+     * Согласно документации techcheck-images-strategy.md
+     */
+    showExample(imagePath, caption) {
+        // Создаем модальное окно для просмотра изображения
+        const modal = document.createElement('div');
+        modal.className = 'image-modal';
+        modal.innerHTML = `
+            <div class="modal-backdrop" onclick="this.parentElement.remove()"></div>
+            <div class="modal-content">
+                <button class="modal-close" onclick="this.parentElement.parentElement.remove()">✕</button>
+                <img src="${imagePath}" alt="${caption}" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22%3E%3Crect fill=%22%23f0f2f5%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-family=%22sans-serif%22 font-size=%2216%22 fill=%22%238c92a0%22%3E📷 Изображение недоступно%3C/text%3E%3C/svg%3E';">
+                <p class="modal-caption">${caption}</p>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        
+        // Блокируем скролл body
+        document.body.style.overflow = 'hidden';
+        
+        // Восстанавливаем скролл при закрытии
+        modal.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal-backdrop') || 
+                e.target.classList.contains('modal-close')) {
+                document.body.style.overflow = '';
+            }
+        });
+        
+        // Закрытие по Escape
+        const handleEscape = (e) => {
+            if (e.key === 'Escape') {
+                modal.remove();
+                document.body.style.overflow = '';
+                document.removeEventListener('keydown', handleEscape);
+            }
+        };
+        document.addEventListener('keydown', handleEscape);
+    }
+    
+    /**
+     * Рендер галереи изображений
+     */
+    renderGallery(images) {
+        if (!images || images.length === 0) return '';
+        
+        return `
+            <div class="image-gallery">
+                ${images.map((img, index) => `
+                    <div class="gallery-item" 
+                         onclick="app.getModule('${this.name}').showExample('${img.path || img.image}', '${img.caption || img.title}')">
+                        ${img.path ? 
+                            `<img src="${img.path}" alt="${img.caption}" loading="lazy" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'image-placeholder\\'>📷</div>';">` :
+                            `<div class="image-placeholder">📷</div>`
+                        }
+                        <div class="gallery-overlay">
+                            <span>🔍 Смотреть</span>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+    
+    /**
+     * Рендер примеров (хорошие/плохие)
+     */
+    renderExamples(examples) {
+        if (!examples || examples.length === 0) return '';
+        
+        return `
+            <section class="examples-section">
+                <h3>Примеры</h3>
+                <div class="examples-grid">
+                    ${examples.map(ex => `
+                        <div class="example-card ${ex.type}" 
+                             onclick="app.getModule('${this.name}').showExample('${ex.image}', '${ex.caption}')">
+                            ${ex.image ? 
+                                `<img src="${ex.image}" alt="${ex.caption}" loading="lazy" onerror="this.onerror=null; this.innerHTML='<div class=\\'image-placeholder\\'>📷</div>';">` :
+                                `<div class="image-placeholder">${ex.type === 'bad' ? '❌' : '✅'}</div>`
+                            }
+                            <p>${ex.type === 'bad' ? '❌' : '✅'} ${ex.caption}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            </section>
+        `;
+    }
+    
+    /**
+     * Lazy loading для изображений
+     */
+    initLazyLoading() {
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.classList.add('loaded');
+                        observer.unobserve(img);
+                    }
+                });
+            });
+            
+            document.querySelectorAll('img[data-src]').forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+    }
     
     /**
      * Методы жизненного цикла
