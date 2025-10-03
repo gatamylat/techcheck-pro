@@ -86,6 +86,18 @@ export default class KnowledgeBase extends BaseModule {
                     category: 'sketches',
                     title: 'Оформление эскиза для согласования',
                     tags: ['эскиз', 'согласование', 'заказчик'],
+                    examples: [
+                        {
+                            image: './images/kitchen-example-01.jpg',
+                            caption: 'Правильно оформленный эскиз кухни',
+                            type: 'good'
+                        },
+                        {
+                            image: './images/error-no-dimensions.jpg',
+                            caption: 'Ошибка: не указаны габариты',
+                            type: 'bad'
+                        }
+                    ],
                     content: {
                         overview: 'Все чертежи должны быть сохранены в формате PDF. Эскизы - это первичная документация для согласования с заказчиком.',
                         sections: [
@@ -350,6 +362,7 @@ export default class KnowledgeBase extends BaseModule {
                                 </span>`
                             ).join('')}
                         </div>
+                        ${article.examples ? this.renderExamples(article.examples) : ''}
                     </footer>
                 </article>
             </div>
