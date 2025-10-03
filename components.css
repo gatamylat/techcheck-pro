@@ -619,6 +619,7 @@
     inset: 0;
     background: rgba(0, 0, 0, 0.8);
     cursor: pointer;
+    z-index: 1;
 }
 
 .image-modal .modal-content {
@@ -628,7 +629,7 @@
     max-width: 90vw;
     max-height: 90vh;
     overflow: auto;
-    z-index: 1;
+    z-index: 10;
     box-shadow: var(--shadow-xl);
 }
 
